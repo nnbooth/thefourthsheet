@@ -1,5 +1,11 @@
 # Changes
 
+## Contact form switched on (11 Oct 2026)
+- The contact form now sends: it posts to FormSubmit, which emails each enquiry (as a table, subject "Website enquiry:
+  <topic>, <organisation>", reply-to the sender) to the business address. The first send triggers FormSubmit's one-off
+  activation email, which must be clicked. Bots that fill the hidden trap field are thanked but nothing is sent; the Send
+  button is disabled while sending; a failed send suggests emailing instead. `[[FORM_ENDPOINT]]` is gone.
+
 ## Site review fixes (9 Oct 2026, branch `site-review-fixes`)
 - **Content:** prices on ($110 an hour, $800 a day); NFP "example TBC" chip gone; "How long" timings confirmed with a guide line;
   "Monthly reporting, done for me"; organisation, job title and an Australian phone number required; boardroom mock-up shows

@@ -21,23 +21,18 @@ Anything not yet known is marked with a `data-placeholder` attribute; search the
 
 | Token | Where | What it needs |
 | --- | --- | --- |
-| `[[BOOKING_URL]]` | every "Book a free 20-minute numbers check" button (48) | the booking page address; until then the contact page says "Online booking opens soon" |
-| `[[FORM_ENDPOINT]]` | `contact.html` form `action` | the form service address (e.g. Formspree); until then the form says nothing was sent |
 | `[[LINKEDIN_URL]]` | the hidden LinkedIn chip on every page | the profile address; then show the chip as a link |
 | `[[QUOTE_1]]` | `about.html`, hidden testimonial slot | a client quote, with permission |
 | `[[ANALYTICS_TOKEN]]` | `script.js` (ANALYTICS) | a cookieless analytics provider's token, script and event call (see below) |
 
-The not-for-profit example (`not-for-profit.html`) still has its orange TO DO box: waiting on how to reference it.
-
 ## Switches
 
-- **Dev notes:** `class="dev-notes"` on each page's `<body>` shows the orange TO DO boxes and the bar at the top.
-  Remove it from every page before going live.
 - **Prices:** `PRICES` and `SHOW_PRICES` in `script.js` ($110 an hour, $800 a day). Without JavaScript each price reads
   "Talk to me about pricing".
 - **Analytics:** off. `ANALYTICS` in `script.js`: while `token` is a `[[TOKEN]]` nothing loads or sends. To switch on,
   set `token`, `src` (the provider's script) and `send(name, detail)`. Events come from `data-track` attributes:
-  `booking`, `email` (mailto links), `export` (each download; detail = format) and `contact-submit` (sent once the form
+  `numbers-check` (every "Ask for a free 20-minute numbers check" button, which goes to the contact page with the
+  numbers check picked), `email` (mailto links), `export` (each download; detail = format) and `contact-submit` (sent once the form
   passes its checks; detail = the topic). New buttons only need the attribute.
 - **Intro animation:** plays once per visit on the home page; skipped for reduced motion, automated tests, a link to a
   section, or `?intro=off`; `?intro=on` forces it; clicking the sheets beside the headline replays it.
@@ -52,6 +47,9 @@ The not-for-profit example (`not-for-profit.html`) still has its orange TO DO bo
 
 ## Contact form
 
-Posts to `[[FORM_ENDPOINT]]`. `?topic=monthly&report=…&period=…&view=…` (from a report's Export menu) fills in the
+Posts to FormSubmit (`https://formsubmit.co/ajax/<business email>`), which emails each enquiry as a table with the
+subject "Website enquiry: <topic>, <organisation>". The very first send triggers FormSubmit's activation email: click it
+once. Any service that takes a form POST and answers in JSON can replace it by changing the form's `action`. Bots that
+fill the hidden trap field are told "thanks" but nothing is sent. `?topic=monthly&report=…&period=…&view=…` (from a report's Export menu) fills in the
 request; the topic value `monthly` is shown as "Monthly reporting, done for me". Organisation, job title and phone are
 required; phone must be an Australian number (mobile, landline, 13/1300/1800 or +61; spaces allowed).

@@ -412,9 +412,10 @@ function mountStaticExportMenus() {
 }
 
 /* ---------------------------------------------------------------------------
-   CONTACT PAGE (contact.html) — the form posts to a form service that emails Nathan (the form's action, still the
-   placeholder [[FORM_ENDPOINT]]). Until that's set the form says so rather than pretending to send. A link from a
-   report's Export menu (?topic=monthly&report=…&period=…&view=…) fills in what's being asked for.
+   CONTACT PAGE (contact.html) — the form posts to a form service that emails Nathan (the form's action: FormSubmit
+   now, but anything that takes a POST and answers in JSON works). If the action isn't a web address the form says so
+   rather than pretending to send. A link from a report's Export menu (?topic=monthly&report=…&period=…&view=…) fills
+   in what's being asked for.
 --------------------------------------------------------------------------- */
 function setupContactForm() {
   const form = document.getElementById('contact-form');
@@ -450,22 +451,31 @@ function setupContactForm() {
     if (phone) checkPhone();
     if (!form.reportValidity()) return;
     track('contact-submit', (form.querySelector('input[name="topic"]:checked') || {}).value || '');
+    const thanks = "Thanks: that's with me. I'll be in touch within one business day.";
+    if (form.elements._gotcha && form.elements._gotcha.value) { form.reset(); status.textContent = thanks; return; }  // a bot filled the trap
     const action = form.getAttribute('action') || '';
-    if (!/^https?:\/\//.test(action)) {                    // still the [[FORM_ENDPOINT]] placeholder
-      status.textContent = "Thanks. This form goes live with the business email, so nothing has been sent yet. Please try again soon.";
+    if (!/^https?:\/\//.test(action)) {                    // no form service set
+      status.textContent = "Thanks. This form isn't connected yet, so nothing has been sent. Please email me instead.";
       return;
     }
+    const data = new FormData(form);
+    data.delete('_gotcha');
+    const topic = form.querySelector('input[name="topic"]:checked');
+    const topicLabel = topic ? topic.parentElement.textContent.trim() : 'Enquiry';
+    data.set('_subject', `Website enquiry: ${topicLabel}${data.get('organisation') ? `, ${data.get('organisation')}` : ''}`);
+    data.set('_replyto', data.get('email') || '');
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true;
     status.textContent = 'Sending…';
-    fetch(action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-      .then((r) => { if (!r.ok) throw new Error(); form.reset(); status.textContent = "Thanks: that's with me. I'll be in touch within one business day."; })
-      .catch(() => { status.textContent = "That didn't send. Please try again in a moment."; });
-  });
-  // the booking link is still a placeholder ([[BOOKING_URL]]): say so rather than jumping nowhere
-  const book = document.querySelector('[data-booking]');
-  if (book) book.addEventListener('click', (e) => {
-    if (/^https?:\/\//.test(book.getAttribute('href'))) return;
-    e.preventDefault();
-    document.getElementById('book-status').textContent = 'Online booking opens soon.';
+    fetch(action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+      .then((r) => r.json().catch(() => ({})).then((j) => {
+        // Formspree says no with an error status; FormSubmit can answer 200 with success: "false"
+        if (!r.ok || j.success === false || j.success === 'false') throw new Error(j.message || '');
+        form.reset();
+        status.textContent = thanks;
+      }))
+      .catch(() => { status.textContent = "That didn't send. Please try again in a moment, or email me instead."; })
+      .finally(() => { button.disabled = false; });
   });
 }
 
@@ -534,7 +544,7 @@ const PRICES = {
    Cookieless analytics only (no cookies, so no consent banner). To switch on once a provider is chosen: set token,
    set src to the provider's script, and fill in send(name, detail) with the provider's event call.
    Events come from data-track attributes, so new buttons only need the attribute:
-     booking (every "Book a free 20-minute numbers check"), email (mailto links), export (each download, detail = the
+     numbers-check (every "Ask for a free 20-minute numbers check", which opens the contact page), email (mailto links), export (each download, detail = the
      format), contact-submit (the contact form, sent once it passes its checks, detail = the topic).
 --------------------------------------------------------------------------- */
 const ANALYTICS = {
