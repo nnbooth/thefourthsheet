@@ -51,6 +51,14 @@ def strip(o):
 EMBEDS = {}
 
 
+def share_matches_description(h):
+    """A page's og:description and twitter:description say what its own meta description says."""
+    d = re.search(r'<meta name="description" content="([^"]*)"', h).group(1)
+    for k in (r'(<meta property="og:description" content=")[^"]*', r'(<meta name="twitter:description" content=")[^"]*'):
+        h = re.sub(k, lambda m: m.group(1) + d, h, count=1)
+    return h
+
+
 def file_parts(r):
     """The downloads for a report: one set per business. A report that shows two separate businesses (growth: trades and
     services) gives each its own Excel, PDF and PowerPoint, holding that business only: they're never in one file."""
@@ -127,6 +135,7 @@ def write_pages(reports):
         dl = f"media/exports/reports/{r['period']}/{r['slug']}"
         h = head.replace("<title>SMEs | The Fourth Sheet</title>", f"<title>{r['question']} | The Fourth Sheet</title>")
         h = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + r["intro"].replace('"', "'"), h, count=1)
+        h = share_matches_description(h)
         h = h.replace("/sme.html", f"/report-{r['slug']}.html").replace("SMEs | The Fourth Sheet", f"{r['question']} | The Fourth Sheet")
         if r["audience"] == "nfp":
             h = h.replace('<a href="sme.html" aria-current="page">Businesses</a>', '<a href="sme.html">Businesses</a>')
@@ -737,6 +746,7 @@ def write_explainer():
     contact = main[main.index("      <!-- CONTACT -->"):]
     h = head.replace("<title>SMEs | The Fourth Sheet</title>", "<title>The numbers, explained | The Fourth Sheet</title>")
     h = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + "Plain-English definitions of the numbers in the reports: gross margin, overheads, profit, cash, runway and more.", h, count=1)
+    h = share_matches_description(h)
     h = h.replace("/sme.html", "/numbers-explained.html").replace("SMEs | The Fourth Sheet", "The numbers, explained | The Fourth Sheet")
     h = h.replace('<a href="sme.html" aria-current="page">Businesses</a>', '<a href="sme.html">Businesses</a>')
     items = "\n".join(f'            <div class="explain" id="{i}"><dt>{H.escape(t)}</dt><dd>{H.escape(d)}</dd></div>' for i, t, d in EXPLAINED)

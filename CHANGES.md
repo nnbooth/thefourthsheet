@@ -1,5 +1,24 @@
 # Changes
 
+## Site review fixes (13 Oct 2026, branch `site-review-fixes`)
+- **Hero:** eyebrow "Management reporting for Brisbane businesses and not-for-profits"; new subhead in body text; "The
+  fourth" names real questions; a line under the button. "CPA" still held back (subhead and byline) until confirmed.
+- **Hero layout:** from 1000 px, the text and a purpose-made management pack picture (tools/mockups/hero-pack.html,
+  2x and 3x) whose top and bottom line up with the headline and the call to action; under the button below 1000 px; KPI
+  tiles only under 480 px. "See it live" scrolls to the sample dashboard, now its own section. The headline is balanced
+  and keeps "I give you the fourth." together where it fits. The sheets button and intro replay are unchanged.
+- **Home order and labels:** the questions section comes straight after the hero, with a link to The numbers,
+  explained; tiers Build it / Make it stick / Run it; nav and footer say Businesses and Not-for-profits (filenames
+  unchanged). Every "Made with…" credit line is gone from the site (downloads keep theirs); the deliveries map keeps its
+  Leaflet and OpenStreetMap attribution. Services and About: "Everything is reconciled to your accounts…".
+- **Sample panel:** "How it's worked out" is a 14 px green link, 44 px tall everywhere; KPI labels, captions, the hint
+  and the footer are 14 px.
+- **Contact:** name, email and organisation required (job title and phone optional); the button follows the option
+  picked; new consent wording; thanks "Thanks. I reply within one business day."
+- **SEO:** home title "Management reporting for Brisbane SMEs and not-for-profits | The Fourth Sheet"; a schema.org
+  ProfessionalService block on the home page; every page's share description is its own meta description (the report
+  generator does this too).
+
 ## Contact form switched on (11 Oct 2026)
 - The contact form now sends: it posts to FormSubmit, which emails each enquiry (as a table, subject "Website enquiry:
   <topic>, <organisation>", reply-to the sender) to the business address. The first send triggers FormSubmit's one-off
