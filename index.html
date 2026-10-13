@@ -110,15 +110,16 @@
     </header>
 
     <main id="main">
-      <!-- HERO: the brand line as the headline, one short line underneath, and a
-           sample "fourth sheet" dashboard on the right (data and toggle in
-           script.js, search "HERO DASHBOARD"). Headline options: the project notes (OneDrive). -->
+      <!-- HERO: the brand line as the headline, what it means, the call to action, and a picture of a management pack
+           beside it (two columns from 1000 px; under the button below that; just the KPI tiles on phones). The picture
+           is made by tools/mockups/hero-pack.html (python3 tools/render_mockups.py) and links to the live sample
+           dashboard further down. Headline options: the project notes (OneDrive). -->
       <section class="hero" id="top">
-        <div class="container hero-grid hero-grid--dash">
-          <div>
-            <p class="eyebrow">Management reporting for Brisbane businesses and not-for-profits</p>
+        <div class="container hero-grid hero-grid--shot">
+          <p class="eyebrow hero-eyebrow">Management reporting for Brisbane businesses and not-for-profits</p>
+          <div class="hero-main">
             <div class="hero-headline">
-              <h1>Your accountant gives you three sheets. <span class="h1-accent">I give you the fourth.</span></h1>
+              <h1>Your accountant gives you three sheets. <span class="h1-accent">I&nbsp;give you the fourth.</span></h1>
               <button type="button" class="hero-sheets" aria-label="Play the introduction again" title="Play the introduction again"><img src="assets/brand/sheets-illustration.svg?v=dev" alt="" aria-hidden="true" width="104" height="120" /></button>
             </div>
             <!-- What the sheets are, in plain words (user testing: people didn't know what "three sheets" meant) -->
@@ -130,13 +131,34 @@
               <a class="button primary" href="contact.html?topic=numbers-check" data-track="numbers-check">Ask for a free 20-minute numbers check</a>
             </div>
             <p class="hero-cta-note">Bring one question your numbers can't answer yet. I'll tell you what's possible.</p>
-            <!-- The person behind the business.
-                 "CPA" is not shown until Nathan confirms what's allowed. -->
-            <p class="hero-byline">
-              <img class="headshot headshot--sm" src="assets/people/headshot.jpg" alt="Nathan Booth" width="36" height="36" />
-              <span><strong>Nathan Booth</strong> · 20 years in corporate reporting · Brisbane</span>
-            </p>
-            <!-- What you get, in three lines (fills the space beside the sample dashboard) -->
+          </div>
+          <a class="hero-shot" href="#sample">
+            <picture class="hero-shot-pic">
+              <source media="(max-width: 479px)" srcset="media/mockups/hero-pack-kpis.png?v=dev 2x, media/mockups/hero-pack-kpis@3x.png?v=dev 3x" />
+              <img src="media/mockups/hero-pack.png?v=dev" srcset="media/mockups/hero-pack.png?v=dev 2x, media/mockups/hero-pack@3x.png?v=dev 3x"
+                width="920" height="776"
+                alt="Sample management pack showing revenue against budget and forecast, true gross margin, debtor days and the forecast against budget." />
+            </picture>
+            <span class="hero-shot-foot"><span class="hero-shot-tag">Sample data</span><span class="hero-shot-go">See it live&nbsp;&darr;</span></span>
+          </a>
+          <!-- The person behind the business.
+               "CPA" is not shown until Nathan confirms what's allowed. -->
+          <p class="hero-byline">
+            <img class="headshot headshot--sm" src="assets/people/headshot.jpg" alt="Nathan Booth" width="36" height="36" />
+            <span><strong>Nathan Booth</strong> · 20 years in corporate reporting · Brisbane</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- SAMPLE DASHBOARD: three invented sample organisations, built by a driver-based model (tools/financial_model.py)
+           so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
+           Exports: media/exports/. The hero picture's "See it live" link lands here. -->
+      <section class="section sample-section" id="sample" aria-labelledby="sample-title">
+        <div class="container sample-grid">
+          <div class="sample-text">
+            <p class="eyebrow">Sample data</p>
+            <h2 id="sample-title">See it live.</h2>
+            <!-- What you get, in three lines -->
             <ul class="hero-points">
               <li>Daily figures, not just month-end</li>
               <li>Every number shows how it's worked out</li>
@@ -144,10 +166,6 @@
             </ul>
           </div>
 
-          <!-- HERO DASHBOARD: three invented sample organisations, built by a
-               driver-based model (tools/financial_model.py) so every statement
-               adds up. Data: dashboard-data.js. Behaviour: script.js, search
-               "HERO DASHBOARD". Exports: media/exports/. -->
           <figure class="hero-dash" id="hero-dash">
             <div class="dash-head">
               <div class="seg-bar dash-orgbar"><span class="seg-label" id="dash-orgs-label">Sample business</span><div class="seg" role="group" aria-labelledby="dash-orgs-label" id="dash-orgs"></div>

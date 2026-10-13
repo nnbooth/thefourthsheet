@@ -418,10 +418,45 @@ h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); letter-spacing: -0.02em; 
 .card-grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .info-card a { color: var(--accent); text-underline-offset: 3px; }
 
-/* HERO DASHBOARD — sample statements and "the fourth sheet" on the home page */
-.hero-grid--dash { grid-template-columns: minmax(0, 45fr) minmax(0, 55fr); align-items: start; }   /* the dashboard gets ~55% */
-.hero-grid--dash > div:first-child { padding-top: var(--sp-3); }   /* the eyebrow lines up with the dashboard's first row */
-.hero-grid--dash > div:first-child > .eyebrow { margin-top: 0; }
+/* HERO — text on the left and a picture of a management pack on the right from 1000 px: the picture's top lines up
+   with the headline and its bottom with the call to action. Narrower: one column, the picture under the button.
+   Phones (under 480 px): the picture is just the KPI tiles (a <source> in index.html). */
+.hero-grid--shot { grid-template-columns: minmax(0, 1fr); grid-template-areas: "eyebrow" "main" "shot" "byline"; gap: 0; align-items: start; }
+.hero-eyebrow { grid-area: eyebrow; }
+.hero-main { grid-area: main; }
+.hero-main > :last-child { margin-bottom: 0; }
+.hero-grid--shot > .hero-byline { grid-area: byline; margin-top: var(--sp-6); }
+.hero-shot { grid-area: shot; display: flex; flex-direction: column; margin-top: var(--sp-6); overflow: hidden; color: inherit; text-decoration: none;
+  background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-md); }   /* framed like the sample dashboard */
+.hero-shot-pic, .hero-shot-pic img { display: block; width: 100%; height: auto; }
+.hero-shot-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2) var(--sp-4); min-height: 44px;
+  padding: var(--sp-1) var(--sp-4); background: var(--surface); border-top: 1px solid var(--border); }
+.hero-shot-tag { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent);
+  background: var(--accent-soft); border-radius: var(--r-sm); padding: 0.1rem var(--sp-2); }
+.hero-shot-go { font-size: var(--fs-md); font-weight: 700; color: var(--accent); text-underline-offset: 3px; }
+.hero-shot:hover .hero-shot-go { text-decoration: underline; }
+.hero-shot:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (min-width: 1000px) {
+  .hero-grid--shot { grid-template-columns: minmax(0, 1fr) 28.75rem; grid-template-areas: "eyebrow ." "main shot" "byline ."; column-gap: var(--sp-6); }
+  .hero-shot { margin-top: 0; align-self: stretch; }
+  .hero-shot-pic { position: relative; flex: 1 1 auto; min-height: 0; background: #f4f7f2; }   /* the picture's own background */
+  .hero-shot-pic img { position: absolute; inset: 0; height: 100%; object-fit: contain; object-position: top center; }   /* takes the text's height, adds none */
+  .hero-grid--shot .hero-headline { align-items: flex-start; }   /* the headline's first line is the top of the row, so the picture lines up with it */
+}
+@media (min-width: 1200px) { .hero-grid--shot { column-gap: var(--sp-8); } }
+/* The headline never leaves "I" on a line of its own, and "I give you the fourth." stays on one line wherever it fits */
+.hero h1 { text-wrap: balance; }
+@media (min-width: 480px) { .h1-accent { white-space: nowrap; } }
+/* Under 480 px the explainer's labels sit above their text */
+@media (max-width: 479px) {
+  .hero .hero-define { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  .hero .hero-define br + strong { margin-top: var(--sp-2); }
+}
+
+/* SAMPLE DASHBOARD — its own section: three lines on what you get, beside the interactive sample */
+.sample-grid { display: grid; grid-template-columns: minmax(0, 28fr) minmax(0, 72fr); gap: var(--sp-8); align-items: start; }
+.sample-text .hero-points { margin-top: var(--sp-5); }
+@media (max-width: 900px) { .sample-grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-5); } }
 .dash-orgbar { margin-bottom: var(--sp-2); }
 .hero-grid > * { min-width: 0; }   /* columns may shrink below their content's widest line (the toggles scroll instead) */
 /* The headline with the sheets illustration (assets/brand/sheets-illustration.svg) on a brand-green panel beside it. */
@@ -823,7 +858,7 @@ button.hero-sheets:focus-visible { outline: 3px solid var(--accent); outline-off
 .footer-content { display: flex; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: var(--sp-4); }
 @media (max-width: 900px) {
   .rung-detail { grid-template-columns: 1fr; }
-  .hero-grid--dash, .wins-grid, .card-grid, .card-grid--two, .audience-grid, .ladder, .doors, .org-lists, .dashboard-grid, .steps-grid, .hero-grid, .report-grid, .game-grid, .scope-list, .display-grid, .excel-grid, .example-split { grid-template-columns: 1fr; }
+  .wins-grid, .card-grid, .card-grid--two, .audience-grid, .ladder, .doors, .org-lists, .dashboard-grid, .steps-grid, .hero-grid, .report-grid, .game-grid, .scope-list, .display-grid, .excel-grid, .example-split { grid-template-columns: 1fr; }
   .contact-box { flex-direction: column; align-items: flex-start; }
   /* MOBILE SECTION SPACING — tighten further on tablet/mobile */
   .section { padding: var(--sp-5) 0; }
@@ -1217,20 +1252,6 @@ body.intro-active .hero-sheets img { visibility: hidden; }
 .hero-points li { position: relative; padding-left: 1.9rem; font-size: var(--fs-md); color: var(--text); }
 .hero-points li::before { content: "\2713"; position: absolute; left: 0; top: 0.05em; width: 1.3rem; height: 1.3rem; display: grid; place-items: center;
   border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 0.8rem; font-weight: 700; }
-
-/* HERO, side by side: the text column and the sample dashboard are the same height at every width. The proof points
-   sit at the bottom of the text; the dashboard's "Sample data / Export" footer sits at the bottom of the card.
-   Whichever side is shorter takes the spare space between its parts, never as a blank block. */
-@media (min-width: 901px) {
-  .hero-grid--dash { align-items: stretch; }
-  .hero-grid--dash > div:first-child { display: flex; flex-direction: column; }
-  .hero-grid--dash > div:first-child .hero-byline { margin-bottom: var(--sp-6); }
-  .hero-grid--dash .hero-points { margin-top: auto; }
-  .hero-dash { display: flex; flex-direction: column; }
-  .hero-dash > .dash-caption { margin-top: auto; }
-}
-/* At 1700 px and up (larger root font) an even split keeps the headline to three lines, so the columns' natural heights match */
-@media (min-width: 1700px) { .hero-grid--dash { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 
 /* HOME DASHBOARD — the Period picker (carries to every page for the visit), and months without a balance sheet */
 .dash-orgbar { justify-content: space-between; }
