@@ -165,7 +165,6 @@ function buildReportCard(report, index) {
 }
 
 // What made the hand-built charts (Nathan: every hand-built chart or report says what tools made it; embeds say it themselves)
-const MADE_WITH_HTML = '<p class="made-with">Made with HTML, CSS and JavaScript, coded by hand · numbers prepared in Python</p>';
 
 function setupTitleBar() {
   // A page title kept in view: once the big h1[data-title-bar] scrolls under the site header, a slim bar with the title
@@ -1087,7 +1086,6 @@ function mountReport(root, r, only, simple, opts = {}) {
       const what = [kinds.has('kpis') || kinds.has('insight') ? 'number' : '', kinds.has('bars') ? 'bar' : '', kinds.has('series') ? (r.slug === 'runway' || r.slug === 'cash-payroll' ? 'day' : 'month') : ''].filter(Boolean);
       if (what.length) parts.push(`<p class="dash-hint">Click or tap any ${what.length > 1 ? `${what.slice(0, -1).join(', ')} or ${what[what.length - 1]}` : what[0]} for its workings.</p>`);
     }
-    if (!opts.noMadeWith) parts.push(MADE_WITH_HTML);
     // only redraw (and so re-animate) sections whose content changed; others just get fresh workings links
     const norm = (h) => h.replace(/data-sup="\d+"/g, '').replace(/ag\d+/g, '');
     parts.forEach((h, i) => {
@@ -1234,8 +1232,8 @@ function setupReport() {
     if (!r) return;
     const only = el.dataset.only ? el.dataset.only.split(',') : null;
     const p = pickPeriod(r.periods, sitePeriod());
-    if (p && p !== r.period) loadReportPeriod(el.dataset.reportFeature, p).then((x) => mountReport(el, x, only, true, { noMadeWith: true })).catch(() => mountReport(el, r, only, true, { noMadeWith: true }));
-    else mountReport(el, r, only, true, { noMadeWith: true });   // the cards' credit line covers it
+    if (p && p !== r.period) loadReportPeriod(el.dataset.reportFeature, p).then((x) => mountReport(el, x, only, true)).catch(() => mountReport(el, r, only, true));
+    else mountReport(el, r, only, true);
   });
   // a small live chart on every example report card
   const drawCard = (el, override) => {

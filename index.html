@@ -98,8 +98,8 @@
         <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">☰</button>
         <!-- Keep these links in the same order as the sections below. -->
         <nav class="nav-links" id="primary-nav" aria-label="Primary navigation">
-          <a href="sme.html">SME</a>
-          <a href="not-for-profit.html">Not-for-profit</a>
+          <a href="sme.html">Businesses</a>
+          <a href="not-for-profit.html">Not-for-profits</a>
           <a href="examples.html">Examples</a>
           <a href="services.html">Services</a>
           <a href="about.html">About</a>
@@ -150,63 +150,6 @@
         </div>
       </section>
 
-      <!-- SAMPLE DASHBOARD: three invented sample organisations, built by a driver-based model (tools/financial_model.py)
-           so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
-           Exports: media/exports/. The hero picture's "See it live" link lands here. -->
-      <section class="section sample-section" id="sample" aria-labelledby="sample-title">
-        <div class="container sample-grid">
-          <div class="sample-text">
-            <p class="eyebrow">Sample data</p>
-            <h2 id="sample-title">See it live.</h2>
-            <!-- What you get, in three lines -->
-            <ul class="hero-points">
-              <li>Daily figures, not just month-end</li>
-              <li>Every number shows how it's worked out</li>
-              <li>Spreadsheets, PDFs and slides, in the tools you already use</li>
-            </ul>
-          </div>
-
-          <figure class="hero-dash" id="hero-dash">
-            <div class="dash-head">
-              <div class="seg-bar dash-orgbar"><span class="seg-label" id="dash-orgs-label">Sample business</span><div class="seg" role="group" aria-labelledby="dash-orgs-label" id="dash-orgs"></div>
-                <div class="dash-period"><label class="seg-label" for="dash-period">Period</label><select id="dash-period"></select></div></div>
-              <div class="seg" role="tablist" aria-label="Choose a statement">
-              <button type="button" role="tab" data-tab="fourth" aria-selected="true">The fourth sheet</button>
-              <button type="button" role="tab" data-tab="pnl" aria-selected="false">P&amp;L</button>
-              <button type="button" role="tab" data-tab="bs" aria-selected="false">Balance sheet</button>
-              <button type="button" role="tab" data-tab="cf" aria-selected="false">Cash flow</button>
-            </div></div>
-            <div class="dash-body">
-              <div class="dash-panel" id="dash-panel" role="tabpanel">
-                <noscript><p>Turn on JavaScript to explore the sample statements, or download them: <a href="media/exports/trades-sample-statements.xlsx">Excel</a> · <a href="media/exports/trades-sample-statements.pdf">PDF</a>.</p></noscript>
-              </div>
-            </div>
-            <figcaption class="dash-caption">
-              <span class="dash-sample">Sample data</span>
-              <div class="dash-export" id="dash-export"><noscript><a href="media/exports/trades-sample-statements.xlsx" download>Spreadsheet</a> · <a href="media/exports/trades-sample-statements.pdf" download>PDF</a> · <a href="media/exports/trades-sample-statements.pptx" download>Slides</a></noscript></div>
-            </figcaption>
-            <p class="made-with dash-made-with">Made with HTML, CSS and JavaScript, coded by hand · numbers prepared in Python</p>
-          </figure>
-
-          <!-- Assumptions pop-up (filled in by script.js for the chosen organisation) -->
-          <dialog class="assumptions" id="assumptions-dialog" aria-labelledby="assumptions-title">
-            <div class="assumptions-head">
-              <h2 id="assumptions-title">Assumptions</h2>
-              <button type="button" class="assumptions-close" id="assumptions-close" aria-label="Close">&times;</button>
-            </div>
-            <div class="assumptions-body" id="assumptions-body"></div>
-          </dialog>
-          <!-- Workings behind any number on the dashboard (filled by script.js) -->
-          <dialog class="assumptions" id="support-dialog" aria-labelledby="support-title">
-            <div class="assumptions-head">
-              <h2 id="support-title">How it's worked out</h2>
-              <button type="button" class="assumptions-close" id="support-close" aria-label="Close">&times;</button>
-            </div>
-            <div class="assumptions-body" id="support-body"></div>
-          </dialog>
-        </div>
-      </section>
-
       <!-- DOORS: one per audience, each opening its own page. The questions
            are EXAMPLES only (the client brings their own). -->
       <section id="doors" class="section">
@@ -243,6 +186,63 @@
               <a class="door-go" href="not-for-profit.html">See how it works for not-for-profits &rarr;</a>
             </div>
           </div>
+          <p class="doors-more"><a href="numbers-explained.html">New to these terms? The numbers, explained &rarr;</a></p>
+        </div>
+      </section>
+
+      <!-- SAMPLE DASHBOARD: three invented sample organisations, built by a driver-based model (tools/financial_model.py)
+           so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
+           Exports: media/exports/. The hero picture's "See it live" link lands here. -->
+      <section class="section sample-section" id="sample" aria-labelledby="sample-title">
+        <div class="container sample-grid">
+          <div class="sample-text">
+            <p class="eyebrow">Sample data</p>
+            <h2 id="sample-title">See it live.</h2>
+            <!-- What you get, in three lines -->
+            <ul class="hero-points">
+              <li>Daily figures, not just month-end</li>
+              <li>Every number shows how it's worked out</li>
+              <li>Spreadsheets, PDFs and slides, in the tools you already use</li>
+            </ul>
+          </div>
+
+          <figure class="hero-dash" id="hero-dash">
+            <div class="dash-head">
+              <div class="seg-bar dash-orgbar"><span class="seg-label" id="dash-orgs-label">Sample business</span><div class="seg" role="group" aria-labelledby="dash-orgs-label" id="dash-orgs"></div>
+                <div class="dash-period"><label class="seg-label" for="dash-period">Period</label><select id="dash-period"></select></div></div>
+              <div class="seg" role="tablist" aria-label="Choose a statement">
+              <button type="button" role="tab" data-tab="fourth" aria-selected="true">The fourth sheet</button>
+              <button type="button" role="tab" data-tab="pnl" aria-selected="false">P&amp;L</button>
+              <button type="button" role="tab" data-tab="bs" aria-selected="false">Balance sheet</button>
+              <button type="button" role="tab" data-tab="cf" aria-selected="false">Cash flow</button>
+            </div></div>
+            <div class="dash-body">
+              <div class="dash-panel" id="dash-panel" role="tabpanel">
+                <noscript><p>Turn on JavaScript to explore the sample statements, or download them: <a href="media/exports/trades-sample-statements.xlsx">Excel</a> · <a href="media/exports/trades-sample-statements.pdf">PDF</a>.</p></noscript>
+              </div>
+            </div>
+            <figcaption class="dash-caption">
+              <span class="dash-sample">Sample data</span>
+              <div class="dash-export" id="dash-export"><noscript><a href="media/exports/trades-sample-statements.xlsx" download>Spreadsheet</a> · <a href="media/exports/trades-sample-statements.pdf" download>PDF</a> · <a href="media/exports/trades-sample-statements.pptx" download>Slides</a></noscript></div>
+            </figcaption>
+          </figure>
+
+          <!-- Assumptions pop-up (filled in by script.js for the chosen organisation) -->
+          <dialog class="assumptions" id="assumptions-dialog" aria-labelledby="assumptions-title">
+            <div class="assumptions-head">
+              <h2 id="assumptions-title">Assumptions</h2>
+              <button type="button" class="assumptions-close" id="assumptions-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="assumptions-body" id="assumptions-body"></div>
+          </dialog>
+          <!-- Workings behind any number on the dashboard (filled by script.js) -->
+          <dialog class="assumptions" id="support-dialog" aria-labelledby="support-title">
+            <div class="assumptions-head">
+              <h2 id="support-title">How it's worked out</h2>
+              <button type="button" class="assumptions-close" id="support-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="assumptions-body" id="support-body"></div>
+          </dialog>
         </div>
       </section>
 
@@ -268,19 +268,19 @@
           <ol class="ladder">
             <li class="rung">
               <span class="rung-step">1</span>
-              <h3>Set up and hand over</h3>
+              <h3>Build it</h3>
               <p>I build the system, train your team and leave it running.</p>
               <p class="rung-price"><span data-price="setup"></span><small>Fixed quote per engagement</small></p>
             </li>
             <li class="rung">
               <span class="rung-step">2</span>
-              <h3>Bedding-in</h3>
+              <h3>Make it stick</h3>
               <p>A few months alongside you while the habit forms.</p>
               <p class="rung-price"><span data-price="bedding"></span><small>Fixed term</small></p>
             </li>
             <li class="rung">
               <span class="rung-step">3</span>
-              <h3>Monthly</h3>
+              <h3>Run it</h3>
               <p>I run your month-end and review rhythm with you.</p>
               <p class="rung-price"><span data-price="monthly"></span><small>Monthly retainer</small></p>
             </li>
@@ -320,7 +320,7 @@
     <footer class="site-footer">
       <div class="container footer-content">
         <nav class="footer-links" aria-label="Site">
-          <a href="sme.html">SME</a><a href="not-for-profit.html">Not-for-profit</a><a href="examples.html">Examples</a><a href="services.html">Services</a><a href="about.html">About</a><a href="numbers-explained.html">Numbers explained</a><a href="contact.html">Contact</a>
+          <a href="sme.html">Businesses</a><a href="not-for-profit.html">Not-for-profits</a><a href="examples.html">Examples</a><a href="services.html">Services</a><a href="about.html">About</a><a href="numbers-explained.html">Numbers explained</a><a href="contact.html">Contact</a>
         </nav>
         <p>
           © <span id="year">2026</span> The Fourth Sheet · Nathan Booth · Brisbane, Australia ·
