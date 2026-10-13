@@ -437,6 +437,12 @@ function setupContactForm() {
     req.innerHTML = `You're asking for <strong>${esc(q.get('report'))}</strong>${q.get('view') ? ` (${esc(q.get('view'))})` : ''} as monthly reporting, done for you${q.get('period') ? `, starting from ${esc(q.get('period'))}` : ''}.`;
     req.hidden = false;
   }
+  // the button says what you're asking for: its words follow the option picked
+  const button = form.querySelector('button[type="submit"]');
+  const BUTTON_WORDS = { 'numbers-check': 'Request my free numbers check', monthly: 'Ask about monthly reporting', other: 'Send my message' };
+  const label = () => { button.textContent = BUTTON_WORDS[(form.querySelector('input[name="topic"]:checked') || {}).value] || 'Send my message'; };
+  form.addEventListener('change', (e) => { if (e.target.name === 'topic') label(); });
+  label();
   // phone: an Australian number, spaces, dashes and brackets allowed (mobile, landline, 13/1300/1800, or +61)
   const phone = form.elements.phone;
   const checkPhone = () => {
@@ -450,8 +456,8 @@ function setupContactForm() {
     if (phone) checkPhone();
     if (!form.reportValidity()) return;
     track('contact-submit', (form.querySelector('input[name="topic"]:checked') || {}).value || '');
-    const thanks = "Thanks: that's with me. I'll be in touch within one business day.";
-    if (form.elements._gotcha && form.elements._gotcha.value) { form.reset(); status.textContent = thanks; return; }  // a bot filled the trap
+    const thanks = 'Thanks. I reply within one business day.';
+    if (form.elements._gotcha && form.elements._gotcha.value) { form.reset(); label(); status.textContent = thanks; return; }  // a bot filled the trap
     const action = form.getAttribute('action') || '';
     if (!/^https?:\/\//.test(action)) {                    // no form service set
       status.textContent = "Thanks. This form isn't connected yet, so nothing has been sent. Please email me instead.";
@@ -463,7 +469,6 @@ function setupContactForm() {
     const topicLabel = topic ? topic.parentElement.textContent.trim() : 'Enquiry';
     data.set('_subject', `Website enquiry: ${topicLabel}${data.get('organisation') ? `, ${data.get('organisation')}` : ''}`);
     data.set('_replyto', data.get('email') || '');
-    const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
     status.textContent = 'Sending…';
     fetch(action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
@@ -471,6 +476,7 @@ function setupContactForm() {
         // Formspree says no with an error status; FormSubmit can answer 200 with success: "false"
         if (!r.ok || j.success === false || j.success === 'false') throw new Error(j.message || '');
         form.reset();
+        label();
         status.textContent = thanks;
       }))
       .catch(() => { status.textContent = "That didn't send. Please try again in a moment, or email me instead."; })
