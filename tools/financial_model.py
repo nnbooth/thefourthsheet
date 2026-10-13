@@ -1201,7 +1201,7 @@ def examples_services(m, out, f4):
     lowm = 100 * low["contribution"] / low["revenue"]
     best = max(range(3), key=lambda i: perh[i])
     all_above = all(v >= m["target_margin"] for v in margin)
-    return [ex("services", "Which services should we drop?",
+    return [ex("services", "Which services should you drop?",
                {"type": "bars", "chart": {"title": "Gross margin by type of work, September", "labels": [plural[t].capitalize() for t in types],
                                           "values": [round(v, 1) for v in margin], "target": float(m["target_margin"]), "format": "pct1"}},
                ("Every type of work made more than the " if all_above else "Not every type of work made the ") + f"{m['target_margin']:.1f}% target in September: "
@@ -1253,7 +1253,7 @@ def examples_nfp(m, out, f4):
         calc("Runway", "months", "r0/r1"), inp("Reserves target", "months", [float(m["reserves_target_months"])]),
         calc("Cash needed for the target", "money", "r3*r1"), calc("Gap to the target", "money", "r4-r0")], cols=("30 Sep 2026",))
     y = sp3["xl"]["rows"]
-    e3 = ex("nfp", "How many months could we run on our own money?",
+    e3 = ex("nfp", "How many months could you run on your own money?",
             {"type": "kpis", "kpis": [{"label": "Runway now", "value": FMT["months"](y[2]["values"][0])},
                                       {"label": "Target", "value": FMT["months"](y[3]["values"][0])},
                                       {"label": "Gap", "value": money(y[5]["values"][0])}]},

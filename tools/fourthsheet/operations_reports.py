@@ -3,8 +3,8 @@ operations_reports.py — the questions that aren't about money: worked examples
 
   callbacks       SME trades    How long do customers wait for a callback?
   overtime        SME trades    Where is overtime creeping up, and why?
-  people-helped   NFP           How many people did we help this month, and how many couldn't we reach?
-  calls           NFP           When do calls for help come in, and are we there to answer?
+  people-helped   NFP           How many people did you help this month, and how many couldn't you reach?
+  calls           NFP           When do calls for help come in, and are you there to answer?
   volunteers      NFP           How many volunteer hours go into each program?
 
 Same shape as every other report (catalogue.py): headline numbers with workings, a month-by-month chart, a breakdown,
@@ -191,11 +191,11 @@ def people_helped(D, P):
     reach = {m: (h[m] / (h[m] + nr[m]) if h[m] + nr[m] else None) for m in W}
 
     def sp(m):
-        return support(f"People helped, {mlabel(m)}", "Helped ÷ (helped + couldn't reach)", [inp("People helped", "int", [h[m]]), inp("People we couldn't reach", "int", [nr[m]]),
+        return support(f"People helped, {mlabel(m)}", "Helped ÷ (helped + couldn't reach)", [inp("People helped", "int", [h[m]]), inp("People not reached", "int", [nr[m]]),
                                                                                            calc("Share reached", "pct", "r0/(r0+r1)")], cols=(mlabel(m),))
     sups = [sp(m) for m in W]
     k = support(f"People helped, {P.month} and {P.prev_month}", "Helped ÷ (helped + couldn't reach)", [
-        inp("People helped", "int", [h[P.mo], h[P.prev]]), inp("People we couldn't reach", "int", [nr[P.mo], nr[P.prev]]), calc("Share reached", "pct", "r0/(r0+r1)")],
+        inp("People helped", "int", [h[P.mo], h[P.prev]]), inp("People not reached", "int", [nr[P.mo], nr[P.prev]]), calc("Share reached", "pct", "r0/(r0+r1)")],
         P.part_note or None, cols=(mlabel(P.mo), mlabel(P.prev)))
     rc = reach[P.mo] or 0
     items = [kpi(f"People helped, {P.when}", f"{int(h[P.mo]):,}", f"{P.prev_month} {int(h[P.prev]):,}", k),
@@ -213,7 +213,7 @@ def people_helped(D, P):
         f"The main reason: {rs[0].lower()} ({reason[P.mo][rs[0]]} people)." if rs else None],
         "Every program reached its target share.")
     answer = f"{int(h[P.mo]):,} people helped in {P.when}; {int(nr[P.mo]):,} couldn't be reached ({pct(rc)} reached, target {pct(TARGET_REACH)})."
-    return report("people-helped", "nfp", "How many people did we help this month, and how many couldn't we reach?", "nfp", D, P,
+    return report("people-helped", "nfp", "How many people did you help this month, and how many couldn't you reach?", "nfp", D, P,
                   "People helped by each program, day by day, and the people who came to a program but couldn't be helped (and why). People helped are counted against each program's own grant spend.",
                   [{"label": None, "sections": [
                       kpis(items),
@@ -304,7 +304,7 @@ def calls(D, P):
         f"{staffed[P.mo] - ans[P.mo]:,} callers hung up waiting while the line was staffed." if staffed[P.mo] > ans[P.mo] else None],
         "Every staffed-hours call was answered.")
     answer = f"{tot[P.mo]:,} calls in {P.when}: {pct(rc)} answered while staffed (target {pct(TARGET_ANSWER)}); {pct(after)} came outside staffed hours."
-    return report("calls", "nfp", "When do calls for help come in, and are we there to answer?", "nfp", D, P,
+    return report("calls", "nfp", "When do calls for help come in, and are you there to answer?", "nfp", D, P,
                   "Every call to the help line: when it came in, whether someone answered, and how long the caller waited. The line is staffed 8:30am to 5pm on working days.",
                   [{"label": None, "sections": [
                       kpis(items),

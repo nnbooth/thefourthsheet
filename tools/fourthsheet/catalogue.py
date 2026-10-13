@@ -881,7 +881,7 @@ def runway(D, P):
     answer = f"{FMT['months'](run)} of spending in unrestricted cash, against a {FMT['months'](float(tgt))} reserves target."
     rn = runway_numbers(D, P, P.mo)
     res_tgt = round_half_up(float(tgt) * spend + rn[1] + rn[4])     # cash at bank that would meet the target: grant money and the ATO's are held as well
-    return report("runway", "nfp", "How many months of runway do we have?", "nfp", D, P,
+    return report("runway", "nfp", "How many months of runway do you have?", "nfp", D, P,
                   "How long the organisation could keep going on its own money: cash at bank, less unspent grant money (which belongs to the funders' programs) and GST and PAYG owed to the ATO, divided by a month's spending.",
                   [{"label": None, "sections": [
                       kpis([kpi("Runway now", FMT["months"](run), f"target {FMT['months'](float(tgt))}", s_now, tone=ek.tone(run, "higher", float(tgt), 0.5)),
