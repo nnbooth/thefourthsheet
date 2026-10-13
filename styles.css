@@ -1129,6 +1129,9 @@ button.dash-kpi:focus-visible { outline: 3px solid var(--accent); outline-offset
 /* HERO — the line that says what the three sheets and the fourth are */
 .hero-define { margin: var(--sp-3) 0 var(--sp-2); font-size: var(--fs-md); line-height: 1.55; color: var(--text); max-width: 36rem; }
 .hero-define strong { color: var(--accent); }
+.hero .hero-copy { margin: 0 0 var(--sp-2); font-size: var(--fs-md); line-height: 1.55; color: var(--text); max-width: 36rem; }   /* body text, same as the explainer */
+.hero-actions:has(+ .hero-cta-note) { margin-bottom: var(--sp-2); }
+.hero-cta-note { margin: 0 0 var(--sp-6); font-size: var(--fs-sm); color: var(--muted); max-width: 36rem; }
 /* two rows, labels in their own column so both descriptions start in line */
 .hero-define { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--sp-2); row-gap: var(--sp-2); }
 .hero-define br { display: none; }
