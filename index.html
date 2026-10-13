@@ -143,14 +143,13 @@
     </header>
 
     <main id="main">
-      <!-- HERO: the brand line as the headline, what it means, the call to action, and a picture of a management pack
-           beside it (two columns from 1000 px; under the button below that; just the KPI tiles on phones). The picture
-           is made by tools/mockups/hero-pack.html (python3 tools/render_mockups.py) and links to the live sample
-           dashboard further down. Headline options: the project notes (OneDrive). -->
+      <!-- HERO: the brand line as the headline, what it means, the call to action, and the sample "fourth sheet"
+           dashboard on the right (data and toggle in script.js, search "HERO DASHBOARD"). Headline options: the project
+           notes (OneDrive). -->
       <section class="hero" id="top">
-        <div class="container hero-grid hero-grid--shot">
-          <p class="eyebrow hero-eyebrow">Management reporting for Brisbane businesses and not-for-profits</p>
-          <div class="hero-main">
+        <div class="container hero-grid hero-grid--dash">
+          <div>
+            <p class="eyebrow">Management reporting for Brisbane businesses and <span class="nowrap">not-for-profits</span></p>
             <div class="hero-headline">
               <h1>Your accountant gives you three sheets. <span class="h1-accent">I&nbsp;give you the fourth.</span></h1>
               <button type="button" class="hero-sheets" aria-label="Play the introduction again" title="Play the introduction again"><img src="assets/brand/sheets-illustration.svg?v=dev" alt="" aria-hidden="true" width="104" height="120" /></button>
@@ -158,80 +157,17 @@
             <!-- What the sheets are, in plain words (user testing: people didn't know what "three sheets" meant) -->
             <p class="hero-define"><strong>The three:</strong> <span>profit and loss, balance sheet and cash flow, the reports your accountant prepares.</span><br>
               <strong>The fourth:</strong> <span>why they look that way: which jobs make money, which customers pay late, where overtime is creeping.</span></p>
-            <!-- "I'm a CPA who also builds the dashboards." goes in front of this once Nathan confirms what CPA Australia allows. -->
-            <p class="hero-copy">I set up your reporting from the data you already have, so you see why the numbers moved, not just what they were.</p>
+            <p class="hero-copy">I'm a CPA who also builds the dashboards. I set up your reporting from the data you already have, so you see why the numbers moved, not just what they were.</p>
             <div class="hero-actions">
               <a class="button primary" href="contact.html?topic=numbers-check" data-track="numbers-check">Ask for a free 20-minute numbers check</a>
             </div>
             <p class="hero-cta-note">Bring one question your numbers can't answer yet. I'll tell you what's possible.</p>
-          </div>
-          <a class="hero-shot" href="#sample">
-            <picture class="hero-shot-pic">
-              <source media="(max-width: 479px)" srcset="media/mockups/hero-pack-kpis.png?v=dev 2x, media/mockups/hero-pack-kpis@3x.png?v=dev 3x" />
-              <img src="media/mockups/hero-pack.png?v=dev" srcset="media/mockups/hero-pack.png?v=dev 2x, media/mockups/hero-pack@3x.png?v=dev 3x"
-                width="920" height="776"
-                alt="Sample management pack showing revenue against budget and forecast, true gross margin, debtor days and the forecast against budget." />
-            </picture>
-            <span class="hero-shot-foot"><span class="hero-shot-tag">Sample data</span><span class="hero-shot-go">See it live&nbsp;&darr;</span></span>
-          </a>
-          <!-- The person behind the business.
-               "CPA" is not shown until Nathan confirms what's allowed. -->
-          <p class="hero-byline">
-            <img class="headshot headshot--sm" src="assets/people/headshot.jpg" alt="Nathan Booth" width="36" height="36" />
-            <span><strong>Nathan Booth</strong> · 20 years in corporate reporting · Brisbane</span>
-          </p>
-        </div>
-      </section>
-
-      <!-- DOORS: one per audience, each opening its own page. The questions
-           are EXAMPLES only (the client brings their own). -->
-      <section id="doors" class="section">
-        <div class="container">
-          <div class="section-heading">
-            <h2>What do you wish your numbers could tell you?</h2>
-            <p>Every business asks something different. Here are a few we hear.</p>
-          </div>
-          <div class="doors">
-            <div class="door">
-              <span class="door-eyebrow">For SMEs</span>
-              <strong>What's really driving the business?</strong>
-              <ul class="q-list" aria-label="Questions">
-                <li><a href="report-job-margins.html"><span class="q-text">Which jobs actually make money?</span><span class="q-tag">Money</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-cash-payroll.html"><span class="q-text">Will cash cover payroll next month?</span><span class="q-tag">Cash</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="examples.html#deliveries"><span class="q-text">Which deliveries run late, and why?</span><span class="q-tag">Operations</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-callbacks.html"><span class="q-text">How long do customers wait for a callback?</span><span class="q-tag">Customers</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-overtime.html"><span class="q-text">Where is overtime creeping up, and why?</span><span class="q-tag">People</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a class="q-ask" href="contact.html?topic=other"><span class="q-text">Got a different question?</span><span class="q-go">Ask me &rarr;</span></a></li>
-              </ul>
-              <a class="door-go" href="sme.html">See how it works for SMEs &rarr;</a>
-            </div>
-            <div class="door">
-              <span class="door-eyebrow">For not-for-profits</span>
-              <strong>Show what your work achieves.</strong>
-              <ul class="q-list" aria-label="Questions">
-                <li><a href="report-people-helped.html"><span class="q-text">How many people did we help this month, and how many couldn&#x27;t we reach?</span><span class="q-tag">Impact</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-calls.html"><span class="q-text">When do calls for help come in, and are we there to answer?</span><span class="q-tag">Demand</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-volunteers.html"><span class="q-text">How many volunteer hours go into each program?</span><span class="q-tag">People</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-program-cost.html"><span class="q-text">What does each program really cost?</span><span class="q-tag">Money</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a href="report-runway.html"><span class="q-text">How many months of runway do we have?</span><span class="q-tag">Money</span><span class="q-go">Example &rarr;</span></a></li>
-                <li><a class="q-ask" href="contact.html?topic=other"><span class="q-text">Got a different question?</span><span class="q-go">Ask me &rarr;</span></a></li>
-              </ul>
-              <a class="door-go" href="not-for-profit.html">See how it works for not-for-profits &rarr;</a>
-            </div>
-          </div>
-          <p class="doors-more"><a href="numbers-explained.html">New to these terms? The numbers, explained &rarr;</a></p>
-        </div>
-      </section>
-
-      <!-- SAMPLE DASHBOARD: three invented sample organisations, built by a driver-based model (tools/financial_model.py)
-           so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
-           Exports: media/exports/. The hero picture's "See it live" link lands here. -->
-      <section class="section sample-section" id="sample" aria-labelledby="sample-title">
-        <div class="container sample-grid">
-          <div class="sample-text">
-            <p class="eyebrow">Sample data</p>
-            <h2 id="sample-title">See it live.</h2>
-            <!-- What you get, in three lines -->
+            <!-- The person behind the business. -->
+            <p class="hero-byline">
+              <img class="headshot headshot--sm" src="assets/people/headshot.jpg" alt="Nathan Booth" width="36" height="36" />
+              <span><strong>Nathan Booth, CPA</strong> · 20 years in corporate reporting · Brisbane</span>
+            </p>
+            <!-- What you get, in three lines (fills the space beside the sample dashboard) -->
             <ul class="hero-points">
               <li>Daily figures, not just month-end</li>
               <li>Every number shows how it's worked out</li>
@@ -239,6 +175,9 @@
             </ul>
           </div>
 
+          <!-- HERO DASHBOARD: three invented sample organisations, built by a driver-based model (tools/financial_model.py)
+               so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
+               Exports: media/exports/. -->
           <figure class="hero-dash" id="hero-dash">
             <div class="dash-head">
               <div class="seg-bar dash-orgbar"><span class="seg-label" id="dash-orgs-label">Sample business</span><div class="seg" role="group" aria-labelledby="dash-orgs-label" id="dash-orgs"></div>
@@ -276,6 +215,46 @@
             </div>
             <div class="assumptions-body" id="support-body"></div>
           </dialog>
+        </div>
+      </section>
+
+      <!-- DOORS: one per audience, each opening its own page. The questions
+           are EXAMPLES only (the client brings their own). -->
+      <section id="doors" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <h2>What do you wish your numbers could tell you?</h2>
+            <p>Every business asks something different. Here are a few I hear.</p>
+          </div>
+          <div class="doors">
+            <div class="door">
+              <span class="door-eyebrow">For SMEs</span>
+              <strong>What's really driving the business?</strong>
+              <ul class="q-list" aria-label="Questions">
+                <li><a href="report-job-margins.html"><span class="q-text">Which jobs actually make money?</span><span class="q-tag">Profit</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-cash-payroll.html"><span class="q-text">Will cash cover payroll next month?</span><span class="q-tag">Cash</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="examples.html#deliveries"><span class="q-text">Which deliveries run late, and why?</span><span class="q-tag">Operations</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-callbacks.html"><span class="q-text">How long do customers wait for a callback?</span><span class="q-tag">Customers</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-overtime.html"><span class="q-text">Where is overtime creeping up, and why?</span><span class="q-tag">People</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a class="q-ask" href="contact.html?topic=other"><span class="q-text">Got a different question?</span><span class="q-go">Ask me &rarr;</span></a></li>
+              </ul>
+              <a class="door-go" href="sme.html">See how it works for SMEs &rarr;</a>
+            </div>
+            <div class="door">
+              <span class="door-eyebrow">For not-for-profits</span>
+              <strong>Show what your work achieves.</strong>
+              <ul class="q-list" aria-label="Questions">
+                <li><a href="report-people-helped.html"><span class="q-text">How many people did you help this month, and how many couldn&#x27;t you reach?</span><span class="q-tag">Impact</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-calls.html"><span class="q-text">When do calls for help come in, and are you there to answer?</span><span class="q-tag">Demand</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-volunteers.html"><span class="q-text">How many volunteer hours go into each program?</span><span class="q-tag">People</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-program-cost.html"><span class="q-text">What does each program really cost?</span><span class="q-tag">Costs</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a href="report-runway.html"><span class="q-text">How many months of runway do you have?</span><span class="q-tag">Cash</span><span class="q-go">Example &rarr;</span></a></li>
+                <li><a class="q-ask" href="contact.html?topic=other"><span class="q-text">Got a different question?</span><span class="q-go">Ask me &rarr;</span></a></li>
+              </ul>
+              <a class="door-go" href="not-for-profit.html">See how it works for not-for-profits &rarr;</a>
+            </div>
+          </div>
+          <p class="doors-more"><a href="numbers-explained.html">New to these terms? The numbers, explained &rarr;</a></p>
         </div>
       </section>
 
