@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Green Screen Table</title>
+<meta name="description" content="A green screen terminal that boots up and prints a data table. Load your own CSV.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f0d;
+    --screen: #020602;
+    --phosphor: #5cff85;
+    --phosphor-dim: #3fd166;
+    --phosphor-faint: #23803f;
+    --glow: rgba(92, 255, 133, 0.35);
+    --ui-text: #b8c4b8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ui-text);
+    font-family: "VT323", ui-monospace, Menlo, Consolas, monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  /* ---------- screen ---------- */
+  .monitor { width: min(1000px, 100%); }
+  .screen {
+    position: relative;
+    background: var(--screen);
+    border: 2px solid var(--phosphor-dim);
+    border-radius: 6px;
+    min-height: 480px;
+    overflow: hidden;
+  }
+  .screen.off .crt { opacity: 0; }
+  .screen.on .crt { animation: power-on .7s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes power-on {
+    0%   { transform: scale(1, .004); filter: brightness(6); opacity: 1; }
+    35%  { transform: scale(1, .004); filter: brightness(6); }
+    60%  { transform: scale(1, 1);    filter: brightness(2.5); }
+    100% { transform: scale(1, 1);    filter: brightness(1); }
+  }
+  .crt {
+    position: relative;
+    padding: 22px 26px 28px;
+    min-height: 480px;
+  }
+  .crt { font-size: 20px; }
+  .grid-wrap { overflow-x: auto; margin-top: .2em; }
+  .grid {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--phosphor-dim);
+    text-shadow: 0 0 2px var(--glow);
+    line-height: 1.2;
+  }
+  .grid th, .grid td {
+    border: 1px solid var(--phosphor-faint);
+    padding: .15em 1ch;
+    white-space: pre;
+    text-align: left;
+  }
+  .grid .n { text-align: right; }
+  .grid th.title { font-size: 1.15em; letter-spacing: .03em; }
+  .grid th, .grid tr.main td { color: var(--phosphor); }
+  .grid tr { opacity: 0; }
+  .grid tr.shown { opacity: 1; transition: opacity .2s; }
+  .screen.printed, .screen.printed .crt { min-height: 0; }
+
+  pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.2;
+    color: var(--phosphor-dim);
+    text-shadow: 0 0 2px var(--glow);
+    white-space: pre;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--phosphor-faint) transparent;
+  }
+  .b { color: var(--phosphor); }               /* bright (headers, total rows) */
+  .f { color: var(--phosphor-faint); text-shadow: none; } /* faint (rules, n/a) */
+  .inv { background: var(--phosphor); color: var(--screen); text-shadow: none; }
+  .cursor {
+    display: inline-block; width: .6em; height: 1em; vertical-align: -0.12em;
+    background: var(--phosphor); box-shadow: 0 0 8px var(--glow);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .error { color: #ffb347; font-size: 18px; min-height: 1em; }
+
+  /* ---------- command prompt ---------- */
+  .console { margin-top: .9em; }
+  .console pre { color: var(--phosphor-dim); }
+  .msg:empty { display: none; }
+  .msg { margin-bottom: .6em; }
+  .prompt {
+    position: relative; display: block; cursor: text;
+    white-space: pre; color: var(--phosphor); text-shadow: 0 0 2px var(--glow); line-height: 1.2;
+  }
+  .prompt input {
+    position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    opacity: 0; border: 0; padding: 0; font: inherit;
+  }
+
+  .print-query { display: none; }
+
+  /* ---------- printout: the query and the table, black on white ---------- */
+  @page { margin: 15mm; }
+  @media print {
+    body { background: #fff; display: block; padding: 0; min-height: 0; }
+    #out, .console, .error { display: none !important; }
+    .monitor { width: 100%; }
+    .screen { border: 0; background: #fff; min-height: 0; overflow: visible; }
+    .screen.on .crt { animation: none; }
+    .crt { padding: 0; min-height: 0; }
+    .grid { font-family: "Roboto", Arial, sans-serif; font-size: 10pt; color: #000; text-shadow: none; }
+    .grid th, .grid td, .grid tr.main td { border: .5pt solid #000; color: #000; padding: 3pt 6pt; }
+    .grid tr.main td, .grid th { font-weight: 700; }
+    .grid .f { color: #666; }
+    .grid th.title { font-size: 12pt; }
+    .grid tr { opacity: 1 !important; }
+    .print-query { display: block; font-family: "Roboto Mono", Consolas, monospace; font-size: 9pt; color: #000; text-shadow: none; margin: 0 0 8pt; }
+  }
+
+  @media (max-width: 600px) {
+    .crt { padding: 14px 12px 18px; min-height: 380px; }
+    .screen { min-height: 380px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .screen.on .crt { animation: none; }
+    .cursor { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="monitor">
+  <div class="screen off" id="screen" aria-live="polite">
+    <div class="crt">
+      <pre id="out"></pre>
+      <pre class="print-query" id="printQuery"></pre>
+      <div class="console" id="console" hidden>
+        <pre class="msg" id="msg"></pre>
+        <label class="prompt"><span class="b">&gt; </span><span id="typed"></span><span class="cursor"></span><input id="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Command (type HELP)"></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="error" id="error" role="alert"></div>
+
+<script>
+/* ------------------------------------------------------------------
+   Data. An optional first line with a single value is the table title.
+   The next row is the header. Labels that start with spaces are
+   sub-rows (shown indented, dimmer). Everything else is a main row.
+------------------------------------------------------------------- */
+const SAMPLE_CSV = `"XYZ Nursing Home, September 2026"
+AUD,Month actual,Month budget,Variance $,Variance %
+Revenue,"$1,163,134","$1,203,065","($39,931)",(3.3%)
+  Direct care revenue,"$766,699",n/a,n/a,n/a
+  Everyday living revenue,"$258,828",n/a,n/a,n/a
+  Accommodation revenue,"$137,607",n/a,n/a,n/a
+Labour cost,"$808,655","$809,926","$1,271",0.2%
+Other operating costs (calc),"$409,476","$438,900","$29,424",6.7%
+Operating result,"($54,997)","($45,761)","($9,236)",(20.2%)
+EBITDA (add back dep'n and interest),"$25,214",n/a,n/a,n/a`;
+
+const out = document.getElementById('screen').querySelector('#out');
+const screen = document.getElementById('screen');
+const errorEl = document.getElementById('error');
+const printQuery = document.getElementById('printQuery');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let runId = 0;                 // bumps on every run so an old animation stops
+const sleep = ms => new Promise(r => setTimeout(r, reduceMotion ? 0 : ms));
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+/* ---------- CSV ---------- */
+function parseCSV(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') q = false;
+      else cell += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(cell); rows.push(row); row = []; cell = '';
+    } else cell += c;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ''));
+}
+
+function toTable(text) {
+  const rows = parseCSV(text.replace(/^\uFEFF/, ''));
+  // optional title: a first line with a single value (quote it if it has a comma)
+  const title = rows.length > 2 && rows[0].filter(c => c.trim()).length === 1 && rows[1].length > 1
+    ? rows.shift().find(c => c.trim()).trim() : '';
+  if (rows.length < 2) throw new Error('Need a header row and at least one data row.');
+  const width = Math.max(...rows.map(r => r.length));
+  const pad = r => Array.from({ length: width }, (_, i) => r[i] ?? '');
+  const [head, ...body] = rows.map(pad);
+  const t = {
+    title,
+    head: head.map(s => s.trim().toUpperCase()),
+    rows: body.map(r => {
+      const indent = (r[0].match(/^\s*/)[0].length > 0);
+      return { sub: indent, cells: [(indent ? '  ' : '') + r[0].trim(), ...r.slice(1).map(s => s.trim())] };
+    })
+  };
+  // Accounting alignment: where a column has (negatives), give the other cells a
+  // trailing space so their last digit lines up with the last digit inside the bracket
+  for (let i = 1; i < width; i++) {
+    if (!t.rows.some(r => /\)$/.test(r.cells[i]))) continue;
+    t.rows.forEach(r => { if (r.cells[i] && !/\)$/.test(r.cells[i])) r.cells[i] += ' '; });
+  }
+  return t;
+}
+
+/* Size the text so the whole table fits across the screen (24px max, 14px min, then it scrolls) */
+const crt = screen.querySelector('.crt');
+let fitWidth = 60;             // table width in characters, cell padding included
+function fitFont() {
+  crt.style.fontSize = '100px';
+  const probe = document.createElement('span');
+  probe.textContent = '0'.repeat(50);
+  probe.style.whiteSpace = 'pre';
+  crt.appendChild(probe);
+  const perChar = probe.getBoundingClientRect().width / 50 / 100;   // char width per px of font size
+  probe.remove();
+  const cs = getComputedStyle(crt);
+  const room = crt.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const size = room / (fitWidth * perChar) - 0.3;
+  crt.style.fontSize = Math.max(14, Math.min(24, size)) + 'px';
+}
+window.addEventListener('resize', fitFont);
+
+/* ---------- rendering helpers ---------- */
+const lines = [];              // finished HTML lines
+function render(live = '', cursor = true) {
+  out.innerHTML = lines.join('\n') + (lines.length ? '\n' : '') + live + (cursor ? '<span class="cursor"></span>' : '');
+}
+async function type(text, cls = '', speed = 18, id) {
+  for (let i = 1; i <= text.length; i++) {
+    if (id !== runId) return false;
+    render(`<span class="${cls}">${esc(text.slice(0, i))}</span>`);
+    if (!reduceMotion) await sleep(speed + Math.random() * speed);
+  }
+  lines.push(`<span class="${cls}">${esc(text)}</span>`);
+  render();
+  return true;
+}
+
+/* ---------- the show ---------- */
+let booted = false;
+async function run(csvText, sourceName = 'SAMPLE.CSV') {
+  const id = ++runId;
+  errorEl.textContent = '';
+  let t;
+  try { t = toTable(csvText); shown = t; }
+  catch (e) { errorEl.textContent = 'Could not read that data: ' + e.message; return; }
+
+  consoleEl.hidden = true; msgEl.textContent = '';
+  lines.length = 0; out.innerHTML = '';
+  crt.querySelectorAll('.grid-wrap').forEach(el => el.remove());
+  out.style.display = '';
+  screen.classList.remove('printed');
+  fitWidth = t.head.reduce((sum, h, i) =>
+    sum + Math.max(h.length, ...t.rows.map(r => r.cells[i].length)) + 2, 2);
+  await document.fonts.load('20px VT323').catch(() => {}); fitFont();
+  if (id !== runId) return;
+  // the query, always in uppercase; the table name comes from the file name (sample.csv -> SAMPLE)
+  const tableName = sourceName.replace(/\.[^.]+$/, '').toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '') || 'DATA';
+  const query = `SELECT * FROM ${tableName};`;
+  printQuery.textContent = 'SQL> ' + query;
+
+  // the boot plays once, the first time; data loaded later goes straight to the table
+  if (!booted) {
+    screen.classList.remove('on'); screen.classList.add('off');
+    void screen.offsetWidth;                 // restart the power-on animation
+    screen.classList.remove('off'); screen.classList.add('on');
+    await sleep(750);
+    if (id !== runId) return;
+    render(); await sleep(700);
+
+    if (!await type('THE FOURTH SHEET  //  DATA TERMINAL v4.0', 'b', 14, id)) return;
+    if (!await type('(C) ' + new Date().getFullYear() + '  ALL SYSTEMS NOMINAL', '', 10, id)) return;
+    lines.push(''); render(); await sleep(250);
+
+    // initiating . . . .
+    const dots = async (label, n, ms) => {
+      for (let i = 0; i <= n; i++) {
+        if (id !== runId) return false;
+        render(esc(label + ' ' + '. '.repeat(i)));
+        await sleep(ms);
+      }
+      lines.push(esc(label + ' ' + '. '.repeat(n)) + ' <span class="b">OK</span>'); render();
+      return true;
+    };
+    if (!await dots('INITIATING', 6, 160)) return;
+    // the query: table name comes from the file name (sample.csv -> sample)
+    lines.push(''); render(); await sleep(200);
+    if (!await type('SQL> ' + query, 'b', 55, id)) return;
+    await sleep(450);
+    if (!await dots('EXECUTING', 3, 180)) return;
+
+    // progress bar of dashes filling with blocks
+    const barLen = window.innerWidth < 600 ? 14 : 28;
+    for (let i = 0; i <= barLen; i++) {
+      if (id !== runId) return;
+      const pct = String(Math.round(i / barLen * 100)).padStart(3);
+      render(esc('READING ROWS [') + '<span class="b">' + '#'.repeat(i) + '</span>' +
+        '<span class="f">' + '-'.repeat(barLen - i) + '</span>' + esc('] ' + pct + '%'));
+      await sleep(35 + Math.random() * 50);
+    }
+    lines.push(esc('READING ROWS [') + '<span class="b">' + '#'.repeat(barLen) + '</span>' + esc('] 100%')); render();
+
+    if (!await type(`CHECKSUM ${(Math.random() * 0xffffff | 0).toString(16).toUpperCase().padStart(6, '0')} ... VERIFIED`, '', 10, id)) return;
+    if (!await type(`${t.rows.length} ${t.rows.length === 1 ? 'row' : 'rows'} in set (${(0.01 + Math.random() * 0.08).toFixed(2)} sec)`, '', 10, id)) return;
+    lines.push(''); render(); await sleep(300);
+    if (!await type('> PRINT TABLE', 'b', 45, id)) return;
+    await sleep(400);
+    lines.push(''); render();
+    booted = true;
+  }
+
+  // the boot text clears and the table takes the screen: a bordered grid, rows appear one after another
+  lines.length = 0; out.innerHTML = ''; out.style.display = 'none';
+  screen.classList.add('printed');
+  const wrap = document.createElement('div');
+  wrap.className = 'grid-wrap';
+  const table = document.createElement('table');
+  table.className = 'grid';
+  const num = i => i === 0 ? '' : ' class="n"';
+  table.innerHTML = '<thead>' + (t.title ? `<tr><th class="title" colspan="${t.head.length}">${esc(t.title)}</th></tr>` : '') + '<tr>' + t.head.map((h, i) => `<th${num(i)}>${esc(h)}</th>`).join('') + '</tr></thead><tbody>' +
+    t.rows.map(r => `<tr class="${r.sub ? 'sub' : 'main'}">` + r.cells.map((c, i) =>
+      `<td${num(i)}>${c.trim() === 'n/a' ? `<span class="f">${esc(c)}</span>` : esc(c)}</td>`).join('') + '</tr>').join('') +
+    '</tbody>';
+  wrap.appendChild(table);
+  crt.insertBefore(wrap, consoleEl);
+  for (const tr of table.querySelectorAll('tr')) {
+    if (id !== runId) return;
+    tr.classList.add('shown');
+    await sleep(90);
+  }
+  consoleEl.hidden = false;
+  cmd.focus({ preventScroll: true });
+}
+
+/* ---------- inputs ---------- */
+let current = { text: SAMPLE_CSV, name: 'SAMPLE.CSV' };
+
+/* ---------- commands: type at the prompt, Enter to run, as often as you like ---------- */
+let shown = null;              // the table on screen
+const consoleEl = document.getElementById('console');
+const msgEl = document.getElementById('msg');
+const cmd = document.getElementById('cmd');
+const typed = document.getElementById('typed');
+const say = text => { msgEl.textContent = text; };
+
+/* Plain-text copy: the query, then the table with thin box lines */
+function tableText(t) {
+  const n = t.head.length;
+  const w = t.head.map((h, i) => Math.max(h.length, ...t.rows.map(r => r.cells[i].length)));
+  const inner = w.reduce((a, x) => a + x + 2, 0) + n - 1;
+  if (t.title) w[0] += Math.max(0, t.title.length + 2 - inner);     // a long title widens the first column
+  const span = w.reduce((a, x) => a + x + 2, 0) + n - 1;
+  const rule = (l, m, r) => l + w.map(x => '─'.repeat(x + 2)).join(m) + r;
+  const row = cells => '│' + cells.map((c, i) => ' ' + (i === 0 ? c.padEnd(w[i]) : c.padStart(w[i])) + ' ').join('│') + '│';
+  const out = [printQuery.textContent, ''];      // the query first, as on the printout
+  if (t.title) out.push('┌' + '─'.repeat(span) + '┐', '│' + (' ' + t.title).padEnd(span) + '│', rule('├', '┬', '┤'));
+  else out.push(rule('┌', '┬', '┐'));
+  out.push(row(t.head), rule('├', '┼', '┤'), ...t.rows.map(r => row(r.cells)), rule('└', '┴', '┘'));
+  return out.join('\r\n') + '\r\n';
+}
+const fileName = t => ((t.title || current.name.replace(/\.[^.]+$/, '')).toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'table') + '.txt';
+
+const COMMANDS = {
+  help: () => say([
+    'AVAILABLE COMMANDS',
+    '  PRINT    send the table to the printer',
+    '  EXPORT   save the table as a .txt file',
+    '  HELP     show this list'
+  ].join('\n')),
+  print: () => { say('SENDING TO PRINTER . . .  OK'); setTimeout(() => window.print(), 60); },
+  export: () => {
+    const name = fileName(shown);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([tableText(shown)], { type: 'text/plain;charset=utf-8' }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    say('EXPORTED ' + name);
+  }
+};
+
+cmd.addEventListener('input', () => { typed.textContent = cmd.value.toUpperCase(); });
+cmd.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const word = cmd.value.trim().toLowerCase();
+  cmd.value = ''; typed.textContent = '';
+  if (!word) return;
+  if (COMMANDS[word]) COMMANDS[word]();
+  else say(`'${word.toUpperCase()}' IS NOT A COMMAND. TYPE HELP.`);
+});
+// clicking anywhere on the screen puts you back at the prompt
+screen.addEventListener('click', () => { if (!consoleEl.hidden) cmd.focus({ preventScroll: true }); });
+
+
+run(SAMPLE_CSV);
+</script>
+</body>
+</html>
