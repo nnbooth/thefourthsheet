@@ -23,7 +23,7 @@ import platform
 import sys
 import time
 from datetime import date
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -39,7 +39,11 @@ def convert(kind):
     k = kind.split("(")[0]
     if k in ("INT", "BIGINT", "SMALLINT", "TINYINT"):
         return lambda v: None if v == "" else int(Decimal(v))
-    if k in ("DECIMAL", "NUMERIC", "FLOAT", "REAL"):
+    if k in ("DECIMAL", "NUMERIC"):
+        # rounded to the column's decimal places, as the database stores it, so the checksums compare like for like
+        scale = Decimal(1).scaleb(-int(kind.split(",")[1].rstrip(")"))) if "," in kind else Decimal(1)
+        return lambda v: None if v == "" else Decimal(v).quantize(scale, ROUND_HALF_UP)
+    if k in ("FLOAT", "REAL"):
         return lambda v: None if v == "" else Decimal(v)
     if k == "DATE":
         return lambda v: None if v == "" else date.fromisoformat(v)
@@ -83,8 +87,8 @@ def checksum_sql(t, where):
     target = t.qual if where == "live" else t.stage
     nums = [c for c, k in t.columns if numeric(k)]
     if not nums:
-        return f"SELECT COUNT(*), CAST(0 AS DECIMAL(38,2)) FROM {target}"
-    s = " + ".join(f"CAST(ISNULL([{c}], 0) AS DECIMAL(38,2))" for c in nums)
+        return f"SELECT COUNT(*), CAST(0 AS DECIMAL(38,6)) FROM {target}"
+    s = " + ".join(f"CAST(ISNULL([{c}], 0) AS DECIMAL(38,6))" for c in nums)   # 6 places: the most any column has
     return f"SELECT COUNT(*), ISNULL(SUM({s}), 0) FROM {target}"
 
 

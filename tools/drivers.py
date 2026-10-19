@@ -154,7 +154,7 @@ def build(res, account_ids):
         org + [("scope", V(20)), ("subject", V(80)), ("line_no", "INT"), ("line", V(80)), ("kind", V(10)), ("column_label", V(20)),
                ("value", "DECIMAL(18,6)"), ("is_calculated", "INT"), ("calculation", V(120))], rows)
     tbl("commentary", "Supporting commentary: the notes and chart descriptions shown with the numbers (typed by the analyst at month end in real use).",
-        org + [("scope", V(20)), ("subject", V(80)), ("month_key", V(7)), ("kind", V(30)), ("text", V(300))], notes)
+        org + [("scope", V(20)), ("subject", V(80)), ("month_key", V(7)), ("kind", V(30)), ("text", V(1000))], notes)
 
     # ---- dim_contract
     from ids import contract_no
@@ -164,7 +164,7 @@ def build(res, account_ids):
         if jm[r_[0]]["revenue"] != r_[3]:
             problems.append(f"contract {r_[0]}")
     tbl("dim_contract", "Supporting maintenance contracts: one per customer, invoiced on the 1st of each month.",
-        [("contract_id", V(6) + " PRIMARY KEY"), ("org_id", V(12) + " REFERENCES dim_org(org_id)"), ("customer", V(60)),
+        [("contract_id", V(10) + " PRIMARY KEY"), ("org_id", V(12) + " REFERENCES dim_org(org_id)"), ("customer", V(60)),
          ("monthly_fee", "INT"), ("tech_hours_per_month", "DECIMAL(6,1)"), ("materials_per_month", "INT"), ("payment_days", "INT")], rows)
 
     # ---- dim_carrier

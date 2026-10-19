@@ -75,6 +75,17 @@ for n in ("report_payroll_by_team", "report_payroll_hours_vs_jobs", "report_payr
             "sales": "fact_sales_order_line (order, customer, product, dates, value, cancelled + reason) with dim_customer and dim_product"}[area]
     STAR[n] = ("Presentation (mock-up report)", f"Don't store: a **rpt.** view over {feed}.")
 
+# ---- operations tables added for the reports (calls, callbacks, people helped, overtime, volunteers, runway)
+STAR.update({
+    "dim_volunteer": ("Dimension", "Keep as **dim_volunteer** (surrogate volunteer_key, codes only, no names). main_program and started are attributes; type 2 if a volunteer's main program changes."),
+    "fact_call": ("Fact (transaction)", "Keep as **fact_call** at one row per call: date_key, org_key, a time-of-day key (hour, staffed or not) instead of hour_of_day, an outcome key; measures answered (0/1) and wait_seconds. Answer rate and wait come straight from it."),
+    "fact_enquiry": ("Fact (accumulating snapshot)", "Keep as **fact_enquiry** at one row per enquiry with role-playing dates (received, responded), channel and enquiry type as small dimensions (or one junk dimension), job_key once it becomes a job; measures minutes_to_callback and within_target."),
+    "fact_service_daily": ("Fact (periodic snapshot)", "Becomes **fact_service** at program × day: date_key, org_key, **program_key** (add a dim_program shared with grants and volunteers), a reason key; measures people_helped and people_not_reached."),
+    "fact_shift_daily": ("Fact (transaction)", "Fold into **fact_time** (see fact_timesheet_daily) at person × day: employee_key (technicians become rows in dim_employee), ordinary and overtime hours, an overtime-reason key."),
+    "fact_volunteer_shift": ("Fact (transaction)", "Keep as **fact_volunteer_shift** at one row per shift: date_key, org_key, volunteer_key, program_key (shared dim_program); measure hours. Value of volunteer time is hours × a rate in a view."),
+    "report_cash_forecast_daily": ("Fact (periodic snapshot, forecast)", "Keep as **fact_cash_forecast** at made-on date × forecast date × org: two role-playing date keys and the cash lines as measures. Forecast accuracy is a view joining fact_cash_daily on the forecast date."),
+})
+
 # ---- the three datasets (tools/datasets.py): each already close to a star; advice is the tidy-up to finish it
 STAR.update({
     # Retail
@@ -162,7 +173,7 @@ BUILD_ORDER = ["dim_date", "dim_org", "dim_account", "dim_customer", "dim_suppli
                "simulation_parameter", "template_pnl"]
 
 MCP_RULES = """You are connected through the SQL database MCP to the Azure SQL database **thefourthsheet** (server
-thefourthsheet.database.windows.net), signed in as me. We are building a Kimball star schema from the loaded tables.
+thefourthsheet-sql.database.windows.net), signed in as me. We are building a Kimball star schema from the loaded tables.
 
 Ground rules for everything in this session:
 1. Read before you write: inspect the source table(s) in `dbo` (columns, types, row counts, a few rows) first.

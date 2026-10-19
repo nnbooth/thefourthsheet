@@ -384,7 +384,7 @@ def write_readme():
         "- `dim_date` carries the whole drill path: financial year > quarter > month > week (`week_start`, Monday) > day, plus",
         "  working days and Brisbane public holidays. Join any fact on `date_key` and drill from the year to a single day.",
         "",
-        "Status: the Azure SQL database (to be recreated as `thefourthsheet` on server `thefourthsheet.database.windows.net`) is currently deleted and needs to be created before loading.",
+        "Database: Azure SQL `thefourthsheet` on server `thefourthsheet-sql.database.windows.net` (names in Config/database.env). Check it exists with `python3 tools/database/azure_setup.py` before loading.",
         "",
         "## Loading into a database",
         "",

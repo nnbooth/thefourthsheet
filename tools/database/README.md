@@ -37,10 +37,11 @@ python3 tools/database/azure_setup.py create     # create it, locked down
 python3 tools/database/azure_setup.py status     # security check
 ```
 
-What it creates: resource group `au.thefourthsheet.qld`, server `thefourthsheet.database.windows.net`, database `thefourthsheet`.
+What it creates: resource group `rg-thefourthsheet`, server `thefourthsheet-sql.database.windows.net`, database `thefourthsheet`
+(the names come from `Config/database.env`; `tools/database/config.py` has the defaults).
 - **Region:** Australia East.
 - **Cost:** the free serverless tier. It pauses when idle, and pauses instead of charging if the free monthly allowance runs out.
-- **Sign-in:** SQL login `SQL_LOGIN` (default `fourthsheet_admin`) with the password above; your Microsoft account is also
+- **Sign-in:** SQL login `SQL_LOGIN` (default `tfsadmin`) with the password above; your Microsoft account is also
   set as the server's Entra admin when its ID is known.
 - **Encryption:** TLS 1.2 or newer.
 - **Firewall:** no Azure-wide access; one rule per machine, at that machine's own address.

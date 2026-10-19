@@ -42,8 +42,8 @@ CREATE TABLE ops.load_table (
     files          INT NOT NULL,
     csv_rows       INT NOT NULL,
     loaded_rows    INT NOT NULL,
-    csv_checksum   DECIMAL(38,2) NULL,     -- sum of the numeric columns in the files
-    loaded_checksum DECIMAL(38,2) NULL,    -- the same sum, read back from the database
+    csv_checksum   DECIMAL(38,6) NULL,     -- sum of the numeric columns in the files
+    loaded_checksum DECIMAL(38,6) NULL,    -- the same sum, read back from the database
     PRIMARY KEY (load_id, table_name)
 );
 
