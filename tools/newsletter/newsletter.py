@@ -16,6 +16,7 @@ COMMANDS (run from the repo root; Windows: py instead of python3)
     python3 tools/newsletter/newsletter.py new 2026-W44        # blank review file for a week (copy of the template)
     python3 tools/newsletter/newsletter.py build 2026-W43      # render that week's post + refresh the newsletter index
     python3 tools/newsletter/newsletter.py build-all           # rebuild every week (after a style change)
+    python3 tools/newsletter/newsletter.py preview 2026-W43    # build it, then open it in your browser (Ctrl-C to stop). Nothing is published.
 
 STATUS
   Draft      -> post is written to newsletter/<week>.html with "noindex", a DRAFT banner, and is NOT listed on the index.
@@ -380,6 +381,23 @@ def build_index():
              canonical=f"{DOMAIN}/newsletter/"), encoding="utf-8")
 
 
+# ------------------------------------------------------------------------------------------ preview
+def preview(week):
+    """Build the week, serve the site folder on your own machine and open the page. Drafts show here whatever the
+    Status; nothing is committed or published. Stop with Ctrl-C."""
+    import functools, http.server, threading, webbrowser
+    build(week)
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(REPO))
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    url = f"http://127.0.0.1:{server.server_address[1]}/newsletter/{week.lower()}.html"
+    print(f"previewing {url}   (Ctrl-C to stop)")
+    threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("stopped")
+
+
 # ------------------------------------------------------------------------------------------ command line
 if __name__ == "__main__":
     args = sys.argv[1:]
@@ -387,6 +405,8 @@ if __name__ == "__main__":
         new_review(args[1])
     elif len(args) == 2 and args[0] == "build":
         build(args[1])
+    elif len(args) == 2 and args[0] == "preview":
+        preview(args[1])
     elif args == ["build-all"]:
         for r in sorted(ISSUES.glob("*/review.xlsx")):
             build(r.parent.name)
