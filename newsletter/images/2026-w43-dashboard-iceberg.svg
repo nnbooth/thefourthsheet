@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+  <title id="t">The dashboard is the tip of the iceberg</title>
+  <desc id="d">A dashboard sits above the waterline. Below it: written-down definitions, reconciled data, a clean data model, and the source systems.</desc>
+  <rect width="1200" height="630" fill="#f4f7f2"/>
+  <rect y="190" width="1200" height="440" fill="#eaf6ee"/>
+  <line x1="0" y1="190" x2="1200" y2="190" stroke="#2f7a5d" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="40" y="180" font-family="Roboto, Arial, sans-serif" font-size="20" fill="#5f6f63">What people see</text>
+  <text x="40" y="222" font-family="Roboto, Arial, sans-serif" font-size="20" fill="#5f6f63">Where the work happens</text>
+  <!-- the tip: the dashboard -->
+  <rect x="470" y="60" width="260" height="130" rx="12" fill="#ffffff" stroke="#2f7a5d" stroke-width="3"/>
+  <rect x="490" y="120" width="30" height="50" fill="#9db8a6"/>
+  <rect x="530" y="100" width="30" height="70" fill="#9db8a6"/>
+  <rect x="570" y="130" width="30" height="40" fill="#9db8a6"/>
+  <rect x="610" y="85" width="30" height="85" fill="#2f7a5d"/>
+  <polyline points="660,150 680,120 700,135 716,95" fill="none" stroke="#2f7a5d" stroke-width="4"/>
+  <text x="600" y="80" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="22" font-weight="700" fill="#25342a">The dashboard</text>
+  <!-- the layers underneath, widening -->
+  <g font-family="Roboto, Arial, sans-serif" fill="#25342a">
+    <rect x="340" y="240" width="520" height="80" rx="12" fill="#ffffff" stroke="#2f7a5d" stroke-width="2"/>
+    <text x="600" y="274" text-anchor="middle" font-size="24" font-weight="700">Definitions</text>
+    <text x="600" y="302" text-anchor="middle" font-size="18" fill="#5f6f63">What "revenue" and "margin" mean, written down once</text>
+    <rect x="260" y="334" width="680" height="80" rx="12" fill="#ffffff" stroke="#2f7a5d" stroke-width="2"/>
+    <text x="600" y="368" text-anchor="middle" font-size="24" font-weight="700">Numbers that tie to the ledger</text>
+    <text x="600" y="396" text-anchor="middle" font-size="18" fill="#5f6f63">Reconciled, checked, with the workings kept</text>
+    <rect x="200" y="428" width="800" height="80" rx="12" fill="#ffffff" stroke="#2f7a5d" stroke-width="2"/>
+    <text x="600" y="462" text-anchor="middle" font-size="24" font-weight="700">A clean data model</text>
+    <text x="600" y="490" text-anchor="middle" font-size="18" fill="#5f6f63">SQL, Fabric, Databricks: the plumbing that keeps it right</text>
+    <rect x="120" y="522" width="960" height="80" rx="12" fill="#2f7a5d"/>
+    <text x="600" y="556" text-anchor="middle" font-size="24" font-weight="700" fill="#fbfdf9">Your source systems</text>
+    <text x="600" y="584" text-anchor="middle" font-size="18" fill="#eaf6ee">Accounting, payroll, CRM, job costing, spreadsheets</text>
+  </g>
+</svg>
