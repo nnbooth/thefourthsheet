@@ -1,18 +1,18 @@
 #!/bin/sh
-# Blocks any commit that contains a password, key, secret or personal detail. Installed by tools/setup_machine.py
+# Blocks any commit that contains a password, key, secret or personal detail. Installed by tools/setup/setup_machine.py
 # (git config core.hooksPath tools/githooks). Works on Mac and Windows (Git for Windows runs this with its own sh).
 PY=$(command -v python3 || command -v python || command -v py)
 "$PY" tools/githooks/check_secrets.py || exit 1
 # A commit that changes the site's numbers or its downloads must keep them matching: every spreadsheet, PDF and slide
-# deck says exactly what the site says (tools/tests/exports_match.py), or the commit stops.
+# deck says exactly what the site says (tools/3_publish_site/tests/exports_match.py), or the commit stops.
 if git diff --cached --name-only | grep -qE '^(data/|media/exports/)'; then
   echo "Checking every download matches the site..."
-  "$PY" -I tools/tests/exports_match.py . > /tmp/exports_match.$$ 2>&1
+  "$PY" -I tools/3_publish_site/tests/exports_match.py . > /tmp/exports_match.$$ 2>&1
   status=$?
   if [ $status -ne 0 ]; then
     grep -E "^(FAIL|  )" /tmp/exports_match.$$ | head -30
     rm -f /tmp/exports_match.$$
-    echo "COMMIT STOPPED: a download doesn't match the site. Rebuild (python3 tools/sample_data.py) and commit again."
+    echo "COMMIT STOPPED: a download doesn't match the site. Rebuild (python3 tools/1_build_data/sample_data.py) and commit again."
     exit 1
   fi
   rm -f /tmp/exports_match.$$

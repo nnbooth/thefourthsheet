@@ -22,7 +22,7 @@
   URL OPTIONS
     ?demo=1             plays the whole story by itself (scripted inputs,
                         seeded randomness: identical every time)
-    ?demo=1&capture=1   same, but frozen until tools/record_demo.py steps
+    ?demo=1&capture=1   same, but frozen until tools/archive/record_demo.py steps
                         it frame by frame (see window.__game at the bottom)
     ?embed=1            set by the website when the game runs in its iframe
 
@@ -183,7 +183,7 @@
   }
 
   // TEXT AUDIT (capture mode only): every text and every covering box
-  // (banner, popup, panel) drawn this frame, in order. tools/record_demo.py
+  // (banner, popup, panel) drawn this frame, in order. tools/archive/record_demo.py
   // checks each frame for text that runs off screen, overlaps other text,
   // or is partly hidden behind a box. See auditFrame().
   const AUDIT = CAPTURE ? [] : null;
@@ -1405,7 +1405,7 @@
   }
 
   // Recorder hook (capture mode only): the page doesn't run by itself;
-  // tools/record_demo.py calls __game.step(2) per video frame (30fps).
+  // tools/archive/record_demo.py calls __game.step(2) per video frame (30fps).
   const fontsReady = (document.fonts && document.fonts.load)
     ? document.fonts.load(`8px ${FONT_NAME}`).then(() => document.fonts.ready).catch(() => {})
     : Promise.resolve();

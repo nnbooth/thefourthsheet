@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 /* Shared look for the illustrative dashboard mock-ups (1600x900 screens).
-   Sample Co data is invented. Re-render with: python3 tools/render_mockups.py */
+   Sample Co data is invented. Re-render with: python3 tools/archive/render_mockups.py */
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1600px; height: 900px; overflow: hidden; font-family: "Roboto","Segoe UI",Helvetica,Arial,sans-serif; }
 .tag { position: absolute; right: 28px; bottom: 18px; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }

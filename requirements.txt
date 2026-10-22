@@ -1,11 +1,15 @@
-# Python packages the tools need. Installed by: python3 tools/setup_machine.py (Mac) or py tools\setup_machine.py (Windows)
+# Python packages the tools need. Installed by: python3 tools/setup/setup_machine.py (Mac) or py tools\setup\setup_machine.py (Windows)
+# The GitHub Actions workflow (.github/workflows/pages.yml) installs its own shorter list: keep the two in step.
 openpyxl
 playwright
 python-pptx
 pycel
 mssql-python      # Microsoft's SQL Server driver: no ODBC install needed, signs in with your Microsoft account
-azure-identity
-pandas            # the dataset tools (tools/datasets.py)
+azure-identity    # UNCONFIRMED: nothing in tools/ imports it; kept in case mssql-python's Microsoft sign-in needs it
+pandas            # the dataset tools (tools/1_build_data/datasets.py)
 certifi           # trusted certificates for downloads (Python from python.org on a Mac has none)
+qrcode            # QR codes (tools/archive/generate_qr.py)
+pillow            # image handling, also needed by generate_qr.py (imported as PIL)
+pymupdf           # reads PDFs back for the exports-match check (tools/3_publish_site/tests/exports_match.py)
 holidays          # Queensland public holidays (working days and banking days)
 tzdata            # time zones on Windows: download stamps are in Brisbane time whatever the machine's clock

@@ -219,7 +219,7 @@
 
   /* ---------------------------------------------------------------- offline render (demo recordings)
 
-     tools/record_demo.py steps the game frame by frame, so sound can't be recorded live. Instead it logs every
+     tools/archive/record_demo.py steps the game frame by frame, so sound can't be recorded live. Instead it logs every
      cue with its time and asks for the soundtrack to be rendered offline, through this same synth:
        events: [[seconds, 'sfx', name] | [seconds, 'music', true/false] | [seconds, 'layer', true/false]]
      Returns a Promise of 16-bit stereo WAV bytes, base64. Noise uses seeded randomness, so a render repeats exactly. */

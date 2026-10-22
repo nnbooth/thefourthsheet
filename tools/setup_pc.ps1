@@ -11,7 +11,7 @@
     3. downloads the website project to %USERPROFILE%\thefourthsheet (or updates it if it's already there)
     4. switches on Python's UTF-8 mode for good
     2b. installs VS Code and Claude Code if they're missing
-    5. runs tools\setup_machine.py: Python packages, Azure command line, git leak guard, OneDrive media sync,
+    5. runs tools\setup\setup_machine.py: Python packages, Azure command line, git leak guard, OneDrive media sync,
        and brings over your Mac set-up (VS Code extensions and settings, Claude settings, memory, conversations)
        (Azure sign-in is left for later unless you add -Azure: wait until the business Microsoft 365 account exists)
     6. checks it works: lists the reports, then tests every page in a real browser
@@ -129,18 +129,18 @@ try {
     # 5. The project's own setup -----------------------------------------------------------------------
     Say "5. Packages, Azure command line, git leak guard, media, and your set-up from the Mac"
     Push-Location $Folder
-    $pyArgs = @("tools\setup_machine.py", "--onedrive", $project)
+    $pyArgs = @("tools\setup\setup_machine.py", "--onedrive", $project)
     if (-not $Azure) { $pyArgs += "--no-azure" }
     Run-Py @pyArgs
-    if ($LASTEXITCODE -ne 0) { throw "tools\setup_machine.py reported a problem (see above)." }
+    if ($LASTEXITCODE -ne 0) { throw "tools\setup\setup_machine.py reported a problem (see above)." }
 
     # 6. Check it works --------------------------------------------------------------------------------
     Say "6. Checking it works"
-    Run-Py tools\report.py --list
+    Run-Py tools\3_publish_site\report.py --list
     if ($LASTEXITCODE -ne 0) { throw "The report builder didn't run (see above)." }
     if (-not $SkipSiteCheck) {
         Write-Host "   testing every page and report in a real browser (a few minutes) ..."
-        Run-Py tools\tests\site_check.py
+        Run-Py tools\3_publish_site\tests\site_check.py
         if ($LASTEXITCODE -ne 0) { Warn "The site check found problems (listed above). Everything else is set up; send me the log." }
     }
     Pop-Location
@@ -150,7 +150,7 @@ try {
     $desktop = [Environment]::GetFolderPath("Desktop")
     $shortcut = Join-Path $desktop "Preview The Fourth Sheet.cmd"
     $lines = @("@echo off", "rem Starts the local preview of the website and opens it. Close this window to stop it.",
-               "cd /d `"$Folder`"", "start `"`" http://127.0.0.1:8765/", "py tools\serve.py")
+               "cd /d `"$Folder`"", "start `"`" http://127.0.0.1:8765/", "py tools\3_publish_site\serve.py")
     Set-Content -Path $shortcut -Value $lines -Encoding ASCII
     Ok "double-click 'Preview The Fourth Sheet' on the desktop any time"
     Start-Process -FilePath $shortcut
@@ -159,10 +159,10 @@ try {
     Write-Host "   Project:   $Folder"
     Write-Host "   Data:      $project"
     Write-Host "   Next:      the checklist in OneDrive, Business\Microsoft 365, Azure and Fabric plan.md"
-    Write-Host "   Everyday:  cd $Folder   then   py tools\sample_data.py  /  py tools\report.py --list"
+    Write-Host "   Everyday:  cd $Folder   then   py tools\1_build_data\sample_data.py  /  py tools\3_publish_site\report.py --list"
     Write-Host "   Before you start work each day:  git -C $Folder pull"
     Write-Host "   Claude:    open VS Code on $Folder, sign in to Claude Code, and pick '4th Sheet buildout' from its history"
-    Write-Host "   Switching back to the Mac later:  py tools\machine_profile.py export   (then on the Mac: python3 tools/setup_machine.py)"
+    Write-Host "   Switching back to the Mac later:  py tools\setup\machine_profile.py export   (then on the Mac: python3 tools/setup/setup_machine.py)"
     if (-not $Azure) { Write-Host "   Azure:     once the business Microsoft 365 account exists, run this again with -Azure (or: az login)" }
 }
 catch {

@@ -6,11 +6,11 @@ publishing strips them, so nothing internal reaches a visitor. This folder isn't
 ## Publishing
 
 - Every push to `main` runs `.github/workflows/pages.yml`: Jekyll builds the site (honouring `_config.yml`'s
-  exclude list), then `tools/publish_site.py` strips every HTML comment and CSS comment, stamps every `?v=` with the
+  exclude list), then `tools/3_publish_site/publish_site.py` strips every HTML comment and CSS comment, stamps every `?v=` with the
   commit's short hash, and writes `sitemap.xml`. The Pages source must be **GitHub Actions** (Settings > Pages).
 - In the repo every asset reference is `?v=dev`: nothing to bump by hand. `script.js` passes the same `?v=` on to the
   data files it loads.
-- Adding a page: run `python3 tools/publish_site.py --sitemap .` so the repo's `sitemap.xml` lists it (the publish step
+- Adding a page: run `python3 tools/3_publish_site/publish_site.py --sitemap .` so the repo's `sitemap.xml` lists it (the publish step
   rewrites it anyway). `404.html` uses absolute paths (`/styles.css`) so it works at any depth.
 - Not published: `README.md`, `CHANGES.md`, `requirements.txt`, `tools/`, `docs/`, `media/exports/generated.json`
   (no page reads it at runtime).

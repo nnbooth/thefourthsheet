@@ -1,5 +1,12 @@
 # Changes
 
+## Programs sorted into three stages (22 Oct 2026, branch `reorganise-stages`)
+- `tools/` is now `1_build_data/` (make the raw data), `2_load_azure/` (load it into Azure), `3_publish_site/` (build the website
+  files from it), plus `shared/`, `setup/` and `archive/`. The map is `tools/README.md`; `tools/run_pipeline.py` runs the stages in order.
+- `sample_data.py` now only writes the data. Everything that writes website files moved to `3_publish_site/build_site.py`;
+  `deliveries.py` and `publish_dashboard.py` were each split in two to make that possible. No number changed: every data CSV and every
+  website data file is identical before and after (checked by building both and comparing).
+
 ## Site review fixes (13 Oct 2026, branch `site-review-fixes`)
 - **Hero:** eyebrow "Management reporting for Brisbane businesses and not-for-profits"; new subhead in body text; "The
   fourth" names real questions; a line under the button. "CPA" still held back (subhead and byline) until confirmed.
