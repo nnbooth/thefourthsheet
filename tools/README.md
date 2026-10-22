@@ -9,7 +9,7 @@ Everything here is Python (plus `mockups/` pictures and the git hook). The progr
  2_load_azure/        LOAD it into Azure      CSVs -> Azure SQL tables (staged, all-or-nothing)           [only when the database needs refreshing]
         |
         v  (the data: CSVs today, Azure with --source db)
- 3_publish_site/      PUBLISH to the website  data -> page data (data/*.js), report pages, Excel/PDF/PowerPoint downloads (media/exports/)
+ 3_publish_site/      PUBLISH to the website  data -> page data (data/*.json), report pages, Excel/PDF/PowerPoint downloads (media/exports/)
 ```
 
 Run the lot: `python3 tools/run_pipeline.py` (add `--azure` to include stage 2). Or one stage at a time:
@@ -18,7 +18,7 @@ Run the lot: `python3 tools/run_pipeline.py` (add `--azure` to include stage 2).
 |---|---|---|---|
 | 1 | `python3 tools/1_build_data/sample_data.py` | nothing (the model is in code) | OneDrive `Data/**.csv`, `Data documentation/schema.sql` and `README.md` |
 | 2 | `python3 tools/2_load_azure/database/load.py` | OneDrive `Data/` | Azure SQL |
-| 3 | `python3 tools/3_publish_site/build_site.py` | OneDrive `Data/` (or Azure) | `data/*.js`, `report-*.html`, `media/exports/*`, OneDrive Power BI prompts |
+| 3 | `python3 tools/3_publish_site/build_site.py` | OneDrive `Data/` (or Azure) | `data/*.json`, `report-*.html`, `media/exports/*`, OneDrive Power BI prompts |
 
 Then, in the cloud: `.github/workflows/pages.yml` runs `3_publish_site/tests/exports_match.py`, builds with Jekyll, and runs `3_publish_site/publish_site.py`.
 
