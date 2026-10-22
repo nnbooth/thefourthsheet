@@ -807,13 +807,23 @@ def program_cost(D, P):
 
 # ------------------------------------------------------------------ cash (needs the balance sheet: from the opening balance on)
 
+def month_balances(src, org, mo):
+    """{balance-sheet line: amount} at a month end, from fact_balance_month ({} if the data doesn't have that month)."""
+    lines = {r["account_id"]: r["line"] for r in src.table(org, "dim_account")}
+    return {lines[r["account_id"]]: r["amount"] for r in src.table(org, "fact_balance_month") if r["month_key"] == mo}
+
+
 def cash_at(D, mo, P=None):
     """Cash at bank, unspent grant money, and GST and PAYG withheld owed to the ATO, at the end of a month (or today, for
-    the month in progress). The ATO's money sits in the bank until the BAS is paid, so it isn't the organisation's to spend."""
+    the month in progress). The ATO's money sits in the bank until the BAS is paid, so it isn't the organisation's to spend.
+    A month that's over: its balance sheet (fact_balance_month). The month in progress: the daily cash, as at today."""
     src = D["_src"]
     ob = {r["line"]: r["amount"] for r in src.table("nfp", "opening_balance")}
     ob_mo = src.table("nfp", "opening_balance")[0]["as_at"][:7]
     ato_lines = ("GST payable (net)", "PAYG withholding payable")
+    mb = month_balances(src, "nfp", mo) if ds.month_end(mo) < ds.AS_AT.date() else {}
+    if mb:
+        return mb["Cash at bank"], mb["Grants received in advance (unspent)"], sum(mb[k] for k in ato_lines)
     if mo == ob_mo:
         return ob["Cash at bank"], ob["Grants received in advance (unspent)"], sum(ob.get(k, 0) for k in ato_lines)
     end = min(ds.month_end(mo), ds.AS_AT.date())

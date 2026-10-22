@@ -1,5 +1,34 @@
 # Changes
 
+## Months lock by hand; the model has every month's balance sheet and cash flow (22 Oct 2026)
+- **Locking is deliberate.** A month is Locked only when someone locks it (`tools/lock_period.py`), recorded in the
+  period-lock register (`Data/Common/period_lock.csv`, `period_lock` in the database): who, when, and why for a reopen.
+  The 2nd-working-day rule is gone. The sample history's closes are filled in as a bookkeeper would have entered them, so
+  every month reads as before. Wording that promised a lock date ("October locks 4 Nov") now says "until October is locked".
+- **Reports and the home dashboard open on the most recent locked month** (a month that's over but not locked is offered,
+  never the default). Today that's still September.
+- **Balance sheet and cash flow for every month**, 31 Oct 2024 to 30 Sep 2026, for all three sample organisations
+  (`tools/1_build_data/month_end.py`; tables `fact_balance_month`, `fact_cash_flow_month`). August and September are the
+  model's, unchanged; the history joins them at 31 July 2026 to the dollar. Every month must balance, its cash flow must end
+  on its cash, and its profit must equal the ledger's, or the build stops.
+- **The home dashboard** shows all three statements for every month (the cash flow from December 2024), the services firm's
+  unbilled work every month, and the charity's runway back to November 2024.
+- **History fixes:** the services firm's projects now bill their unbilled time at each milestone and at the end (they never
+  did, so $515k of work was never invoiced); the four finished grants have payment schedules; the services invoice table no
+  longer lists May to July 2026 twice. Profit and loss is unchanged in every month.
+
+## Calls downloads made on click, from templates (22 Oct 2026; tester)
+- The Calls report (`report-calls.html`) no longer has pre-built downloads. Choosing Excel, PDF or PowerPoint in its Export
+  menu fills a template with the period on screen, in the browser, and downloads the result. The 39 files in
+  `media/exports/reports/*/calls.*` are gone; every other report is unchanged.
+- The templates are `assets/exports/templates/calls.xlsx`, `calls.pptx` and `calls.pdf.json`: layouts with `{{slots}}` and no
+  numbers. Edit them in Excel, PowerPoint or a text editor; `assets/exports/fill.js` explains the slots. Their first version
+  was made by `tools/archive/make_calls_templates.py` (one-off: running it again overwrites edits).
+- The spreadsheet keeps live formulas (rates worked out from the counts; the Report sheet links to Workings). Every file
+  prints on A4: the PDF is two portrait pages, the workbook's Report sheet one landscape page.
+- The publish check makes the Calls files the same way (Node: `tools/3_publish_site/tests/render_templated.js`) and checks them
+  like every other download. The pipeline (`build_reports.TEMPLATED`) builds no Calls files.
+
 ## Site data as JSON, one file per report (22 Oct 2026)
 - The 178 generated `.js` data files are now 18 `.json` files. Each report has one file holding every period
   (`data/reports/<report>.json`); the report cards share `data/reports/cards.json` (just what a card draws); the home dashboard

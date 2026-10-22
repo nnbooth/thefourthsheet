@@ -63,7 +63,7 @@
     },
     "last": {
       "status": "Provisional",
-      "status_note": "October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them).",
+      "status_note": "October's earlier days are provisional until October is locked (late proofs of delivery can still change them).",
       "kpis": {"total": 44, "on_time_pct": 97.7, "late": 0, "overdue": 1, "open": 0, "in_full_pct": 100.0},
       "points": [
         {"id": "C10322", "n": 1, "on_time": 1, "late": 0, "very_late": 0, "overdue": 0, "open": 0, "name": "Fortitude Valley Building supplies", "sub": "Fortitude Valley", "region": "Inner Brisbane", "lat": -27.4536, "lon": 153.0321},
@@ -115,7 +115,7 @@
     },
     "7d": {
       "status": "Incomplete",
-      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them); earlier days are locked.",
+      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until October is locked (late proofs of delivery can still change them); earlier days are locked.",
       "kpis": {"total": 178, "on_time_pct": 97.6, "late": 3, "overdue": 1, "open": 14, "in_full_pct": 98.2},
       "points": [
         {"id": "C10268", "n": 2, "on_time": 2, "late": 0, "very_late": 0, "overdue": 0, "open": 0, "name": "Brisbane CBD Cafe supplies", "sub": "Brisbane CBD", "region": "Inner Brisbane", "lat": -27.475, "lon": 153.0243},
@@ -188,7 +188,7 @@
     },
     "30d": {
       "status": "Incomplete",
-      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them); earlier days are locked.",
+      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until October is locked (late proofs of delivery can still change them); earlier days are locked.",
       "kpis": {"total": 868, "on_time_pct": 92.9, "late": 60, "overdue": 1, "open": 14, "in_full_pct": 98.0},
       "points": [
         {"id": "C10268", "n": 11, "on_time": 10, "late": 1, "very_late": 0, "overdue": 0, "open": 0, "name": "Brisbane CBD Cafe supplies", "sub": "Brisbane CBD", "region": "Inner Brisbane", "lat": -27.475, "lon": 153.0243},
@@ -282,7 +282,7 @@
     },
     "last": {
       "status": "Provisional",
-      "status_note": "October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them).",
+      "status_note": "October's earlier days are provisional until October is locked (late proofs of delivery can still change them).",
       "kpis": {"total": 10, "on_time_pct": 100.0, "late": 0, "overdue": 0, "open": 0, "in_full_pct": 100.0},
       "points": [
         {"id": "SUP2151", "n": 1, "on_time": 1, "late": 0, "very_late": 0, "overdue": 0, "open": 0, "name": "Supplier C", "sub": "Laverton North VIC", "region": "VIC", "lat": -37.83, "lon": 144.79},
@@ -300,7 +300,7 @@
     },
     "7d": {
       "status": "Incomplete",
-      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them); earlier days are locked.",
+      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until October is locked (late proofs of delivery can still change them); earlier days are locked.",
       "kpis": {"total": 32, "on_time_pct": 96.7, "late": 0, "overdue": 1, "open": 2, "in_full_pct": 93.1},
       "points": [
         {"id": "SUP2208", "n": 4, "on_time": 3, "late": 0, "very_late": 0, "overdue": 0, "open": 1, "name": "Supplier E", "sub": "Yatala QLD", "region": "QLD", "lat": -27.75, "lon": 153.22},
@@ -320,7 +320,7 @@
     },
     "30d": {
       "status": "Incomplete",
-      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until it locks on 3 Nov (late proofs of delivery can still change them); earlier days are locked.",
+      "status_note": "Today is incomplete (as at 2pm; deliveries still on the road); October's earlier days are provisional until October is locked (late proofs of delivery can still change them); earlier days are locked.",
       "kpis": {"total": 128, "on_time_pct": 90.5, "late": 10, "overdue": 2, "open": 2, "in_full_pct": 90.3},
       "points": [
         {"id": "SUP2208", "n": 11, "on_time": 9, "late": 1, "very_late": 0, "overdue": 0, "open": 1, "name": "Supplier E", "sub": "Yatala QLD", "region": "QLD", "lat": -27.75, "lon": 153.22},
@@ -349,6 +349,6 @@
   "exports_meta": {
     "pdf_pages": 2,
     "pptx_slides": 7,
-    "names": {"xlsx": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-09 1320.xlsx", "pdf": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-09 1320.pdf", "pptx": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-09 0839.pptx"}
+    "names": {"xlsx": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-22 1951.xlsx", "pdf": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-22 1951.pdf", "pptx": "Sample Distribution Pty Ltd - Deliveries in and out - to 6 October - generated 2026-10-22 1951.pptx"}
   }
 }

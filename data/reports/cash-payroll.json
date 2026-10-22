@@ -2524,7 +2524,7 @@
       "period_label": "October 2026 to date",
       "period_short": "Oct 2026",
       "period_status": "Incomplete",
-      "status_months": ["2026-09", "2026-10"],
+      "status_months": ["2026-10"],
       "part_note": "October is still in progress (data to 6 October), so it is a part month against full months.",
       "card": {
         "groups": [
@@ -2549,7 +2549,7 @@
       "exports_meta": {
         "pdf_pages": 3,
         "pptx_slides": 7,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-10/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-10/cash-payroll.pdf", "pptx": "media/exports/reports/2026-10/cash-payroll.pptx"},
       "status": [
@@ -4996,7 +4996,7 @@
       "period_label": "September 2026",
       "period_short": "Sep 2026",
       "period_status": "Locked",
-      "status_months": ["2026-08", "2026-09", "2026-10"],
+      "status_months": ["2026-09"],
       "part_note": "",
       "card": {
         "groups": [
@@ -5021,12 +5021,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 6,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-09/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-09/cash-payroll.pdf", "pptx": "media/exports/reports/2026-09/cash-payroll.pptx"},
       "status": [
-        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."}
       ]
     },
     "2026-08": {
@@ -7166,7 +7165,7 @@
       "period_label": "August 2026",
       "period_short": "Aug 2026",
       "period_status": "Locked",
-      "status_months": ["2026-07", "2026-08", "2026-10"],
+      "status_months": ["2026-08"],
       "part_note": "",
       "card": {
         "groups": [
@@ -7191,12 +7190,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 6,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-08/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-08/cash-payroll.pdf", "pptx": "media/exports/reports/2026-08/cash-payroll.pptx"},
       "status": [
-        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."}
       ]
     }
   }

@@ -174,16 +174,22 @@ def services_consultants(mo):
 def services_engagements(m):
     rng = random.Random(4242)
     rows, invoices = [], []
+    unbilled = {}                                           # each project's time worked and not yet invoiced
     for mo in HIST + [OCT]:
         start = fm.month_start(mo)
         to_date = 3 / 22 if mo == OCT else 1.0          # 3 of October's 22 working days have happened
         live = [e for e in SERVICES_HISTORY if e[4] <= mo <= e[5]] if mo != OCT else \
             [[c[0], c[1], c[2], c[3], OCT, OCT, {"E-311": 200, "E-314": 90, "E-318": 70, "E-320": 110}.get(c[0], {"R-102": 56, "R-105": 42, "R-108": 68, "R-110": 34}.get(c[0], 0)), 0]
              for c in m["engagements"] if c[0] in ("E-311", "E-314", "E-318", "E-320", "R-102", "R-105", "R-108", "R-110")]
-        for code, typ, name, rate, _, _, hrs, contr in live:
+        for code, typ, name, rate, _, end, hrs, contr in live:
             h = round(hrs * (1.6 if typ == "Project" and mo != OCT else 1.0) * rng.uniform(0.85, 1.15) * to_date)
             if typ == "Project":
-                revenue, billed = h * rate, (h * rate if (mo != OCT and rng.random() < 0.5) else 0)
+                # projects bill on milestones: at a milestone (about every other month) everything not yet billed is
+                # invoiced, and whatever is left is invoiced in the project's last month (October: nothing billed yet)
+                revenue = h * rate
+                unbilled[code] = unbilled.get(code, 0) + revenue
+                milestone = mo != OCT and rng.random() < 0.5
+                billed = unbilled.pop(code) if (milestone or (mo == end and mo != OCT)) else 0
             else:
                 revenue = billed = rate                     # retainers invoiced on the 1st, in full
             c_ = round(contr * rng.uniform(0.8, 1.2) * to_date / 100) * 100

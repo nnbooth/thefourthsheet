@@ -22,6 +22,25 @@ Run the lot: `python3 tools/run_pipeline.py` (add `--azure` to include stage 2).
 
 Then, in the cloud: `.github/workflows/pages.yml` runs `3_publish_site/tests/exports_match.py`, builds with Jekyll, and runs `3_publish_site/publish_site.py`.
 
+## Locking a month (the month-end close)
+
+A month is **Locked** only when someone locks it: nothing locks on a date by itself. The period-lock register is
+`Data/Common/period_lock.csv` (loaded into Azure as `period_lock`); every Locked / Provisional / Incomplete label and
+every default period reads it.
+
+```
+python3 tools/lock_period.py                                   # the last few months and their status
+python3 tools/lock_period.py 2026-10 --by "Nathan Booth"       # lock October (all three organisations; --org for one)
+python3 tools/lock_period.py 2026-09 --reopen --by "Nathan Booth" --note "late supplier credit"
+```
+
+A month can only be locked once it's over. Then rebuild (`python3 tools/run_pipeline.py`): reports and the home
+dashboard default to the most recent locked month. The data build fills in the sample history's closes (Oct 2024 to
+Sep 2026) but never changes or removes a row someone entered.
+
+The balance sheet and cash flow for every month end come from `1_build_data/month_end.py` (the tables
+`fact_balance_month` and `fact_cash_flow_month`); August and September 2026 are the model's, untouched.
+
 ## The other folders
 
 | Folder | What it is |

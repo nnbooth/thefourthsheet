@@ -77,6 +77,20 @@ def file_name(r):
     return r.get("file", r["slug"])
 
 
+# Reports whose downloads are made when someone clicks Export, in their browser: the report's templates
+# (assets/exports/templates/<slug>.xlsx, .pptx and .pdf.json) filled with the period's page data by assets/exports/fill.js.
+# Nothing is built here for them and no download is stored. Every other report still has its files built in advance
+# (media/exports/reports/<period>/).
+TEMPLATED = {"calls"}
+
+
+def templated_name(r):
+    """The name a templated download is saved under, before its stamp: business, report, period (fill.js adds
+    ' - generated YYYY-MM-DD HHMM' and the extension, at the moment it's made)."""
+    clean = lambda t: re.sub(r'[\\/:*?"<>|]', "", str(t)).strip()
+    return " - ".join(clean(x) for x in (r["business"], SHORT.get(r["slug"], r["slug"]), ek.period_name(r["period"], r["period_status"] == "Incomplete")))
+
+
 def in_short(r):
     """The report's one-line answer, as the site shows it, for the top of every download. Not for a report split into one
     file per business: its answer speaks for both, and the businesses never share a file."""
@@ -106,10 +120,13 @@ def page_payload(reports):
         r["exports"], r["exports_meta"] = paths(parts[0]["file"]), parts[0]["meta"]
         if len(parts) > 1:          # separate businesses: the Export menu hands out the files of the business on screen
             r["exports_by_business"] = {p_["label"]: {"exports": paths(p_["file"]), "meta": p_["meta"]} for p_ in parts}
+        if r["slug"] in TEMPLATED:          # made from its templates when someone clicks Export: no files, no paths
+            r["exports"], r["exports_template"], r["exports_meta"] = None, r["slug"], {"name": templated_name(r)}
+            r.pop("exports_by_business", None)
         if EMBEDS.get(r["slug"]):
             r["embed_url"] = EMBEDS[r["slug"]].replace("{period}", r["period"])
         r["status"] = [{"label": date.fromisoformat(m + "-01").strftime("%B %Y"), "status": ds.month_status(m)[0], "note": ds.month_status(m)[1]}
-                       for m in r["status_months"][1:]]
+                       for m in r["status_months"]]
         out[r["slug"]] = strip(r)
     return out
 
@@ -143,6 +160,10 @@ def write_pages(reports):
     for r in reports:
         page, label = AUDIENCE[r["audience"]]
         dl = f"media/exports/reports/{r['period']}/{r['slug']}"
+        links = (f'<a href="{dl}.xlsx" download>Spreadsheet</a> · <a href="{dl}.pdf" download>PDF</a> · <a href="{dl}.pptx" download>Slides</a>'
+                 if r["slug"] not in TEMPLATED else "Turn on JavaScript to download this report.")
+        later = (f'or download it:\n            <a href="{dl}.pdf">PDF</a> · <a href="{dl}.xlsx">spreadsheet</a> · <a href="{dl}.pptx">slides</a>.'
+                 if r["slug"] not in TEMPLATED else "and to download it.")
         h = head.replace("<title>SMEs | The Fourth Sheet</title>", f"<title>{r['question']} | The Fourth Sheet</title>")
         h = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + r["intro"].replace('"', "'"), h, count=1)
         h = share_matches_description(h)
@@ -161,11 +182,10 @@ def write_pages(reports):
           <div class="report-period"><label for="report-period">Period</label>
             <select id="report-period">{''.join(f'<option value="{o["value"]}"{" selected" if o["value"] == r["period"] else ""}>{o["label"]}{" (incomplete)" if o["status"] == "Incomplete" else ""}</option>' for o in r["periods"])}</select>
             <span class="report-period-note" id="report-period-note"></span></div>
-          <div class="report-export" id="report-export"><noscript><a href="{dl}.xlsx" download>Spreadsheet</a> · <a href="{dl}.pdf" download>PDF</a> · <a href="{dl}.pptx" download>Slides</a></noscript></div>
+          <div class="report-export" id="report-export"><noscript>{links}</noscript></div>
           </div>
           <p class="report-meta" id="report-meta"><span class="dash-sample">Sample data</span> {r['business']}</p>
-          <div id="report-root"><noscript><p>Turn on JavaScript to see this report, or download it:
-            <a href="{dl}.pdf">PDF</a> · <a href="{dl}.xlsx">spreadsheet</a> · <a href="{dl}.pptx">slides</a>.</p></noscript></div>
+          <div id="report-root"><noscript><p>Turn on JavaScript to see this report, {later}</p></noscript></div>
           <p class="report-back-line"><a class="report-back" href="{page}#reports">&larr; Back to {label}</a></p>
         </div>
 {dialog}      </section>

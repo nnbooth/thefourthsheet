@@ -1,0 +1,117 @@
+{
+  "pageSize": "A4",
+  "pageOrientation": "portrait",
+  "pageMargins": [40, 40, 40, 52],
+  "info": { "title": "{{question}}", "author": "The Fourth Sheet", "subject": "{{business}} · {{period_label}} · Sample data" },
+  "defaultStyle": { "fontSize": 9.5, "color": "#25342A", "lineHeight": 1.2 },
+  "styles": {
+    "brand": { "fontSize": 13, "bold": true },
+    "eyebrow": { "fontSize": 8, "color": "#5F6F63" },
+    "sample": { "fontSize": 8, "bold": true, "color": "#8A7A52", "characterSpacing": 0.4 },
+    "title": { "fontSize": 19, "bold": true, "lineHeight": 1.1 },
+    "h2": { "fontSize": 11.5, "bold": true, "margin": [0, 14, 0, 6] },
+    "label": { "fontSize": 7.5, "bold": true, "color": "#5F6F63", "characterSpacing": 0.4 },
+    "muted": { "fontSize": 8, "color": "#5F6F63" },
+    "kpiLabel": { "fontSize": 8, "color": "#5F6F63" },
+    "kpiValue": { "fontSize": 18, "bold": true },
+    "th": { "fontSize": 8, "bold": true, "color": "#5F6F63" }
+  },
+  "content": [
+    {
+      "columns": [
+        { "width": "auto", "table": { "body": [[{ "text": "4th", "bold": true, "color": "#FFFFFF", "fillColor": "#2F7A5D", "fontSize": 11, "margin": [5, 4, 5, 3] }]] }, "layout": "noBorders" },
+        { "width": "*", "text": "The Fourth Sheet", "style": "brand", "margin": [8, 3, 0, 0] },
+        { "width": "auto", "text": "Example report · {{audience}}", "style": "eyebrow", "margin": [0, 6, 0, 0] }
+      ]
+    },
+    { "text": "SAMPLE DATA · INVENTED FIGURES FOR DEMONSTRATION", "style": "sample", "margin": [0, 12, 0, 6] },
+    { "text": "{{question}}", "style": "title" },
+    { "text": "{{business}} · {{period_label}}", "style": "eyebrow", "margin": [0, 4, 0, 8] },
+    { "text": "{{intro}}" },
+    { "$if": "part_note", "text": "{{part_note}}", "style": "muted", "italics": true, "margin": [0, 4, 0, 0] },
+    {
+      "margin": [0, 12, 0, 0],
+      "table": { "widths": ["*"], "body": [[{ "text": [{ "text": "In short: ", "bold": true }, "{{answer}}"], "fillColor": "#EEF5F0", "margin": [10, 8, 10, 8], "fontSize": 10.5 }]] },
+      "layout": "noBorders"
+    },
+    {
+      "margin": [0, 12, 0, 0],
+      "table": {
+        "widths": ["*", "*", "*", "*"],
+        "body": [[
+          { "stack": [{ "text": "{{kpi1.label}}", "style": "kpiLabel" }, { "text": "{{kpi1.value}}", "style": "kpiValue", "color": "{{kpi1.colour}}", "margin": [0, 3, 0, 2] }, { "text": "{{kpi1.sub}}", "style": "muted" }], "margin": [8, 7, 8, 7] },
+          { "stack": [{ "text": "{{kpi2.label}}", "style": "kpiLabel" }, { "text": "{{kpi2.value}}", "style": "kpiValue", "color": "{{kpi2.colour}}", "margin": [0, 3, 0, 2] }, { "text": "{{kpi2.sub}}", "style": "muted" }], "margin": [8, 7, 8, 7] },
+          { "stack": [{ "text": "{{kpi3.label}}", "style": "kpiLabel" }, { "text": "{{kpi3.value}}", "style": "kpiValue", "color": "{{kpi3.colour}}", "margin": [0, 3, 0, 2] }, { "text": "{{kpi3.sub}}", "style": "muted" }], "margin": [8, 7, 8, 7] },
+          { "stack": [{ "text": "{{kpi4.label}}", "style": "kpiLabel" }, { "text": "{{kpi4.value}}", "style": "kpiValue", "color": "{{kpi4.colour}}", "margin": [0, 3, 0, 2] }, { "text": "{{kpi4.sub}}", "style": "muted" }], "margin": [8, 7, 8, 7] }
+        ]]
+      },
+      "layout": "cards"
+    },
+    { "text": "When the calls come in, {{period_label}}", "style": "h2", "margin": [0, 18, 0, 8] },
+    {
+      "columns": [
+        { "width": 250, "stack": [{ "text": "CALLS", "style": "label", "margin": [0, 0, 0, 5] }, { "$chart": "hours", "kind": "hbar", "width": 250, "height": 150 }] },
+        { "width": 15, "text": "" },
+        { "width": 250, "stack": [{ "text": "ANSWERED %", "style": "label", "margin": [0, 0, 0, 5] }, { "$chart": "hours_rate", "kind": "hbar", "width": 250, "height": 150 }] }
+      ]
+    },
+    {
+      "margin": [0, 16, 0, 0],
+      "unbreakable": true,
+      "columns": [
+        { "width": "*", "table": { "widths": ["*"], "body": [[{ "stack": [{ "text": "WHAT IT SHOWS", "style": "label", "margin": [0, 0, 0, 4] }, "{{shows}}"], "margin": [10, 8, 10, 9] }]] }, "layout": "cards" },
+        { "width": 15, "text": "" },
+        { "width": "*", "table": { "widths": ["*"], "body": [[{ "stack": [{ "text": "WHAT YOU'D DO ABOUT IT", "style": "label", "margin": [0, 0, 0, 4] }, "{{action}}"], "fillColor": "#EEF5F0", "margin": [10, 8, 10, 9] }]] }, "layout": "noBorders" }
+      ]
+    },
+
+    { "text": "How final is this data?", "style": "h2", "margin": [0, 18, 0, 6] },
+    {
+      "table": {
+        "widths": [90, 60, "*"],
+        "body": [
+          { "$each": "status", "$do": [
+            { "text": "{{status.label}}", "bold": true, "fontSize": 8.5 },
+            { "text": "{{status.status}}", "fontSize": 8.5 },
+            { "text": "{{status.note}}", "fontSize": 8.5, "color": "#5F6F63" }
+          ] }
+        ]
+      },
+      "layout": "lightHorizontalLines"
+    },
+
+    { "text": "Calls for help by month", "style": "title", "fontSize": 15, "pageBreak": "before" },
+    { "text": "{{months_note}}. Months still in progress are paler.", "style": "eyebrow", "margin": [0, 4, 0, 10] },
+    { "text": "CALLS", "style": "label", "margin": [0, 0, 0, 4] },
+    { "$chart": "months_calls", "kind": "columns", "width": 515, "height": 120 },
+    { "text": "ANSWERED WHILE STAFFED", "style": "label", "margin": [0, 14, 0, 4] },
+    { "$chart": "months_rate", "kind": "line", "width": 515, "height": 120 },
+    { "text": "Every month", "style": "h2", "margin": [0, 12, 0, 4] },
+    {
+      "table": {
+        "headerRows": 1,
+        "widths": ["*", "*", 70, 80, 70, 110],
+        "dontBreakRows": true,
+        "body": [
+          [{ "text": "Month", "style": "th" }, { "text": "Status", "style": "th" }, { "text": "Calls", "style": "th", "alignment": "right" }, { "text": "While staffed", "style": "th", "alignment": "right" }, { "text": "Answered", "style": "th", "alignment": "right" }, { "text": "Answered while staffed", "style": "th", "alignment": "right" }],
+          { "$each": "months", "$do": [
+            { "text": "{{months.label}}", "fontSize": 8 },
+            { "text": "{{months.status}}", "fontSize": 8, "color": "#5F6F63" },
+            { "text": "{{months.calls_text}}", "fontSize": 8, "alignment": "right" },
+            { "text": "{{months.staffed_text}}", "fontSize": 8, "alignment": "right" },
+            { "text": "{{months.answered_text}}", "fontSize": 8, "alignment": "right" },
+            { "text": "{{months.rate_text}}", "fontSize": 8, "alignment": "right" }
+          ] }
+        ]
+      },
+      "layout": "rows"
+    }
+  ],
+  "footer": {
+    "margin": [40, 16, 40, 0],
+    "columns": [
+      { "width": "*", "text": "{{business}} · {{question}}", "style": "muted", "fontSize": 7 },
+      { "width": "auto", "text": "{{generated}} · Sample data · Page {{page}} of {{pages}}", "style": "muted", "fontSize": 7, "alignment": "right" }
+    ]
+  }
+}

@@ -80,6 +80,12 @@ def key(d):
 
 # ------------------------------------------------------------------- dimensions
 
+def locked_on(mo):
+    """The day the month was locked (the period-lock register), or None while it isn't."""
+    d = ds.lock_date(mo)
+    return d.isoformat() if d else None
+
+
 def dim_date():
     rows, d = [], FIRST
     while d <= LAST:
@@ -89,7 +95,7 @@ def dim_date():
                      QLD_HOLIDAYS.get(d), (d - timedelta(days=d.weekday())).isoformat(), d.isocalendar()[1],
                      d.strftime("%Y-%m"), d.strftime("%b %Y"), f"Q{(d.month - 1) // 3 + 1} {d.year}",
                      f"FY{fy}", fy_m, f"FY{fy} Q{(fy_m - 1) // 3 + 1}",
-                     ds.day_status(d), ds.month_status(d.strftime("%Y-%m"))[0], ds.lock_date(d.strftime("%Y-%m")).isoformat(),
+                     ds.day_status(d), ds.month_status(d.strftime("%Y-%m"))[0], locked_on(d.strftime("%Y-%m")),
                      ds.AS_AT.strftime("%Y-%m-%d %H:%M")])
         d += timedelta(days=1)
     return rows
@@ -362,11 +368,12 @@ def build(res):
                   j["labour_cost"], j["gross_profit"]] for j in t["jobs"] + h["jobs"]]
     eng_month = [[x["month"], x["code"], x["hours"], x["revenue"], x["billed"], x["contractors"], x["allocated_cost"], x["contribution"],
                   s["r"][x["month"]]["wip"].get(x["code"], 0) if x["type"] == "Project" else 0] for x in s["engagements"]]
-    eng_month += [[x["month"], x["code"], x["hours"], x["revenue"], x["billed"], x["contractors"], x["allocated_cost"], x["contribution"], None]
-                  for x in h["eng"]]
+    eng_month += [[x["month"], x["code"], x["hours"], x["revenue"], None if x["month"] in history.MODEL_MONTHS else x["billed"], x["contractors"],
+                   x["allocated_cost"], x["contribution"], None] for x in h["eng"]]     # May to July 2026 were billed by the model's monthly invoices
     invoices = [["trades", f"INV-{j['job']}-{j['month'][5:]}", j["job"], None, j["invoice_date"].isoformat(), j["paid_date"].isoformat(), j["amount"]]
                 for j in t["jobs"] + [j for j in h["jobs"] if j["month"] != "2026-10" or j["invoice_date"] <= history.AS_AT]]
-    invoices += [["services", i["invoice"], None, i["code"], i["invoice_date"].isoformat(), i["paid_date"].isoformat(), i["amount"]] for i in h["eng_inv"]]
+    invoices += [["services", i["invoice"], None, i["code"], i["invoice_date"].isoformat(), i["paid_date"].isoformat(), i["amount"]] for i in h["eng_inv"]
+                 if not (history.MODEL_MONTHS[0] <= i["invoice_date"].strftime("%Y-%m") <= history.MODEL_MONTHS[-1])]   # May to July: the model's invoices (below)
     invoices += [["services", i["invoice"], None, None if i["code"] == "earlier" else i["code"], i["invoice_date"].isoformat(),
                   i["paid_date"].isoformat(), i["amount"]] for i in s["invoices"]]
     # invoice numbers come from each business's own billing sequence, in the order the invoices were issued
@@ -386,7 +393,7 @@ def build(res):
     def tbl(name, desc, cols, rows):
         T[name] = (desc, [c[0] for c in cols], rows, cols)
     V = lambda n: f"VARCHAR({n})"
-    tbl("dim_date", "Calendar, 1 Oct 2024 to 31 Dec 2026: the drill-down path from financial year to quarter, month, week and day, with Brisbane working days and public holidays. date_key = yyyymmdd; weeks start Monday. Data status as at the run: day_status / month_status = Locked (month closed), Provisional (over but not locked), Incomplete (today / month to date) or Future; months lock on the 2nd working day of the next month.",
+    tbl("dim_date", "Calendar, 1 Oct 2024 to 31 Dec 2026: the drill-down path from financial year to quarter, month, week and day, with Brisbane working days and public holidays. date_key = yyyymmdd; weeks start Monday. Data status as at the run: day_status / month_status = Locked (month closed), Provisional (over but not locked), Incomplete (today / month to date) or Future; a month is locked when someone locks it (period_lock); month_locked_on is blank until then.",
         [("date_key", "INT PRIMARY KEY"), ("calendar_date", "DATE NOT NULL"), ("day_of_month", "INT"), ("day_name", V(3)),
          ("day_of_week", "INT"), ("is_weekend", "INT"), ("is_working_day", "INT"), ("public_holiday", V(60)),
          ("week_start", "DATE"), ("iso_week", "INT"), ("month_key", V(7)), ("month_name", V(8)), ("calendar_quarter", V(7)),
@@ -422,7 +429,7 @@ def build(res):
         [("month_key", V(7)), ("job_id", V(10) + " REFERENCES dim_job(job_id)"), ("invoice_date", "DATE"), ("revenue", "INT"),
          ("labour_revenue", "INT"), ("materials_revenue", "INT"), ("materials", "INT"),
          ("subcontractors", "INT"), ("tech_hours", "DECIMAL(6,1)"), ("labour_cost", "INT"), ("gross_profit", "INT")], job_month)
-    tbl("fact_engagement_month", "Each services engagement by month, Oct 2024 to Sep 2026 plus October to date. Consultant time costed at $60/hour; wip_closing = unbilled project time at month end.",
+    tbl("fact_engagement_month", "Each services engagement by month, Oct 2024 to Sep 2026 plus October to date. Consultant time costed at $60/hour; wip_closing = unbilled project time at month end (August and September; every month's total is in fact_balance_month). billed is blank for May to July 2026: those months were billed in monthly invoices, not by engagement (fact_invoice).",
         [("month_key", V(7)), ("engagement_id", V(10) + " REFERENCES dim_engagement(engagement_id)"), ("hours", "DECIMAL(6,1)"), ("revenue", "INT"),
          ("billed", "INT"), ("contractors", "INT"), ("consultant_time_cost", "INT"), ("contribution", "INT"), ("wip_closing", "INT")], eng_month)
     tbl("fact_invoice", "Every customer invoice, Oct 2024 to 6 Oct 2026, with the date it was paid (always a banking day). amount includes GST (10%); revenue in the P&L doesn't. Unpaid at a date = debtors at that date.",
@@ -458,6 +465,29 @@ def build(res):
          ("revenue", "INT"), ("direct_cost", "INT"), ("gross_margin", "INT")], lm)
     check_history(res, lm)
     build.line_month, build.nfp_by_month, build.gsm = lm, by_ml, gsm
+
+    # ---- the balance sheet and cash flow at every month end (month_end.py), with the history's profit checked against the ledger
+    import month_end
+    closes, bal_m, cf_m = month_end.build(res)
+    led = {}
+    for r_ in gl:
+        mo = f"{str(r_[0])[:4]}-{str(r_[0])[4:6]}"
+        led[(r_[1], mo)] = led.get((r_[1], mo), 0) + r_[3]
+    for org, c in closes.items():
+        for mo, p_ in c["pnl"].items():
+            got = p_["surplus"] if org == "nfp" else p_["npat"]
+            if got != led.get((org, mo), 0):
+                raise SystemExit(f"month_end {org} {mo}: profit {got} isn't the ledger's {led.get((org, mo), 0)}")
+    tbl("fact_balance_month", "Every balance-sheet line at every month end, 31 Oct 2024 to 30 Sep 2026 (whole dollars; assets, liabilities and equity all positive). "
+        "August and September 2026 are the locked statements; earlier months are closed the same way (month_end.py) and join them at 31 July 2026 to the dollar. "
+        "Totals and subtotals aren't stored: add the lines up (dim_account.section).",
+        [("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("month_key", V(7)), ("account_id", "INT REFERENCES dim_account(account_id)"), ("amount", "INT")],
+        [[o, m, acct[(o, "bsr", line)], a] for o, m, line, a in bal_m])
+    tbl("fact_cash_flow_month", "Every cash-flow line for every month, Nov 2024 to Sep 2026 (direct method: in +, out -). Cash at the start of the month + these = "
+        "cash at the end (fact_balance_month). Each line is what was earned or incurred less the change in what's owed.",
+        [("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("month_key", V(7)), ("account_id", "INT REFERENCES dim_account(account_id)"), ("amount", "INT")],
+        [[o, m, acct[(o, "cfr", line)], a] for o, m, line, a in cf_m])
+    build.closes = closes
     build.balance_daily = bal
     tbl("fact_grant_position", "Each grant at 30 Sep 2026: received, spent, budget to date, still to spend. balance = received - spent (+ in advance, - receivable).",
         [("grant_id", V(10) + " REFERENCES dim_grant(grant_id)"), ("date_key", "INT"), ("received_to_date", "INT"), ("spent_to_date", "INT"),

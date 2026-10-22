@@ -31,8 +31,12 @@ data/                       generated data (JSON) the pages fetch: dashboard.jso
 assets/brand/               the 4th mark, wordmark, share image
 assets/tools/               tool logos       assets/people/   headshot
 media/mockups/              mock-up images   media/game/      game video and poster
-media/exports/              the downloads: home-dashboard statements, deliveries, and
+media/exports/              the downloads built in advance: home-dashboard statements, deliveries, and
                             reports/<period>/<report>.xlsx|pdf|pptx (generated)
+assets/exports/             the downloads made when someone clicks Export (Calls so far): templates/ (the Excel,
+                            PowerPoint and PDF layouts, with {{slots}}, hand-reviewed), fill.js (fills them in the
+                            browser), reports.js (each report's slot values, from its data/reports/ file)
+assets/vendor/              JSZip and pdfmake, loaded only when a download is made
 game/                       the playable game
 tools/                      Python that generates everything (kept in git, not published), in three stages:
                               1_build_data/    make the raw data (CSVs in OneDrive)

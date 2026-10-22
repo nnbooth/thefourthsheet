@@ -20,7 +20,7 @@ from functools import lru_cache
 from pathlib import Path
 
 ORG_FOLDERS = {"trades": "SME trades", "services": "SME services", "nfp": "Not-for-profit"}
-COMMON = ("dim_date", "dim_org", "target", "simulation_parameter")
+COMMON = ("dim_date", "dim_org", "target", "simulation_parameter", "period_lock")
 
 
 def data_root():

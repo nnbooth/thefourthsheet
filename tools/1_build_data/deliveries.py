@@ -43,7 +43,7 @@ def period_status(d_from, d_to):
     if "Incomplete" in days_:
         notes.append(f"today is incomplete (as at {ds.as_at_text().split(',')[0]}; deliveries still on the road)")
     if "Provisional" in days_:
-        notes.append(f"October's earlier days are provisional until it locks on {ds.strf(ds.lock_date('2026-10'), '%-d %b')} (late proofs of delivery can still change them)")
+        notes.append("October's earlier days are provisional until October is locked (late proofs of delivery can still change them)")
     if "Locked" in days_ and notes:
         notes.append("earlier days are locked")
     badge = "Incomplete" if "Incomplete" in days_ else "Provisional" if "Provisional" in days_ else "Locked"

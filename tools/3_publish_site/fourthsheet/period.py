@@ -58,7 +58,7 @@ class Period:
         self.fytd_l = d.strftime("%b %Y") if len(self.fytd) == 1 else f"{a.strftime('%b')} to {d.strftime('%b %Y')}"
         self.pfytd_l = mdate(self.ly).strftime("%b %Y") if len(self.fytd) == 1 else f"{a.strftime('%b')} to {mdate(self.ly).strftime('%b %Y')}"
         self.ytd_name = f"Year to date ({self.fytd_l})"
-        self.status_months = [self.prev, mo] + ([CURRENT] if CURRENT > mo else [])
+        self.status_months = [mo]          # how final the data is: the reported month only (Nathan, 22 Oct 2026)
         self.no_ly = f"Not available: the data starts {mdate(months[0]).strftime('%B %Y')}."
         self.part_note = (f"{self.month} is still in progress (data to {ds.strf(ds.AS_AT, '%-d %B')}), so it is a part month against full months."
                           if self.incomplete else "")

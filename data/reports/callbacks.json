@@ -507,7 +507,7 @@
       "period_label": "October 2026 to date",
       "period_short": "Oct 2026",
       "period_status": "Incomplete",
-      "status_months": ["2026-09", "2026-10"],
+      "status_months": ["2026-10"],
       "part_note": "October is still in progress (data to 6 October), so it is a part month against full months.",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -528,7 +528,7 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - October - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-10/callbacks.xlsx", "pdf": "media/exports/reports/2026-10/callbacks.pdf", "pptx": "media/exports/reports/2026-10/callbacks.pptx"},
       "status": [
@@ -1040,7 +1040,7 @@
       "period_label": "September 2026",
       "period_short": "Sep 2026",
       "period_status": "Locked",
-      "status_months": ["2026-08", "2026-09", "2026-10"],
+      "status_months": ["2026-09"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -1061,12 +1061,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - September 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-09/callbacks.xlsx", "pdf": "media/exports/reports/2026-09/callbacks.pdf", "pptx": "media/exports/reports/2026-09/callbacks.pptx"},
       "status": [
-        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."}
       ]
     },
     "2026-08": {
@@ -1560,7 +1559,7 @@
       "period_label": "August 2026",
       "period_short": "Aug 2026",
       "period_status": "Locked",
-      "status_months": ["2026-07", "2026-08", "2026-10"],
+      "status_months": ["2026-08"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -1581,12 +1580,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - August 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-08/callbacks.xlsx", "pdf": "media/exports/reports/2026-08/callbacks.pdf", "pptx": "media/exports/reports/2026-08/callbacks.pptx"},
       "status": [
-        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."}
       ]
     },
     "2026-07": {
@@ -2066,7 +2064,7 @@
       "period_label": "July 2026",
       "period_short": "Jul 2026",
       "period_status": "Locked",
-      "status_months": ["2026-06", "2026-07", "2026-10"],
+      "status_months": ["2026-07"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -2087,12 +2085,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - July 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-07/callbacks.xlsx", "pdf": "media/exports/reports/2026-07/callbacks.pdf", "pptx": "media/exports/reports/2026-07/callbacks.pptx"},
       "status": [
-        {"label": "July 2026", "status": "Locked", "note": "July 2026 is locked (closed 4 Aug 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "July 2026", "status": "Locked", "note": "July 2026 is locked (closed 4 Aug 2026). These numbers won't change."}
       ]
     },
     "2026-06": {
@@ -2558,7 +2555,7 @@
       "period_label": "June 2026",
       "period_short": "Jun 2026",
       "period_status": "Locked",
-      "status_months": ["2026-05", "2026-06", "2026-10"],
+      "status_months": ["2026-06"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -2579,12 +2576,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - June 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-06/callbacks.xlsx", "pdf": "media/exports/reports/2026-06/callbacks.pdf", "pptx": "media/exports/reports/2026-06/callbacks.pptx"},
       "status": [
-        {"label": "June 2026", "status": "Locked", "note": "June 2026 is locked (closed 2 Jul 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "June 2026", "status": "Locked", "note": "June 2026 is locked (closed 2 Jul 2026). These numbers won't change."}
       ]
     },
     "2026-05": {
@@ -3036,7 +3032,7 @@
       "period_label": "May 2026",
       "period_short": "May 2026",
       "period_status": "Locked",
-      "status_months": ["2026-04", "2026-05", "2026-10"],
+      "status_months": ["2026-05"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -3057,12 +3053,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - May 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-05/callbacks.xlsx", "pdf": "media/exports/reports/2026-05/callbacks.pdf", "pptx": "media/exports/reports/2026-05/callbacks.pptx"},
       "status": [
-        {"label": "May 2026", "status": "Locked", "note": "May 2026 is locked (closed 2 Jun 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "May 2026", "status": "Locked", "note": "May 2026 is locked (closed 2 Jun 2026). These numbers won't change."}
       ]
     },
     "2026-04": {
@@ -3500,7 +3495,7 @@
       "period_label": "April 2026",
       "period_short": "Apr 2026",
       "period_status": "Locked",
-      "status_months": ["2026-03", "2026-04", "2026-10"],
+      "status_months": ["2026-04"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -3521,12 +3516,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - April 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-04/callbacks.xlsx", "pdf": "media/exports/reports/2026-04/callbacks.pdf", "pptx": "media/exports/reports/2026-04/callbacks.pptx"},
       "status": [
-        {"label": "April 2026", "status": "Locked", "note": "April 2026 is locked (closed 5 May 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "April 2026", "status": "Locked", "note": "April 2026 is locked (closed 5 May 2026). These numbers won't change."}
       ]
     },
     "2026-03": {
@@ -3950,7 +3944,7 @@
       "period_label": "March 2026",
       "period_short": "Mar 2026",
       "period_status": "Locked",
-      "status_months": ["2026-02", "2026-03", "2026-10"],
+      "status_months": ["2026-03"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -3971,12 +3965,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - March 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-03/callbacks.xlsx", "pdf": "media/exports/reports/2026-03/callbacks.pdf", "pptx": "media/exports/reports/2026-03/callbacks.pptx"},
       "status": [
-        {"label": "March 2026", "status": "Locked", "note": "March 2026 is locked (closed 2 Apr 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "March 2026", "status": "Locked", "note": "March 2026 is locked (closed 2 Apr 2026). These numbers won't change."}
       ]
     },
     "2026-02": {
@@ -4386,7 +4379,7 @@
       "period_label": "February 2026",
       "period_short": "Feb 2026",
       "period_status": "Locked",
-      "status_months": ["2026-01", "2026-02", "2026-10"],
+      "status_months": ["2026-02"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -4407,12 +4400,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - February 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-02/callbacks.xlsx", "pdf": "media/exports/reports/2026-02/callbacks.pdf", "pptx": "media/exports/reports/2026-02/callbacks.pptx"},
       "status": [
-        {"label": "February 2026", "status": "Locked", "note": "February 2026 is locked (closed 3 Mar 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "February 2026", "status": "Locked", "note": "February 2026 is locked (closed 3 Mar 2026). These numbers won't change."}
       ]
     },
     "2026-01": {
@@ -4808,7 +4800,7 @@
       "period_label": "January 2026",
       "period_short": "Jan 2026",
       "period_status": "Locked",
-      "status_months": ["2025-12", "2026-01", "2026-10"],
+      "status_months": ["2026-01"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -4829,12 +4821,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - January 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-01/callbacks.xlsx", "pdf": "media/exports/reports/2026-01/callbacks.pdf", "pptx": "media/exports/reports/2026-01/callbacks.pptx"},
       "status": [
-        {"label": "January 2026", "status": "Locked", "note": "January 2026 is locked (closed 3 Feb 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "January 2026", "status": "Locked", "note": "January 2026 is locked (closed 3 Feb 2026). These numbers won't change."}
       ]
     },
     "2025-12": {
@@ -5216,7 +5207,7 @@
       "period_label": "December 2025",
       "period_short": "Dec 2025",
       "period_status": "Locked",
-      "status_months": ["2025-11", "2025-12", "2026-10"],
+      "status_months": ["2025-12"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -5237,12 +5228,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - December 2025 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2025-12/callbacks.xlsx", "pdf": "media/exports/reports/2025-12/callbacks.pdf", "pptx": "media/exports/reports/2025-12/callbacks.pptx"},
       "status": [
-        {"label": "December 2025", "status": "Locked", "note": "December 2025 is locked (closed 5 Jan 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "December 2025", "status": "Locked", "note": "December 2025 is locked (closed 5 Jan 2026). These numbers won't change."}
       ]
     },
     "2025-11": {
@@ -5610,7 +5600,7 @@
       "period_label": "November 2025",
       "period_short": "Nov 2025",
       "period_status": "Locked",
-      "status_months": ["2025-10", "2025-11", "2026-10"],
+      "status_months": ["2025-11"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -5631,12 +5621,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - November 2025 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2025-11/callbacks.xlsx", "pdf": "media/exports/reports/2025-11/callbacks.pdf", "pptx": "media/exports/reports/2025-11/callbacks.pptx"},
       "status": [
-        {"label": "November 2025", "status": "Locked", "note": "November 2025 is locked (closed 2 Dec 2025). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "November 2025", "status": "Locked", "note": "November 2025 is locked (closed 2 Dec 2025). These numbers won't change."}
       ]
     },
     "2025-10": {
@@ -5990,7 +5979,7 @@
       "period_label": "October 2025",
       "period_short": "Oct 2025",
       "period_status": "Locked",
-      "status_months": ["2025-09", "2025-10", "2026-10"],
+      "status_months": ["2025-10"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -6011,12 +6000,11 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 3,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Callbacks - October 2025 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2025-10/callbacks.xlsx", "pdf": "media/exports/reports/2025-10/callbacks.pdf", "pptx": "media/exports/reports/2025-10/callbacks.pptx"},
       "status": [
-        {"label": "October 2025", "status": "Locked", "note": "October 2025 is locked (closed 4 Nov 2025). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "October 2025", "status": "Locked", "note": "October 2025 is locked (closed 4 Nov 2025). These numbers won't change."}
       ]
     }
   }

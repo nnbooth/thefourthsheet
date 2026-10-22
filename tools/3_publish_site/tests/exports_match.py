@@ -13,6 +13,9 @@ runs anywhere, including the publish step on GitHub, with no OneDrive needed. Fo
   3. The spreadsheet's headline figures, recalculated from its formulas, equal the site's numbers.
   4. No export file is left over that no report links to any more (a stale file nobody would notice).
 
+A report whose downloads are made from templates when someone clicks Export (exports_template in its data) has no
+files in media/exports/: this makes them first, with tests/render_templated.js (Node), and checks those the same way.
+
 Prints PASS or FAIL for each, with every mismatch, and exits 1 if anything fails.
 """
 import sys, pathlib  # noqa: E401  (next 2 lines: make every stage folder importable; see tools/README.md)
@@ -100,9 +103,22 @@ import build_reports as br                     # the builder's own rules: which 
 
 runs = list(every_period())
 linked, missing, text_bad, xl_bad = set(), [], [], []
+
+# reports whose downloads are made from templates when someone clicks Export: make them here the same way (Node, the
+# site's own fill.js and libraries), then check them like any other download
+TEMPLATED = None
+if any(r.get("exports_template") for r in runs):
+    import subprocess
+    import tempfile
+    TEMPLATED = Path(tempfile.mkdtemp(prefix="templated-"))
+    made = subprocess.run(["node", str(REPO / "tools/3_publish_site/tests/render_templated.js"), str(TEMPLATED)], capture_output=True, text=True)
+    if made.returncode:
+        report("0. every templated download can be made from its template", [(made.stderr or made.stdout).strip()[-1500:]])
+
 for r in runs:
     slug, per = r["slug"], r["period"]
-    folder = (REPO / (r.get("exports") or {}).get("xlsx", f"media/exports/reports/{per}/x")).parent
+    folder = (TEMPLATED / per if r.get("exports_template") and TEMPLATED
+              else (REPO / (r.get("exports") or {}).get("xlsx", f"media/exports/reports/{per}/x")).parent)
     for part in br.file_parts(r):                # one set of files per business for a report split by business
         files = {fmt: folder / f"{br.file_name(part)}.{fmt}" for fmt in ("xlsx", "pdf", "pptx")}
         name = br.file_name(part)

@@ -945,7 +945,7 @@
       "period_label": "October 2026 to date",
       "period_short": "Oct 2026",
       "period_status": "Incomplete",
-      "status_months": ["2026-09", "2026-10"],
+      "status_months": ["2026-10"],
       "part_note": "October is still in progress (data to 6 October), so it is a part month against full months.",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -956,7 +956,7 @@
       "exports_meta": {
         "pdf_pages": 1,
         "pptx_slides": 2,
-        "names": {"xlsx": "Sample Community Services Ltd - Runway - October - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Runway - October - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Runway - October - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Community Services Ltd - Runway - October - generated 2026-10-22 1657.xlsx", "pdf": "Sample Community Services Ltd - Runway - October - generated 2026-10-22 1657.pdf", "pptx": "Sample Community Services Ltd - Runway - October - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-10/runway.xlsx", "pdf": "media/exports/reports/2026-10/runway.pdf", "pptx": "media/exports/reports/2026-10/runway.pptx"},
       "status": [
@@ -1834,7 +1834,7 @@
       "period_label": "September 2026",
       "period_short": "Sep 2026",
       "period_status": "Locked",
-      "status_months": ["2026-08", "2026-09", "2026-10"],
+      "status_months": ["2026-09"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -1845,12 +1845,11 @@
       "exports_meta": {
         "pdf_pages": 1,
         "pptx_slides": 2,
-        "names": {"xlsx": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Community Services Ltd - Runway - September 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-09/runway.xlsx", "pdf": "media/exports/reports/2026-09/runway.pdf", "pptx": "media/exports/reports/2026-09/runway.pptx"},
       "status": [
-        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."}
       ]
     },
     "2026-08": {
@@ -2364,7 +2363,7 @@
       "period_label": "August 2026",
       "period_short": "Aug 2026",
       "period_status": "Locked",
-      "status_months": ["2026-07", "2026-08", "2026-10"],
+      "status_months": ["2026-08"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -2375,12 +2374,11 @@
       "exports_meta": {
         "pdf_pages": 1,
         "pptx_slides": 2,
-        "names": {"xlsx": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-10 2155.pptx"}
+        "names": {"xlsx": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Community Services Ltd - Runway - August 2026 - generated 2026-10-22 1657.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-08/runway.xlsx", "pdf": "media/exports/reports/2026-08/runway.pdf", "pptx": "media/exports/reports/2026-08/runway.pptx"},
       "status": [
-        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."}
       ]
     }
   }

@@ -12,8 +12,10 @@ tables, using the model's own definitions for every headline number:
   - The fourth sheet: the same three headline numbers per organisation and the same chart, for that month against
     the month before. Where a number needs month-end balances (the not-for-profit's runway; the services firm's
     unbilled work) it is only shown from the opening balance, 31 July 2026, and says so before that.
-  - Balance sheet and cash flow: the full statements exist for September 2026 (the month modelled end to end).
-    Other months say so rather than invent balance-sheet history.
+  - Balance sheet and cash flow: every month end from the month-end close (fact_balance_month, fact_cash_flow_month,
+    tools/1_build_data/month_end.py), laid out and added up exactly like September's. They must balance (net assets =
+    equity) and the cash flow must end on the balance sheet's cash, or the build stops. The month in progress has
+    neither yet: they're prepared at month end.
 
 CHECKED: September built this way equals the model's September (every profit-and-loss line and every headline
 number), so the two routes can't drift apart.
@@ -118,6 +120,42 @@ def profit_and_loss(D, org, template, spec, mo, prev, title):
     return {"tab": "Income & exp." if org == "nfp" else "P&L", "title": title, "rows": rows}
 
 
+def statement(D, org, tpl, spec, kind, mo, prev, title):
+    """The balance sheet ('bs') or cash flow ('cf') for a month against the month before: September's lines, filled from
+    fact_balance_month / fact_cash_flow_month and added up by September's own formulas (statement_spec). None if the
+    data doesn't have both months (the month in progress; the first month's cash flow)."""
+    src = D["_src"]
+    lines = {r["account_id"]: r["line"] for r in src.table(org, "dim_account")}
+    table = src.table(org, "fact_balance_month" if kind == "bs" else "fact_cash_flow_month")
+    got = {(r["month_key"], lines[r["account_id"]]): r["amount"] for r in table}
+    bal = {(r["month_key"], lines[r["account_id"]]): r["amount"] for r in src.table(org, "fact_balance_month")}
+    pv = lambda m: Period(m, D["trades"].months).prev
+    def value(label, m):
+        if kind == "cf" and label == "Cash at start of month":
+            return bal.get((pv(m), "Cash at bank"))
+        return got.get((m, label))
+    rows = []
+    for r, sp in zip(tpl, spec):
+        vals = None if sp is None else [value(r["label"], mo), value(r["label"], prev)] if sp == "input" else [0, 0]
+        if sp == "input" and None in vals:
+            return None
+        note = r.get("note")
+        if mo != BASE and note and re.search(r"October|September|instalments arrive", note):    # September's own notes
+            note = {"cf": "Paid on the 28th of the month after each quarter (the October to December quarter: 28 February)."}.get(kind) if "BAS" in r["label"] else "Incl. GST."
+        rows.append({"label": r["label"], "level": r["level"], "values": vals, "note": note})
+    for i, sp in enumerate(spec):
+        if isinstance(sp, tuple):
+            k, refs = sp
+            rows[i]["values"] = [sum((1 if k == "sum" else sg) * rows[j]["values"][c] for j, sg in (((j, 1) for j in refs) if k == "sum" else refs)) for c in range(2)]
+    v = {r["label"]: r["values"] for r in rows if r["values"] is not None}
+    for c, m in enumerate((mo, prev)):           # the statements tie: net assets = equity; the cash flow ends on the balance sheet's cash
+        if kind == "bs" and v["Net assets"][c] != v.get("Total equity", v.get("Accumulated funds"))[c]:
+            raise SystemExit(f"dashboard months: {org} balance sheet at {m} doesn't balance")
+        if kind == "cf" and v["Cash at end of month"][c] != bal.get((m, "Cash at bank")):
+            raise SystemExit(f"dashboard months: {org} cash flow for {m} doesn't end on the balance sheet's cash")
+    return {"tab": "Balance sheet" if kind == "bs" else "Cash flow", "title": title, "rows": rows}
+
+
 def total(stmt, label):
     r = next((r for r in stmt["rows"] if r["label"] == label), None)
     return r["values"] if r else [0, 0]
@@ -188,8 +226,7 @@ def fourth_services(D, P, pnl, prev_name):
         inp("Revenue", "money", total(pnl, "Total revenue")), inp("Billable hours", "hours", S(lambda m: hours(D, "services", m))),
         calc("Revenue per hour", "money", "r0/r1")], ("Retainers are billed on the first of the month, so the month in progress has no fair hourly figure yet. It's counted at month end."
                                                      if P.incomplete else "Retainers and training are fixed fees, so fewer hours on them raises the hourly figure."), cols=cols)
-    em = src.table("services", "fact_engagement_month")
-    wip = lambda m: (sum(r["wip_closing"] or 0 for r in em if r["month_key"] == m) if m >= "2026-08" else None)
+    wip = lambda m: C.month_balances(src, "services", m).get("Work in progress (unbilled project time)") if ds.month_end(m) < ds.AS_AT.date() else None
     inv = [i for i in src.table("services", "fact_invoice") if i["org_id"] == "services"]
     debt = lambda m: sum(i["amount"] for i in inv if i["invoice_date"] <= min(ds.month_end(m), ds.AS_AT.date()).isoformat()
                          and (not i["paid_date"] or i["paid_date"] > min(ds.month_end(m), ds.AS_AT.date()).isoformat()))
@@ -200,7 +237,7 @@ def fourth_services(D, P, pnl, prev_name):
             calc("Total tied up", "money", "r0+r1")], P.part_note or None, cols=cols)
     else:
         s_lock = support("Unpaid client invoices", "Invoices raised and not yet paid, at month end", [inp("Unpaid client invoices", "money", S(debt))],
-                         "Unbilled work (work in progress) is only in the data from August 2026, so this month shows unpaid invoices alone.", cols=cols)
+                         "Unbilled work (work in progress) is counted at month end, so the month in progress shows unpaid invoices alone.", cols=cols)
     v = lambda sp: sp["xl"]["rows"][-1]["values"]
     ut, rt, lk = v(s_ut), v(s_rate), v(s_lock)
     k1, c1 = chg(ut[0], ut[1], FMT["pct"], "up", prev_name)
@@ -240,7 +277,7 @@ def fourth_nfp(D, P, pnl, prev_name):
         calc("Money raised", "money", f"r{nf + 1}+r{nf + 2}+r{nf + 3}"), calc("Cost per dollar raised", "cents", f"r{nf}/r{nf + 4}*100")],
         P.part_note or None, cols=cols)
     tgt = D["_targets"]["Reserves (unrestricted cash runway)"]
-    has_cash = pv >= OPENING
+    has_cash = all(C.month_balances(D["_src"], "nfp", m) or m >= OPENING for m in (mo, pv))
     if has_cash:
         def rn(m):
             Q = Period(m, o.months)
@@ -254,7 +291,7 @@ def fourth_nfp(D, P, pnl, prev_name):
             calc("Runway", "months", "r3/r4")], f"Reserves target: {FMT['months'](tgt)}." + (f" {P.part_note}" if P.incomplete else ""), cols=cols)
     else:
         s_run = support("Unrestricted cash runway", C.RUNWAY_FORMULA, [inp("Not in the data for this month", "text", ["–"])],
-                        "Cash and grant balances start at the opening balance, 31 July 2026, so runway can be worked out from July 2026.", cols=(lab(mo),))
+                        "Cash and grant balances start at the first month end in the data, 31 October 2024.", cols=(lab(mo),))
     ending_window = D["_targets"]["Grants ending soon: window"]
     G = C.grant_positions(D, P)
     live = [g for g in G if g["active"]]
@@ -270,7 +307,7 @@ def fourth_nfp(D, P, pnl, prev_name):
         k2, c2 = chg(run[0], run[1], FMT["months"], "up", prev_name)
         run_v = FMT["months"](run[0])
     else:
-        k2, c2, run_v = "cash data starts 31 Jul 2026", "", "–"
+        k2, c2, run_v = "balances start 31 Oct 2024", "", "–"
     GS = sorted(live, key=lambda g: -g["total"])
     mname = lambda m: date(int(m[:4]), int(m[5:]), 1).strftime("%b %y")
     details = [support(g["program"], f"{g['funder']} · {money(g['total'])} · {date.fromisoformat(g['start']).strftime('%b %Y')} to {date.fromisoformat(g['end']).strftime('%b %Y')}", [
@@ -305,21 +342,25 @@ def month_payload(D, base, mo, templates):
     orgs = []
     for bo in base["orgs"]:
         org = bo["id"]
-        tpl, spec = templates[org]
+        tpl, spec = templates[org]["pnl"]
         title = re.sub(r"(Profit and loss|Income and expenditure), .*", lambda m_: f"{m_.group(1)}, {P.label}", bo["statements"]["pnl"]["title"])
         pnl = profit_and_loss(D, org, tpl, spec, mo, P.prev, title)
-        note = ("The balance sheet and cash flow are built in full for September 2026, the month-end modelled end to end. "
-                "Pick September 2026 to see them; the profit and loss and the fourth sheet are here for every month.")
+        end = ds.strf(ds.month_end(mo), "%-d %B %Y")
+        bs = statement(D, org, *templates[org]["bs"], "bs", mo, P.prev, f"Balance sheet at {end}")
+        cf = statement(D, org, *templates[org]["cf"], "cf", mo, P.prev, f"Cash flow, {P.label}")
+        why = ("The balance sheet and cash flow are prepared at month end, so the month in progress doesn't have them yet."
+               if P.incomplete else "The cash flow compares each month with the one before, and the data starts at 31 October 2024, "
+                                    "so the first cash flow is December 2024's.")
         orgs.append({**{k: bo[k] for k in ("id", "toggle", "name", "about", "unit")},
                      "columns": [lab(mo), lab(P.prev)],
-                     "statements": {"pnl": pnl, "bs": {"tab": "Balance sheet", "title": "Balance sheet", "unavailable": note},
-                                    "cf": {"tab": "Cash flow", "title": "Cash flow", "unavailable": note}},
+                     "statements": {"pnl": pnl, "bs": bs or {"tab": "Balance sheet", "title": "Balance sheet", "unavailable": why},
+                                    "cf": cf or {"tab": "Cash flow", "title": "Cash flow", "unavailable": why}},
                      "fourth": FOURTH[org](D, P, pnl, prev_name),
                      "checks": ["Every subtotal and total adds up", "The bottom line ties to the ledger for the month", "Every headline number shows its workings"],
                      "assumptions": [[g, [[a, (P.label if a == "Reporting month" else b)] for a, b in items]] for g, items in bo["assumptions"]],
                      "exports": {}, "exports_meta": {"unavailable": "The monthly pack is built for September 2026. Every report page has downloads for each month."}})
     status = [{"month": m, "label": lab(m), "status": ds.month_status(m)[0], "note": ds.month_status(m)[1]}
-              for m in [mo, P.prev] + ([CURRENT] if CURRENT > mo else [])]
+              for m in [mo]]            # the reported month only
     return {"generated": base.get("generated"), "as_at": base.get("as_at"), "month": mo, "label": P.label, "status": status, "orgs": orgs}
 
 
@@ -329,7 +370,10 @@ def build(D):
     templates = {}
     for bo in base["orgs"]:
         tpl = statement_template(D[bo["id"]], bo["statements"]["pnl"]["rows"])
-        templates[bo["id"]] = (tpl, statement_spec(tpl))
+        templates[bo["id"]] = {"pnl": (tpl, statement_spec(tpl))}
+        for k in ("bs", "cf"):
+            rows = bo["statements"][k]["rows"]
+            templates[bo["id"]][k] = (rows, statement_spec(rows))
     # the safety net: September built from the ledger must equal the model's September
     sep = month_payload(D, base, BASE, templates)
     for bo, so in zip(base["orgs"], sep["orgs"]):
@@ -337,6 +381,11 @@ def build(D):
         for r in so["statements"]["pnl"]["rows"]:
             if r["values"] is not None and r["label"] in want and [round_half_up(x) for x in r["values"]] != [round_half_up(x) for x in want[r["label"]]]:
                 raise SystemExit(f"dashboard months: {bo['id']} September '{r['label']}' {r['values']} isn't the model's {want[r['label']]}")
+        for k in ("bs", "cf"):                # and its balance sheet and cash flow, from the month tables, the model's
+            want = [r["values"] for r in bo["statements"][k]["rows"]]
+            got = [r["values"] for r in so["statements"][k]["rows"]]
+            if [[round_half_up(x) for x in w] if w else w for w in want] != [[round_half_up(x) for x in g] if g else g for g in got]:
+                raise SystemExit(f"dashboard months: {bo['id']} September {k} from the month tables isn't the model's")
         for kb, ks in zip(bo["fourth"]["kpis"], so["fourth"]["kpis"]):
             if kb["value"] != ks["value"]:
                 raise SystemExit(f"dashboard months: {bo['id']} September '{kb['label']}' {ks['value']} isn't the model's {kb['value']}")
@@ -348,12 +397,15 @@ def build(D):
         if mo != BASE:                        # September is the full dashboard (dashboard.json)
             months[mo] = month_payload(D, base, mo, templates)
     listing.reverse()                         # newest first, like the report pages
+    # it opens on the most recent locked month (the period-lock register); if none is locked, the latest that's over
+    default = (next((m["value"] for m in listing if m["status"] == "Locked"), None)
+               or next(m["value"] for m in listing if m["status"] != "Incomplete"))
     write_json(REPO / "data" / "dashboard-months.json",
                {"note": "GENERATED by tools/3_publish_site/fourthsheet/dashboard_months.py from the ledger: every month but September, "
                         "loaded when someone picks one. Invented sample data. Don't edit by hand.",
-                "by_month": {m["value"]: months[m["value"]] for m in listing if m["value"] in months}})
+                "by_month": {m["value"]: months[m["value"]] for m in listing if m["value"] in months}})   # September is in dashboard.json
     f = REPO / "data" / "dashboard.json"     # the months list goes in with September, so the picker fills straight away
     d = json.loads(f.read_text(encoding="utf-8"))
-    d["period_list"] = {"default": BASE, "months": listing}
+    d["period_list"] = {"default": default, "base": BASE, "months": listing}
     write_json(f, d)
     return len(listing)

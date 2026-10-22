@@ -4,7 +4,10 @@ data_status.py — how final each period's numbers are, as at the time the
 reports are run. Every page, export and database load uses this, so a report
 always says what it can and can't be relied on for.
 
-  Locked       the month has been closed (2nd working day of the next month).
+  Locked       someone has locked (closed) the month: the period-lock register
+               (period_lock.py, Data/Common/period_lock.csv) says so as at the
+               run. Locking is a deliberate step, never a date: a month stays
+               provisional until it's locked (tools/lock_period.py).
                The numbers won't change.
   Provisional  the month (or day) is over but not yet locked: late invoices,
                proofs of delivery and adjustments can still change it.
@@ -40,7 +43,7 @@ def working(d):
     return d.weekday() < 5 and d not in QLD_HOLIDAYS
 
 AS_AT = datetime(2026, 10, 6, 14, 0)     # the reports are "run" at 2pm on Tuesday 6 October 2026
-LOCK_WORKING_DAY = 2                      # months are locked on the 2nd working day of the next month
+HISTORY_LOCK_DAY = 2                      # the sample history's closes were done on the 2nd working day of the next month
 
 
 def month_end(month):
@@ -48,23 +51,55 @@ def month_end(month):
     return date(y + (m == 12), m % 12 + 1, 1) - timedelta(days=1)
 
 
-def lock_date(month):
+def history_lock_day(month):
+    """The day the sample history's bookkeeper locked a month (period_lock.seed_history): its 2nd working day after."""
     d, n = month_end(month), 0
-    while n < LOCK_WORKING_DAY:
+    while n < HISTORY_LOCK_DAY:
         d += timedelta(days=1)
         if working(d):
             n += 1
     return d
 
 
-def month_status(month, as_at=AS_AT):
+_REGISTER = []
+
+
+def _register():
+    if not _REGISTER:
+        import period_lock
+        _REGISTER.extend(period_lock.read())
+    return _REGISTER
+
+
+def lock_state(month, as_at=AS_AT, org=None):
+    """('Locked' | 'Reopened' | None, the action in force) for a month as at a moment, from the period-lock register.
+    For one organisation, or (org None) all three together: locked only when every one of them has locked it."""
+    import period_lock
+    rows = _register()
+    acts = [period_lock.state(rows, o, month, as_at) for o in ([org] if org else period_lock.ORGS)]
+    if acts and all(a and a["action"] == "Locked" for a in acts):
+        return "Locked", max(acts, key=lambda a: a["when"])
+    reopened = [a for a in acts if a and a["action"] == "Reopened"]
+    return ("Reopened", max(reopened, key=lambda a: a["when"])) if reopened else (None, None)
+
+
+def lock_date(month, as_at=AS_AT, org=None):
+    """The day the month was locked, as at a moment (None if it isn't locked)."""
+    st, act = lock_state(month, as_at, org)
+    return act["when"].date() if st == "Locked" else None
+
+
+def month_status(month, as_at=AS_AT, org=None):
     """('Locked' | 'Provisional' | 'Incomplete', plain-English note)."""
     label = date.fromisoformat(month + "-01").strftime("%B %Y")
-    if as_at.date() >= lock_date(month):
-        return "Locked", f"{label} is locked (closed {strf(lock_date(month), '%-d %b %Y')}). These numbers won't change."
+    st, act = lock_state(month, as_at, org)
+    if st == "Locked":
+        return "Locked", f"{label} is locked (closed {strf(act['when'].date(), '%-d %b %Y')}). These numbers won't change."
     if as_at.date() > month_end(month):
-        return "Provisional", (f"{label} is over but not locked yet (due {strf(lock_date(month), '%-d %b')}). "
-                               "Late invoices and adjustments can still change it.")
+        if st == "Reopened":
+            return "Provisional", (f"{label} was reopened on {strf(act['when'].date(), '%-d %b %Y')}"
+                                   f"{' (' + act['note'] + ')' if act.get('note') else ''}: it can change until it's locked again.")
+        return "Provisional", f"{label} is over but not locked yet. Late invoices and adjustments can still change it."
     return "Incomplete", f"{label} is still in progress: figures to {strf(as_at, '%-d %b')} only."
 
 
@@ -73,7 +108,7 @@ def day_status(d, as_at=AS_AT):
         return "Future"
     if d == as_at.date():
         return "Incomplete"
-    return "Locked" if as_at.date() >= lock_date(d.strftime("%Y-%m")) else "Provisional"
+    return "Locked" if lock_state(d.strftime("%Y-%m"), as_at)[0] == "Locked" else "Provisional"
 
 
 def as_at_text(as_at=AS_AT):

@@ -587,7 +587,7 @@
       "period_label": "October 2026 to date",
       "period_short": "Oct 2026",
       "period_status": "Incomplete",
-      "status_months": ["2026-09", "2026-10"],
+      "status_months": ["2026-10"],
       "part_note": "October is still in progress (data to 6 October), so it is a part month against full months.",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -605,12 +605,9 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - October - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - October - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - October - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-10/calls.xlsx", "pdf": "media/exports/reports/2026-10/calls.pdf", "pptx": "media/exports/reports/2026-10/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - October"},
+      "exports_template": "calls",
       "status": [
         {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
       ]
@@ -1200,7 +1197,7 @@
       "period_label": "September 2026",
       "period_short": "Sep 2026",
       "period_status": "Locked",
-      "status_months": ["2026-08", "2026-09", "2026-10"],
+      "status_months": ["2026-09"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -1218,15 +1215,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - September 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - September 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - September 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-09/calls.xlsx", "pdf": "media/exports/reports/2026-09/calls.pdf", "pptx": "media/exports/reports/2026-09/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - September 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "September 2026", "status": "Locked", "note": "September 2026 is locked (closed 2 Oct 2026). These numbers won't change."}
       ]
     },
     "2026-08": {
@@ -1800,7 +1793,7 @@
       "period_label": "August 2026",
       "period_short": "Aug 2026",
       "period_status": "Locked",
-      "status_months": ["2026-07", "2026-08", "2026-10"],
+      "status_months": ["2026-08"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -1818,15 +1811,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - August 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - August 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - August 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-08/calls.xlsx", "pdf": "media/exports/reports/2026-08/calls.pdf", "pptx": "media/exports/reports/2026-08/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - August 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "August 2026", "status": "Locked", "note": "August 2026 is locked (closed 2 Sep 2026). These numbers won't change."}
       ]
     },
     "2026-07": {
@@ -2386,7 +2375,7 @@
       "period_label": "July 2026",
       "period_short": "Jul 2026",
       "period_status": "Locked",
-      "status_months": ["2026-06", "2026-07", "2026-10"],
+      "status_months": ["2026-07"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -2404,15 +2393,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - July 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - July 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - July 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-07/calls.xlsx", "pdf": "media/exports/reports/2026-07/calls.pdf", "pptx": "media/exports/reports/2026-07/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - July 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "July 2026", "status": "Locked", "note": "July 2026 is locked (closed 4 Aug 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "July 2026", "status": "Locked", "note": "July 2026 is locked (closed 4 Aug 2026). These numbers won't change."}
       ]
     },
     "2026-06": {
@@ -2958,7 +2943,7 @@
       "period_label": "June 2026",
       "period_short": "Jun 2026",
       "period_status": "Locked",
-      "status_months": ["2026-05", "2026-06", "2026-10"],
+      "status_months": ["2026-06"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -2976,15 +2961,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - June 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - June 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - June 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-06/calls.xlsx", "pdf": "media/exports/reports/2026-06/calls.pdf", "pptx": "media/exports/reports/2026-06/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - June 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "June 2026", "status": "Locked", "note": "June 2026 is locked (closed 2 Jul 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "June 2026", "status": "Locked", "note": "June 2026 is locked (closed 2 Jul 2026). These numbers won't change."}
       ]
     },
     "2026-05": {
@@ -3516,7 +3497,7 @@
       "period_label": "May 2026",
       "period_short": "May 2026",
       "period_status": "Locked",
-      "status_months": ["2026-04", "2026-05", "2026-10"],
+      "status_months": ["2026-05"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -3534,15 +3515,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - May 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - May 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - May 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-05/calls.xlsx", "pdf": "media/exports/reports/2026-05/calls.pdf", "pptx": "media/exports/reports/2026-05/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - May 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "May 2026", "status": "Locked", "note": "May 2026 is locked (closed 2 Jun 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "May 2026", "status": "Locked", "note": "May 2026 is locked (closed 2 Jun 2026). These numbers won't change."}
       ]
     },
     "2026-04": {
@@ -4060,7 +4037,7 @@
       "period_label": "April 2026",
       "period_short": "Apr 2026",
       "period_status": "Locked",
-      "status_months": ["2026-03", "2026-04", "2026-10"],
+      "status_months": ["2026-04"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -4078,15 +4055,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - April 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - April 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - April 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-04/calls.xlsx", "pdf": "media/exports/reports/2026-04/calls.pdf", "pptx": "media/exports/reports/2026-04/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - April 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "April 2026", "status": "Locked", "note": "April 2026 is locked (closed 5 May 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "April 2026", "status": "Locked", "note": "April 2026 is locked (closed 5 May 2026). These numbers won't change."}
       ]
     },
     "2026-03": {
@@ -4590,7 +4563,7 @@
       "period_label": "March 2026",
       "period_short": "Mar 2026",
       "period_status": "Locked",
-      "status_months": ["2026-02", "2026-03", "2026-10"],
+      "status_months": ["2026-03"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -4608,15 +4581,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - March 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - March 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - March 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-03/calls.xlsx", "pdf": "media/exports/reports/2026-03/calls.pdf", "pptx": "media/exports/reports/2026-03/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - March 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "March 2026", "status": "Locked", "note": "March 2026 is locked (closed 2 Apr 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "March 2026", "status": "Locked", "note": "March 2026 is locked (closed 2 Apr 2026). These numbers won't change."}
       ]
     },
     "2026-02": {
@@ -5106,7 +5075,7 @@
       "period_label": "February 2026",
       "period_short": "Feb 2026",
       "period_status": "Locked",
-      "status_months": ["2026-01", "2026-02", "2026-10"],
+      "status_months": ["2026-02"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -5124,15 +5093,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - February 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - February 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - February 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-02/calls.xlsx", "pdf": "media/exports/reports/2026-02/calls.pdf", "pptx": "media/exports/reports/2026-02/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - February 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "February 2026", "status": "Locked", "note": "February 2026 is locked (closed 3 Mar 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "February 2026", "status": "Locked", "note": "February 2026 is locked (closed 3 Mar 2026). These numbers won't change."}
       ]
     },
     "2026-01": {
@@ -5608,7 +5573,7 @@
       "period_label": "January 2026",
       "period_short": "Jan 2026",
       "period_status": "Locked",
-      "status_months": ["2025-12", "2026-01", "2026-10"],
+      "status_months": ["2026-01"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -5626,15 +5591,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - January 2026 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - January 2026 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - January 2026 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2026-01/calls.xlsx", "pdf": "media/exports/reports/2026-01/calls.pdf", "pptx": "media/exports/reports/2026-01/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - January 2026"},
+      "exports_template": "calls",
       "status": [
-        {"label": "January 2026", "status": "Locked", "note": "January 2026 is locked (closed 3 Feb 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "January 2026", "status": "Locked", "note": "January 2026 is locked (closed 3 Feb 2026). These numbers won't change."}
       ]
     },
     "2025-12": {
@@ -6096,7 +6057,7 @@
       "period_label": "December 2025",
       "period_short": "Dec 2025",
       "period_status": "Locked",
-      "status_months": ["2025-11", "2025-12", "2026-10"],
+      "status_months": ["2025-12"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -6114,15 +6075,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - December 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - December 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - December 2025 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2025-12/calls.xlsx", "pdf": "media/exports/reports/2025-12/calls.pdf", "pptx": "media/exports/reports/2025-12/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - December 2025"},
+      "exports_template": "calls",
       "status": [
-        {"label": "December 2025", "status": "Locked", "note": "December 2025 is locked (closed 5 Jan 2026). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "December 2025", "status": "Locked", "note": "December 2025 is locked (closed 5 Jan 2026). These numbers won't change."}
       ]
     },
     "2025-11": {
@@ -6570,7 +6527,7 @@
       "period_label": "November 2025",
       "period_short": "Nov 2025",
       "period_status": "Locked",
-      "status_months": ["2025-10", "2025-11", "2026-10"],
+      "status_months": ["2025-11"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -6588,15 +6545,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - November 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - November 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - November 2025 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2025-11/calls.xlsx", "pdf": "media/exports/reports/2025-11/calls.pdf", "pptx": "media/exports/reports/2025-11/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - November 2025"},
+      "exports_template": "calls",
       "status": [
-        {"label": "November 2025", "status": "Locked", "note": "November 2025 is locked (closed 2 Dec 2025). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "November 2025", "status": "Locked", "note": "November 2025 is locked (closed 2 Dec 2025). These numbers won't change."}
       ]
     },
     "2025-10": {
@@ -7030,7 +6983,7 @@
       "period_label": "October 2025",
       "period_short": "Oct 2025",
       "period_status": "Locked",
-      "status_months": ["2025-09", "2025-10", "2026-10"],
+      "status_months": ["2025-10"],
       "part_note": "",
       "periods": [
         {"value": "2026-10", "label": "October 2026 to date", "status": "Incomplete"},
@@ -7048,15 +7001,11 @@
         {"value": "2025-10", "label": "October 2025", "status": "Locked"}
       ],
       "default_period": "2026-09",
-      "exports_meta": {
-        "pdf_pages": 2,
-        "pptx_slides": 3,
-        "names": {"xlsx": "Sample Community Services Ltd - Calls for help - October 2025 - generated 2026-10-10 2155.xlsx", "pdf": "Sample Community Services Ltd - Calls for help - October 2025 - generated 2026-10-10 2155.pdf", "pptx": "Sample Community Services Ltd - Calls for help - October 2025 - generated 2026-10-10 2155.pptx"}
-      },
-      "exports": {"xlsx": "media/exports/reports/2025-10/calls.xlsx", "pdf": "media/exports/reports/2025-10/calls.pdf", "pptx": "media/exports/reports/2025-10/calls.pptx"},
+      "exports": null,
+      "exports_meta": {"name": "Sample Community Services Ltd - Calls for help - October 2025"},
+      "exports_template": "calls",
       "status": [
-        {"label": "October 2025", "status": "Locked", "note": "October 2025 is locked (closed 4 Nov 2025). These numbers won't change."},
-        {"label": "October 2026", "status": "Incomplete", "note": "October 2026 is still in progress: figures to 6 Oct only."}
+        {"label": "October 2025", "status": "Locked", "note": "October 2025 is locked (closed 4 Nov 2025). These numbers won't change."}
       ]
     }
   }

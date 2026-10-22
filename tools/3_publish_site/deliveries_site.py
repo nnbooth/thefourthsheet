@@ -49,7 +49,7 @@ def write_xlsx(d):
     retrieved = ds.as_at_text()
     sub = f"Sample Distribution · Wacol DC · SAMPLE DATA (invented) · The Fourth Sheet · {ek.MADE_WITH['xlsx']}"
     status = (f"Data status (data retrieved {retrieved}): today's deliveries are incomplete; 1–5 October is provisional "
-              f"(October locks {ds.strf(ds.lock_date('2026-10'), '%-d %b')}); September and earlier are locked. {ek.generated_text()}.")
+              f"(until October is locked); September and earlier are locked. {ek.generated_text()}.")
     wb = ek.xl_default_font(Workbook())
     pages = {}
 
@@ -250,7 +250,7 @@ h1 {{ font-size: 15pt; margin: 4px 0; }} h2 {{ font-size: 12pt; color: #2f7a5d; 
 <span class=sample>SAMPLE DATA · invented figures for demonstration</span>
 <h1>Sample Distribution: Wacol DC</h1>
 {ek.status_box_html([("Today (6 Oct)", "Incomplete", f"As at {ds.as_at_text()}: deliveries still on the road are shown as on their way."),
-                     ("1–5 October", "Provisional", f"October is not locked until {ds.strf(ds.lock_date('2026-10'), '%-d %b')}: late proofs of delivery can still change it."),
+                     ("1–5 October", "Provisional", "October isn't locked yet: late proofs of delivery can still change it."),
                      ("September 2026 and earlier", "Locked", "Closed. These numbers won't change.")])}
 {side('out', 'Deliveries out, to customers')}
 {side('in', 'Deliveries in, from suppliers')}
@@ -297,7 +297,7 @@ def write_pptx(d):
     p = d["payload"]
     deck = pptkit.Deck("Sample Distribution Pty Ltd", "Deliveries in and out", "deliveries-sample.pptx", ds.as_at_text())
     deck.title_slide("Every delivery out to a customer and in from a supplier, for an invented distribution centre at Wacol, Brisbane.",
-                     [f"Today (6 Oct): incomplete, as at {ds.as_at_text()}.", f"1-5 October: provisional (October locks {ds.strf(ds.lock_date('2026-10'), '%-d %b')}).",
+                     [f"Today (6 Oct): incomplete, as at {ds.as_at_text()}.", "1-5 October: provisional (until October is locked).",
                       "September and earlier: locked."])
     for side, heading in (("out", "Deliveries out, to customers"), ("in", "Deliveries in, from suppliers")):
         k = p[side]["30d"]["kpis"]

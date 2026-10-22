@@ -16,6 +16,9 @@
 !media/exports/**/*.xlsx
 !media/exports/**/*.pptx
 !media/exports/**/*.pdf
+# ...and the templates the site fills when someone clicks Export (layouts with {{slots}}, no data; reviewed by hand)
+!assets/exports/templates/*.xlsx
+!assets/exports/templates/*.pptx
 
 # Secrets: copy .env.example to .env and fill it in; never commit .env
 **/.env

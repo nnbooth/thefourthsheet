@@ -27,7 +27,7 @@ import financial_model as fm
 from model_tables import ORDER, statements      # (moved to stage 1: the same rows feed the database)
 import readable_json
 
-STATUS_MONTHS = ["2026-09", "2026-08", "2026-10"]   # the reported month, the comparison, and the month now running
+STATUS_MONTHS = ["2026-09"]   # how final the data is: the reported month only, not the comparison or the month now running
 
 REPO = Path(__file__).resolve().parent.parent.parent
 EXPORTS = REPO / "media" / "exports"
@@ -538,7 +538,7 @@ def html_report(org, v):
     fmt = lambda n: f"({abs(n):,})" if n < 0 else (f"{n:,}" if n else "-")
 
     def stmt(s):
-        stl = " · ".join(f"{date.fromisoformat(m + '-01').strftime('%b %Y')}: {ds.month_status(m)[0].lower()}" for m in fm.PERIODS)
+        stl = " · ".join(f"{date.fromisoformat(m + '-01').strftime('%b %Y')}: {ds.month_status(m)[0].lower()}" for m in fm.PERIODS[:1])   # the reported month only
         out = [f"<h2>{esc(s['title'])}</h2><p class=stline>{esc(stl)}</p><table><tr><th>$</th>" + "".join(f"<th class=n>{c}</th>" for c in fm.COLUMNS + ["Change"]) + "</tr>"]
         for rw in s["rows"]:
             if rw["values"] is None:

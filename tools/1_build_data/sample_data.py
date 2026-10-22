@@ -49,7 +49,7 @@ DOCS = DATA_ROOT.parent / "Data documentation"     # schema.sql and table descri
 
 # Which folder of Data/ each table goes in: one folder per task, plus Common for shared tables.
 FOLDERS = [
-    ("Common", ("dim_date", "dim_org", "target", "simulation_parameter")),
+    ("Common", ("dim_date", "dim_org", "target", "simulation_parameter", "period_lock")),
     ("Deliveries map", ("dim_customer", "dim_supplier", "dim_carrier", "fact_delivery_out", "fact_delivery_in")),
     ("Live displays", ("display_",)),
     ("Reports", ("report_",)),
@@ -252,6 +252,17 @@ def folder_for(name):
 
 
 def main():
+    import data_status as ds
+    import period_lock          # which months are locked: read by every status label, so it comes first
+    added = period_lock.seed_history([f"{y}-{m:02d}" for y in (2024, 2025, 2026) for m in range(1, 13) if "2024-10" <= f"{y}-{m:02d}" <= "2026-09"],
+                                     ds.history_lock_day)
+    if added:
+        print(f"Period-lock register: added the sample history's closes ({added} rows) to {period_lock.path()}")
+    table("period_lock", "The period-lock register: every time a month was locked (closed) or reopened, by whom and when. A month's "
+          "status is its last action as at the run (Locked; Reopened or never locked = Provisional once it's over). Entered by people "
+          "(tools/lock_period.py), never generated: the build only adds the sample history's closes (Oct 2024 to Sep 2026) where a "
+          "month has no entry, and keeps every row anyone entered.",
+          period_lock.COLUMNS, [[r[c] or None for c in period_lock.COLUMNS] for r in period_lock.read()])
     import financial_model      # the driver-based model
     import model_tables         # ...as CSV rows for the dashboard tables
     import warehouse            # the same model as a daily star schema for a cloud database

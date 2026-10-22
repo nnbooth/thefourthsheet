@@ -304,6 +304,10 @@ function watchEmbedLoad(container) {
 
      const menu = mountExportMenu(container, { period, filterLabel, exports: {xlsx, pdf, pptx}, meta: {pdf_pages, pptx_slides} });
      menu.update({ period, filterLabel, exports, meta });     // when the period or the filter changes
+     mountExportMenu(container, { period, build: (fmt) => promiseOf({ bytes, name, type }) });   // made on click, nothing stored
+
+   With build (a report filled from its templates: assets/exports/fill.js), each format is made when it's chosen and
+   handed straight to the browser as a download.
 
    Static pages can declare one instead: <div data-export data-export-period="September 2026" data-export-filter="All"
    data-export-xlsx="…" data-export-pdf="…" data-export-pptx="…" data-export-pdf-pages="5" data-export-pptx-slides="9"></div>
@@ -342,7 +346,13 @@ function mountExportMenu(container, opts) {
     menu.querySelectorAll('.xm-item').forEach((a) => {
       const href = state.exports && state.exports[a.dataset.fmt];
       const size = a.querySelector('.xm-size');
-      if (href) {
+      if (state.build) {               // made when chosen: no file to link to yet
+        a.href = '#';
+        a.removeAttribute('download');
+        a.removeAttribute('aria-disabled');
+        a.removeAttribute('tabindex');
+        if (!a.hasAttribute('aria-busy')) size.textContent = 'Made when you choose it';
+      } else if (href) {
         a.href = href;
         a.removeAttribute('aria-disabled');
         a.removeAttribute('tabindex');
@@ -361,7 +371,7 @@ function mountExportMenu(container, opts) {
   }
   function sizeExcel() {                         // the workbook's size, read when the menu opens (blank if that fails)
     const a = menu.querySelector('.xm-item[data-fmt="xlsx"]');
-    if (!a.getAttribute('href')) return;
+    if (state.build || !a.getAttribute('href')) return;
     fetch(a.getAttribute('href'), { method: 'HEAD' }).then((r) => {
       const n = Number(r.headers.get('content-length'));
       if (r.ok && n) a.querySelector('.xm-size').textContent = fileSize(n);
@@ -393,11 +403,52 @@ function mountExportMenu(container, opts) {
   menu.addEventListener('click', (e) => {
     const item = e.target.closest('.xm-item[aria-disabled]');
     if (item) { e.preventDefault(); return; }
+    const made = state.build && e.target.closest('.xm-item');
+    if (made) {
+      e.preventDefault();
+      if (made.hasAttribute('aria-busy')) return;
+      const size = made.querySelector('.xm-size');
+      made.setAttribute('aria-busy', 'true');
+      size.textContent = 'Making your file…';
+      state.build(made.dataset.fmt).then((file) => {
+        const url = URL.createObjectURL(new Blob([file.bytes], { type: file.type }));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        made.removeAttribute('aria-busy');
+        paint();
+        close();
+      }).catch((err) => {
+        console.error(err);
+        made.removeAttribute('aria-busy');
+        size.textContent = "Couldn't make the file. Try again in a moment.";
+      });
+      return;
+    }
     if (e.target.closest('.xm-item, .xm-sub')) setTimeout(() => close(), 0);   // a choice closes the menu
   });
   document.addEventListener('click', (e) => { if (!container.contains(e.target)) close(false); });
   paint();
   return { update(next) { state = { ...state, ...next }; paint(); }, close };
+}
+
+// assets/exports/fill.js, loaded the first time someone chooses a download it makes (it loads its own libraries)
+let exportKit = null;
+function loadExportKit(ver) {
+  if (!exportKit) {
+    exportKit = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = `assets/exports/fill.js${ver ? `?v=${ver}` : ''}`;
+      s.onload = () => resolve(window.FourthSheetExports);
+      s.onerror = () => { exportKit = null; reject(new Error('Could not load assets/exports/fill.js')); };
+      document.head.appendChild(s);
+    });
+  }
+  return exportKit;
 }
 
 function mountStaticExportMenus() {
@@ -1182,7 +1233,10 @@ function setupReportPage(f) {
   let view = { business: params.get('business'), filter: params.get('filter') };     // restored from a copied link
   let current = base;
   const exportBox = document.getElementById('report-export');
-  const menu = exportBox ? mountExportMenu(exportBox, { period: base.period_label, exports: base.exports, meta: base.exports_meta }) : null;
+  // a report filled from its templates (assets/exports/): each download is made from the period on screen when it's chosen
+  const ver = ((document.querySelector('script[src*="script.js"]') || {}).src || '').split('?v=')[1] || '';
+  const builder = (r) => (r.exports_template ? (fmt) => loadExportKit(ver).then((kit) => kit.build(r, fmt, { ver })) : null);
+  const menu = exportBox ? mountExportMenu(exportBox, { period: base.period_label, exports: base.exports, meta: base.exports_meta, build: builder(base) }) : null;
   const syncUrl = () => {
     const u = new URL(window.location.href);
     const set = (k, v) => (v ? u.searchParams.set(k, v) : u.searchParams.delete(k));
@@ -1194,8 +1248,7 @@ function setupReportPage(f) {
   const show = (r) => {
     current = r;
     const st = r.status[0];
-    const later = r.status.slice(1).map((x) => `${x.label} is still in progress`);
-    meta.innerHTML = `${metaStart} · <span class="dash-status is-${st.status.toLowerCase()}" title="${esc(r.status.map((x) => x.note).join(' '))}">${esc(r.period_label)}: ${esc(st.status.toLowerCase())}</span>${later.length ? ` · ${esc(later.join(' · '))}` : ''}`;
+    meta.innerHTML = `${metaStart} · <span class="dash-status is-${st.status.toLowerCase()}" title="${esc(r.status.map((x) => x.note).join(' '))}">${esc(r.period_label)}: ${esc(st.status.toLowerCase())}</span>`;
     document.getElementById('report-period-note').textContent = [r.part_note || r.periods_note || '', periodFallback].filter(Boolean).join(' ');
     const root = document.getElementById('report-root');
     root.innerHTML = '';
@@ -1207,7 +1260,7 @@ function setupReportPage(f) {
         view = v;
         // separate businesses have separate files: the menu offers the business on screen, never both in one
         const ex = (r.exports_by_business || {})[v.business] || { exports: r.exports, meta: r.exports_meta };
-        if (menu) menu.update({ period: r.period_label, filterLabel: [v.business, v.filterLabel].filter(Boolean).join(' · '), exports: ex.exports, meta: ex.meta });
+        if (menu) menu.update({ period: r.period_label, filterLabel: [v.business, v.filterLabel].filter(Boolean).join(' · '), exports: ex.exports, meta: ex.meta, build: builder(r) });
         syncUrl();
       },
     });
@@ -1341,13 +1394,15 @@ function startHeroDash(box, data) {
   if (data.orgs.some((o) => o.id === askedFor)) dash.org = askedFor;
   const exportBox = document.getElementById('dash-export');
   if (exportBox) dash.menu = mountExportMenu(exportBox, { period: data.status[0].label });
-  // Period: every month the data has; September is the full dashboard, other months load when picked
+  // Period: every month the data has. It opens on the most recent locked month (list.default, from the period-lock
+  // register); dashboard.json holds the month modelled end to end (list.base), every other month loads when picked
   const list = data.period_list;
   const perSel = document.getElementById('dash-period');
   if (list && perSel) {
     const base = data;
+    const baseMonth = list.base || list.default;
     perSel.innerHTML = list.months.map((m) => `<option value="${m.value}">${esc(m.label)}${m.status === 'Incomplete' ? ' (incomplete)' : ''}</option>`).join('');
-    const loadMonth = (mo) => (mo === list.default ? Promise.resolve(base)
+    const loadMonth = (mo) => (mo === baseMonth ? Promise.resolve(base)
       : loadData('data/dashboard-months.json').then((all) => all.by_month[mo] || Promise.reject(new Error(`no ${mo}`))));
     const showMonth = (mo, remember) => {
       perSel.disabled = true;
@@ -1363,7 +1418,7 @@ function startHeroDash(box, data) {
     };
     const start = pickPeriod(list.months, sitePeriod()) || list.default;
     perSel.value = start;
-    if (start !== list.default) setTimeout(() => showMonth(start, false), 0);
+    if (start !== baseMonth) setTimeout(() => showMonth(start, false), 0);
     perSel.addEventListener('change', () => showMonth(perSel.value, true));
   }
   document.getElementById('dash-orgs').innerHTML = data.orgs.map((o) => `<button type="button" data-org="${o.id}" aria-pressed="false">${esc(o.toggle)}</button>`).join('');

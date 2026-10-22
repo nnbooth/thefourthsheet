@@ -39,6 +39,9 @@ STAR = {
     "fact_gl_daily": ("Fact (transaction)", "The centre of the finance star: **fact_gl** at one row per posting (org, day, account, job/engagement/grant), keys only + amount DECIMAL(19,4) + load_id. Every P&L, balance sheet and cash flow is a view over it. Clustered columnstore index. Missing job/engagement/grant = the −1 'not applicable' member, never NULL."),
     "fact_cash_daily": ("Fact (transaction)", "Fold into **fact_gl** (cash-flow lines are just accounts), or keep as **fact_cash** with the same keys if the bank feed arrives separately. Reconcile to fact_gl's cash account every day."),
     "fact_balance_daily": ("Fact (periodic snapshot)", "Becomes **fact_balance_snapshot** at one row per org, day and balance account (unpivot cash_at_bank and unpaid_invoices into account rows). Better still, derive it as a running total of fact_gl and keep the snapshot only for speed."),
+    "fact_balance_month": ("Fact (periodic snapshot)", "Keep as **fact_balance_month_snapshot** (org_key, month_key, account_key, amount): the month-end close, every balance-sheet line. Once fact_gl carries opening journals, check each month against the running total of fact_gl (they must tie to the dollar), then keep this as the locked record of each close."),
+    "fact_cash_flow_month": ("Fact (derived, monthly)", "Don't store once fact_cash is complete: **rpt.cash_flow_month** = fact_cash summed by month and cash-flow account. Until then keep it, and check opening cash + the month's lines = closing cash (fact_balance_month)."),
+    "period_lock": ("Fact (transaction, entered)", "Keep as **ops.period_lock** (org_key, month_key, action, action_at, action_by, note): entered by people, append-only, never regenerated. **ops.period_status** (a view: the last action per org and month) replaces the status columns on dim_date."),
     "fact_timesheet_daily": ("Fact (transaction)", "Becomes **fact_time** at one row per person, day and job/engagement: date_key, org_key, **employee_key** (add a dim_employee: role, team, cost rate, type 2), job_key or engagement_key, hours, cost (hours × the rate in force). Utilisation and time-not-charged come straight from it."),
     "fact_job_month": ("Fact (derived, monthly)", "Don't store: build **rpt.job_month** as a view (revenue and materials from fact_gl by job, hours from fact_time, cost at the dim rate). Call-out revenue is two ledger accounts, 'Call-outs: technician time' and 'Call-outs: materials charged' (cost × 1.3), so the view keeps both columns. Storing it means two copies of the truth."),
     "fact_engagement_month": ("Fact (derived, monthly)", "Don't store the revenue/cost columns: they come from fact_time and fact_gl. Keep WIP as **fact_wip_snapshot** (engagement, month end, unbilled value): a balance at a date is a periodic snapshot."),
@@ -167,9 +170,9 @@ everything else (statements, KPIs, screens, workings) is a **view in `rpt`**, so
 """
 
 
-BUILD_ORDER = ["dim_date", "dim_org", "dim_account", "dim_customer", "dim_supplier", "dim_carrier", "dim_contract", "dim_job",
+BUILD_ORDER = ["dim_date", "dim_org", "period_lock", "dim_account", "dim_customer", "dim_supplier", "dim_carrier", "dim_contract", "dim_job",
                "dim_engagement", "dim_grant", "cost_rate", "target", "opening_balance", "fact_gl_daily", "fact_cash_daily",
-               "fact_balance_daily", "fact_timesheet_daily", "fact_invoice", "fact_job_month", "fact_engagement_month", "fact_line_month",
+               "fact_balance_daily", "fact_balance_month", "fact_cash_flow_month", "fact_timesheet_daily", "fact_invoice", "fact_job_month", "fact_engagement_month", "fact_line_month",
                "fact_grant_instalment", "fact_grant_spend_month", "fact_grant_position", "fact_delivery_out", "fact_delivery_in",
                "driver_month", "commentary", "kpi_workings", "model_statements", "model_fourth_sheet_kpis", "model_assumptions",
                "simulation_parameter", "template_pnl"]
@@ -221,7 +224,7 @@ def area(n):
             return a
     if n in ("dim_customer", "dim_supplier", "dim_carrier", "fact_delivery_in", "fact_delivery_out"):
         return "Deliveries"
-    if n in ("dim_date", "dim_org", "target", "simulation_parameter"):
+    if n in ("dim_date", "dim_org", "target", "simulation_parameter", "period_lock"):
         return "Common"
     return "Month-end (finance, jobs, engagements, grants)"
 

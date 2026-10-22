@@ -5,7 +5,7 @@ PY=$(command -v python3 || command -v python || command -v py)
 "$PY" tools/githooks/check_secrets.py || exit 1
 # A commit that changes the site's numbers or its downloads must keep them matching: every spreadsheet, PDF and slide
 # deck says exactly what the site says (tools/3_publish_site/tests/exports_match.py), or the commit stops.
-if git diff --cached --name-only | grep -qE '^(data/|media/exports/)'; then
+if git diff --cached --name-only | grep -qE '^(data/|media/exports/|assets/exports/)'; then
   echo "Checking every download matches the site..."
   "$PY" -I tools/3_publish_site/tests/exports_match.py . > /tmp/exports_match.$$ 2>&1
   status=$?
