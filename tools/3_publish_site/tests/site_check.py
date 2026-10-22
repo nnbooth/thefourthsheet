@@ -19,6 +19,7 @@ _T = next(p for p in pathlib.Path(__file__).resolve().parents if p.name == "tool
 sys.path[:0] = [d for d in (str(x) for x in sorted(_T.iterdir()) if x.is_dir() and (x.name[0].isdigit() or x.name in ("shared", "setup"))) if d not in sys.path]
 
 import functools
+import json
 import http.server
 import socket
 import sys
@@ -116,7 +117,7 @@ def main():
                     continue
                 before = pg.inner_text("#report-root")
                 opening = pg.eval_on_selector("#report-period", "e => e.value")     # the period the page opens on (the month picked earlier in the visit carries over)
-                default = pg.evaluate(f"window.FOURTH_SHEET_REPORTS[{s!r}].period")   # the default month needs no ?period=
+                default = json.loads((REPO / "data" / "reports" / f"{s}.json").read_text(encoding="utf-8"))["default"]   # the default month needs no ?period=
                 if w == 1280:
                     periods = list(zip(opts, labels))           # every period at desktop width; the oldest elsewhere
                 else:

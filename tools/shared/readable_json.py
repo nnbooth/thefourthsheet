@@ -1,5 +1,5 @@
 """
-readable_json.py — JSON for the generated data/*.js files that a person can read.
+readable_json.py — JSON for the generated data/*.json files that a person can read.
 
 Containers are indented; anything with nothing nested inside it (one map point, one KPI set, a list of numbers)
 stays on one line, so a list of records reads like a table.
@@ -10,7 +10,7 @@ import json
 
 def dumps(o, indent="  ", level=0):
     flat = lambda v: json.dumps(v, ensure_ascii=False, separators=(", ", ": "))
-    nested = lambda v: isinstance(v, (dict, list)) and any(isinstance(x, (dict, list)) and x for x in (v.values() if isinstance(v, dict) else v))
+    nested = lambda v: isinstance(v, (dict, list, tuple)) and any(isinstance(x, (dict, list, tuple)) and x for x in (v.values() if isinstance(v, dict) else v))
     if not nested(o):
         return flat(o)
     pad, inner = indent * level, indent * (level + 1)

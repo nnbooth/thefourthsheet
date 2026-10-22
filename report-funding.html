@@ -38,6 +38,7 @@
     <!-- ?v= is the version: "dev" here; publishing (.github/workflows/pages.yml) stamps every one with the commit,
          so browsers fetch new files after each publish. Nothing to change by hand. -->
     <link rel="stylesheet" href="styles.css?v=dev" />
+    <link rel="preload" href="data/reports/funding.json?v=dev" as="fetch" crossorigin>
   </head>
 
   <!--
@@ -130,7 +131,6 @@
       </div>
     </footer>
 
-    <script src="data/reports-data.js?v=dev"></script>
     <script src="script.js?v=dev"></script>
   </body>
 </html>

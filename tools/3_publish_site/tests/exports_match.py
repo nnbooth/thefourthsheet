@@ -4,7 +4,7 @@ exports_match.py — every download on the site says exactly what the site says.
 
     python3 -I tools/3_publish_site/tests/exports_match.py .
 
-Uses only what's in the repo (data/reports/<report>/<period>.js, the site's own numbers, and media/exports/), so it
+Uses only what's in the repo (data/reports/<report>.json, the site's own numbers, and media/exports/), so it
 runs anywhere, including the publish step on GitHub, with no OneDrive needed. For every report and every period:
 
   1. Its spreadsheet, PDF and slides exist (the files the site's Export menu links to).
@@ -34,9 +34,11 @@ def report(name, problems):
         fails.append(name)
 
 
-def payload(path):
-    s = path.read_text(encoding="utf-8")
-    return json.loads(s[s.index("=", s.index("]")) + 1:].strip().rstrip(";"))
+def every_period():
+    """Every report at every period, from data/reports/<report>.json (cards.json is the cards' cut-down copy)."""
+    for f in sorted((REPO / "data" / "reports").glob("*.json")):
+        if f.name != "cards.json":
+            yield from json.loads(f.read_text(encoding="utf-8"))["by_period"].values()
 
 
 def norm(t):
@@ -96,10 +98,9 @@ def shown(value):
 
 import build_reports as br                     # the builder's own rules: which file holds which part of a report
 
-runs = sorted((REPO / "data" / "reports").glob("*/*.js"))
+runs = list(every_period())
 linked, missing, text_bad, xl_bad = set(), [], [], []
-for path in runs:
-    r = payload(path)
+for r in runs:
     slug, per = r["slug"], r["period"]
     folder = (REPO / (r.get("exports") or {}).get("xlsx", f"media/exports/reports/{per}/x")).parent
     for part in br.file_parts(r):                # one set of files per business for a report split by business
@@ -144,8 +145,7 @@ for path in runs:
                 xl_bad.append(f"{name} {per} xlsx: couldn't read it ({e})")
 
 # the home page's sample statements (September): each business's PDF and slides carry its headline figures and statement totals
-s_dash = (REPO / "data" / "dashboard-data.js").read_text(encoding="utf-8")
-dash = json.loads(s_dash[s_dash.index("{"):s_dash.rindex("}") + 1])
+dash = json.loads((REPO / "data" / "dashboard.json").read_text(encoding="utf-8"))
 for o in dash["orgs"]:
     files = {fmt: REPO / href for fmt, href in (o.get("exports") or {}).items()}
     acct = lambda v: f"({-v:,})" if v < 0 else f"{v:,}"

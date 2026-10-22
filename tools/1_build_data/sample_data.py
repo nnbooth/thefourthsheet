@@ -5,7 +5,7 @@ sample_data.py — the sample data behind every mock-up dashboard and report.
 ONE place for the invented "Sample Co" numbers shown on the website:
   - the home-page dashboard: three sample organisations' P&L, balance sheet,
     cash flow and fourth sheet (calculated by tools/1_build_data/financial_model.py; the
-    website's dashboard-data.js and Excel/PDF exports are written later, in stage 3)
+    website's data/dashboard.json and Excel/PDF exports are written later, in stage 3)
   - the live-display screens (warehouse, reception, boardroom)
   - the report previews (sales, purchasing, payroll and overtime)
   - the management-pack template (profit and loss)
@@ -350,7 +350,7 @@ GROUPS = [
     ("", "fact_"),
     ("Supporting files: drivers, rates, targets, opening balances, workings and commentary", "driver_month"),
     ("", "cost_rate"), ("", "target"), ("", "opening_balance"), ("", "kpi_workings"), ("", "commentary"), ("", "simulation_parameter"),
-    ("Home-page dashboard model (index.html, dashboard-data.js, media/exports/)", "model_"),
+    ("Home-page dashboard model (index.html, data/dashboard.json, media/exports/)", "model_"),
     ("Live-display screens (media/mockups/display-*.png)", "display_"),
     ("Report previews (media/mockups/report-*.png)", "report_"),
     ("Management-pack template (media/mockups/template-excel.png)", "template_"),

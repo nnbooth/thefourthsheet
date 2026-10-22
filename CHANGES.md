@@ -1,5 +1,16 @@
 # Changes
 
+## Site data as JSON, one file per report (22 Oct 2026)
+- The 178 generated `.js` data files are now 18 `.json` files. Each report has one file holding every period
+  (`data/reports/<report>.json`); the report cards share `data/reports/cards.json` (just what a card draws); the home dashboard
+  is `data/dashboard.json` (September and the months list) plus `data/dashboard-months.json` (every other month, fetched only
+  when someone picks one); the map is `data/deliveries.json`.
+- `reports-data.js` (856 KB, every report) no longer loads on every report, SME and not-for-profit page: a report page fetches
+  only its own file, and the cards file is 13 KB compressed. Each page asks for its data in the `<head>` (preload).
+- `script.js` fetches the files (`loadData()`) instead of adding `<script>` tags. Pages now need a web server to preview:
+  `python3 tools/3_publish_site/serve.py`. No number changed: every card, chart and report renders the same as before (checked
+  in the browser, page by page, at two months), and `tests/exports_match.py` and `tests/site_check.py` pass.
+
 ## Programs sorted into three stages (22 Oct 2026, branch `reorganise-stages`)
 - `tools/` is now `1_build_data/` (make the raw data), `2_load_azure/` (load it into Azure), `3_publish_site/` (build the website
   files from it), plus `shared/`, `setup/` and `archive/`. The map is `tools/README.md`; `tools/run_pipeline.py` runs the stages in order.

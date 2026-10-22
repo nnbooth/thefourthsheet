@@ -71,6 +71,7 @@
       }
     }
     </script>
+    <link rel="preload" href="data/dashboard.json?v=dev" as="fetch" crossorigin>
   </head>
 
   <!--
@@ -176,7 +177,7 @@
           </div>
 
           <!-- HERO DASHBOARD: three invented sample organisations, built by a driver-based model (tools/1_build_data/financial_model.py)
-               so every statement adds up. Data: dashboard-data.js. Behaviour: script.js, search "HERO DASHBOARD".
+               so every statement adds up. Data: data/dashboard.json (other months: data/dashboard-months.json). Behaviour: script.js, search "HERO DASHBOARD".
                Exports: media/exports/. -->
           <figure class="hero-dash" id="hero-dash">
             <div class="dash-head">
@@ -341,8 +342,6 @@
       </div>
     </footer>
 
-    <script src="data/dashboard-data.js?v=dev"></script>
-    <script src="data/dashboard-months.js?v=dev"></script>
     <script src="script.js?v=dev"></script>
   </body>
 </html>

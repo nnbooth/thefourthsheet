@@ -116,6 +116,16 @@ def page_payload(reports):
 
 # ---------------------------------------------------------------------- pages
 
+PRELOAD = re.compile(r'\n[ \t]*<link rel="preload" href="data/[^"]*" as="fetch" crossorigin>')
+
+
+def data_preloads(head, paths, v):
+    """A page's <head> asks for its data files (data/*.json) straight away, so script.js's fetch of them is already
+    under way. Replaces whichever ones the head copied from had."""
+    links = "".join(f'\n    <link rel="preload" href="{p}?v={v}" as="fetch" crossorigin>' for p in paths)
+    return PRELOAD.sub("", head).replace("\n  </head>", links + "\n  </head>", 1)
+
+
 def write_pages(reports):
     sme = (REPO / "sme.html").read_text()
     head, rest = sme.split("<main id=\"main\">", 1)
@@ -160,9 +170,8 @@ def write_pages(reports):
         </div>
 {dialog}      </section>
 {contact}    </main>'''
-        t = tail if "data/reports-data.js" in tail else tail.replace(f'<script src="script.js?v={v}"></script>',
-                         f'<script src="data/reports-data.js?v={v}"></script>\n    <script src="script.js?v={v}"></script>')
-        (REPO / f"report-{r['slug']}.html").write_text(h + body + t)
+        h = data_preloads(h, [f"data/reports/{r['slug']}.json"], v)      # its own data file, every period
+        (REPO / f"report-{r['slug']}.html").write_text(h + body + tail)
 
 
 # ------------------------------------------------------------- filters in exports
@@ -748,6 +757,7 @@ def write_explainer():
     h = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + "Plain-English definitions of the numbers in the reports: gross margin, overheads, profit, cash, runway and more.", h, count=1)
     h = share_matches_description(h)
     h = h.replace("/sme.html", "/numbers-explained.html").replace("SMEs | The Fourth Sheet", "The numbers, explained | The Fourth Sheet")
+    h = data_preloads(h, [], "")
     h = h.replace('<a href="sme.html" aria-current="page">Businesses</a>', '<a href="sme.html">Businesses</a>')
     items = "\n".join(f'            <div class="explain" id="{i}"><dt>{H.escape(t)}</dt><dd>{H.escape(d)}</dd></div>' for i, t, d in EXPLAINED)
     opts = "\n".join(f'              <option value="{i}">{H.escape(t)}</option>' for i, t, d in EXPLAINED)
