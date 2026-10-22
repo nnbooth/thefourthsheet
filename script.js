@@ -1234,7 +1234,10 @@ function setupReportPage(f) {
   let current = base;
   const exportBox = document.getElementById('report-export');
   // a report filled from its templates (assets/exports/): each download is made from the period on screen when it's chosen
-  const ver = ((document.querySelector('script[src*="script.js"]') || {}).src || '').split('?v=')[1] || '';
+  // the published site stamps one version on everything; a local preview (?v=dev) asks for fresh export files every
+  // load, so an edited template is never paired with an old copy of the filler from the browser's cache
+  const stamp = ((document.querySelector('script[src*="script.js"]') || {}).src || '').split('?v=')[1] || '';
+  const ver = stamp === 'dev' ? `dev-${Date.now()}` : stamp;
   const builder = (r) => (r.exports_template ? (fmt) => loadExportKit(ver).then((kit) => kit.build(r, fmt, { ver })) : null);
   const menu = exportBox ? mountExportMenu(exportBox, { period: base.period_label, exports: base.exports, meta: base.exports_meta, build: builder(base) }) : null;
   const syncUrl = () => {

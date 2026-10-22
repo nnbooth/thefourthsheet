@@ -129,6 +129,13 @@ for r in runs:
         want = [norm(part["period_label"])] + [norm(v) for _, v in kpis(part)]
         if br.in_short(part):
             want.append(norm(br.in_short(part)))
+        if files["pptx"].exists():                  # PowerPoint asks to "repair" a deck with a decimal position or size (LibreOffice doesn't mind)
+            import zipfile
+            with zipfile.ZipFile(files["pptx"]) as z:
+                bad = [n for n in z.namelist() if n.startswith("ppt/slides/") and n.endswith(".xml")
+                       and re.search(rb'\b(?:x|y|cx|cy)="-?\d+\.\d+"', z.read(n))]
+            if bad:
+                text_bad.append(f"{name} {per} pptx: decimal positions or sizes (PowerPoint will ask to repair it) in {', '.join(bad)}")
         for fmt, read in (("pdf", pdf_text), ("pptx", pptx_text)):
             if files[fmt].exists():
                 text = read(files[fmt])
@@ -148,9 +155,16 @@ for r in runs:
                 for lab, val in kpis(part):
                     if shown(val) is not None:
                         want_n.setdefault(lab, []).append((val, *shown(val)))
-                for row in wb["Report"].iter_rows(min_col=1, max_col=2):
-                    lab, cell = row[0].value, row[1]
-                    if lab in want_n and want_n[lab] and isinstance(cell.value, str) and cell.value.startswith("="):
+                rep = wb["Report"]
+                for row in rep.iter_rows():                  # each headline figure's label, then its formula: to the right of it, or below it (a card layout)
+                    for lab_cell in row:
+                        lab = lab_cell.value
+                        if lab not in want_n or not want_n[lab]:
+                            continue
+                        cell = next((c for c in (rep.cell(lab_cell.row, lab_cell.column + 1), rep.cell(lab_cell.row + 1, lab_cell.column))
+                                     if isinstance(c.value, str) and c.value.startswith("=")), None)
+                        if cell is None:
+                            continue
                         got, (val, exp, tol) = xc.evaluate(f"Report!{cell.coordinate}"), want_n[lab].pop(0)
                         if not isinstance(got, (int, float)) or abs(got - exp) > tol:
                             xl_bad.append(f"{name} {per} xlsx: {lab}: file {got}, site {val}")

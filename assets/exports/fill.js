@@ -120,7 +120,13 @@
   // a cell reference on the template row, moved down `by` rows (absolute rows, $6, stay put)
   const moveRefs = (formula, row, by) => formula.replace(/(\$?[A-Z]{1,3})(\d+)(?![\d(!])/g, (m, col, r) => (Number(r) === row && !col.endsWith('$') ? `${col}${row + by}` : m));
 
+  // a cell with something in it: a value, a formula or text (an empty cell can still carry formatting)
+  const hasContent = (c) => /<v>|<f[\s>]|<is>/.test(c);
+
   function fillSheet(xml, ctx, sst) {
+    // a formula's saved result is the template's (Excel saves one, sometimes showing a slot's text): drop it, the
+    // workbook recalculates on opening
+    xml = xml.replace(/(<f\b[^>]*\/>|<f\b[^>]*>[\s\S]*?<\/f>)<v>[\s\S]*?<\/v>/g, '$1');
     const rows = xml.match(ROW) || [];
     let repeat = null;
     const out = [];
@@ -128,7 +134,13 @@
       const cells = rowXml.match(CELL) || [];
       const list = cells.map((c) => cellText(c, sst)).filter((t) => t && t.includes('{{')).map((t) => listIn(t, ctx)).find(Boolean);
       const r = Number(attrs(rowXml.slice(0, rowXml.indexOf('>') + 1)).r);
-      if (repeat && cells.length) throw new Error(`Row ${r} comes after the repeating row ${repeat.row}: a repeating row must be the last on its sheet.`);
+      if (repeat) {
+        // rows below the repeating row: formatting only (e.g. a table formatted further down) is dropped, since the
+        // repeated rows carry the template row's own formatting; anything with content can't stay below it
+        if (cells.some(hasContent)) throw new Error(`Row ${r} comes after the repeating row ${repeat.row}: a repeating row must be the last on its sheet (empty, formatted rows below it are fine).`);
+        out.push([rowXml, '']);
+        continue;
+      }
       if (!list) {
         out.push([rowXml, rowXml.replace(CELL, (c) => fillCell(c, ctx, null, sst))]);
         continue;
@@ -183,7 +195,7 @@
     for (const p of parts) {
       let xml = p === 'xl/workbook.xml' ? wb : await read(p);
       const chart = p.startsWith('xl/charts/');
-      if (chart) xml = fillXml(xml, ctx).replace(/<((?:c:)?)(numCache|strCache)>[\s\S]*?<\/\1\2>/g, '');  // Excel redraws from the cells
+      if (chart) xml = fillXml(xml.replace(/<((?:c:)?)(numCache|strCache)>[\s\S]*?<\/\1\2>/g, ''), ctx);  // Excel redraws from the cells
       for (const r of repeats) {
         xml = xml.replace(/(<(?:c:)?f>|<definedName\b[^>]*>|<f\b[^>]*>)([\s\S]*?)(<\/(?:c:)?f>|<\/definedName>)/g, (m, a, f, b) => a + stretch(f, r.sheet, r.row, r.n, chart) + b);
       }

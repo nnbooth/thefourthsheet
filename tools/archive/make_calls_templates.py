@@ -2,7 +2,7 @@
 """
 make_calls_templates.py — made the first version of the Calls report's templates (22 Oct 2026). One-off.
 
-    python3 tools/archive/make_calls_templates.py
+    python3 tools/archive/make_calls_templates.py pptx      (or xlsx: one template at a time)
 
 Writes assets/exports/templates/calls.xlsx and calls.pptx: empty layouts with {{slots}} where the data goes, no
 numbers in them. The site fills them in the visitor's browser when they click Export (assets/exports/fill.js, from
@@ -249,14 +249,18 @@ def stand_in(key):
 
 
 def swap_stand_ins(deck):
+    def swap(tf):
+        for para in tf.paragraphs:
+            for r in para.runs:
+                for key, (slot, _) in STAND_IN.items():
+                    if key in r.text:
+                        r.text = r.text.replace(stand_in(key), slot)
     for s in deck.p.slides:
         for sh in s.shapes:
             if sh.has_text_frame:
-                for para in sh.text_frame.paragraphs:
-                    for r in para.runs:
-                        for key, (slot, _) in STAND_IN.items():
-                            if r.text.startswith(key):
-                                r.text = slot
+                swap(sh.text_frame)
+        if s.has_notes_slide:                       # the notes repeat the slide's text: the stand-ins are there too
+            swap(s.notes_slide.notes_text_frame)
 
 
 def pptx():
@@ -269,7 +273,7 @@ def pptx():
                       sub="When the calls come in, {{period_label}}")
     tag(s, ["hours"])
     s, top = d.slide("Calls for help by month", "{{months_note}}")
-    h = (pptkit.H - top - Inches(1.0)) / 2
+    h = int((pptkit.H - top - Inches(1.0)) / 2)          # whole EMUs: PowerPoint rejects a decimal position or size
     d.text(s, pptkit.L, top, Inches(6), Inches(0.3), "CALLS", 10, bold=True, colour=MUTED)
     d._area_chart(s, pptkit.L, top + Inches(0.3), pptkit.CONTENT_W, h - Inches(0.35), labels, [1] * 7, "int", "Calls")
     d.text(s, pptkit.L, top + h, Inches(6), Inches(0.3), "ANSWERED WHILE STAFFED", 10, bold=True, colour=MUTED)
@@ -280,7 +284,9 @@ def pptx():
 
 
 if __name__ == "__main__":
+    # one template at a time: each is edited by hand afterwards, so remaking one must never overwrite the other
+    which = sys.argv[1:] or ["pptx"]
     OUT.mkdir(parents=True, exist_ok=True)
-    xlsx()
-    pptx()
-    print(f"wrote {OUT / 'calls.xlsx'} and {OUT / 'calls.pptx'}")
+    for kind in which:
+        {"xlsx": xlsx, "pptx": pptx}[kind]()
+        print(f"wrote {OUT / ('calls.' + kind)}")
