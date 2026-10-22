@@ -17,7 +17,9 @@ const out = process.argv[2];
 if (!out) { console.error('usage: render_templated.js <out folder> [report ...]'); process.exit(2); }
 const only = process.argv.slice(3);
 
-// the browser builds of the libraries, run as Node modules (both are UMD)
+// the browser builds of the libraries, run as Node modules (both are UMD). pdfmake's reads navigator, which Node only
+// has from version 21 (the publish workflow runs 20)
+if (typeof globalThis.navigator === 'undefined') globalThis.navigator = { userAgent: 'node' };
 function load(file, name) {
   const m = { exports: {} };
   new Function('module', 'exports', 'self', 'window', fs.readFileSync(path.join(REPO, file), 'utf8'))(m, m.exports, globalThis, globalThis);
