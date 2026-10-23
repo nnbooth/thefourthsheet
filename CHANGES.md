@@ -1,5 +1,13 @@
 # Changes
 
+## The period-lock register is one row per month (23 Oct 2026)
+- `Data/Common/period_lock.csv` (and `period_lock` in the database) now has one row per organisation and month:
+  `org_id, month_key, locked_at, locked_by, note`. It used to be a log of every Locked / Reopened action, and a month's
+  status was its last action. A month is Locked once `locked_at` is on or before the run.
+- Reopening (`tools/lock_period.py 2026-09 --reopen --note "..."`) blanks the lock and keeps the reason in `note`; it no
+  longer needs `--by`. Locking again fills the lock back in. The history of earlier reopens isn't kept.
+- The 72 sample-history rows moved across unchanged. Every status label, report and download reads as before.
+
 ## Months lock by hand; the model has every month's balance sheet and cash flow (22 Oct 2026)
 - **Locking is deliberate.** A month is Locked only when someone locks it (`tools/lock_period.py`), recorded in the
   period-lock register (`Data/Common/period_lock.csv`, `period_lock` in the database): who, when, and why for a reopen.

@@ -25,13 +25,14 @@ Then, in the cloud: `.github/workflows/pages.yml` runs `3_publish_site/tests/exp
 ## Locking a month (the month-end close)
 
 A month is **Locked** only when someone locks it: nothing locks on a date by itself. The period-lock register is
-`Data/Common/period_lock.csv` (loaded into Azure as `period_lock`); every Locked / Provisional / Incomplete label and
+`Data/Common/period_lock.csv` (loaded into Azure as `period_lock`), one row per organisation and month with when it
+was locked and by whom; every Locked / Provisional / Incomplete label and
 every default period reads it.
 
 ```
 python3 tools/lock_period.py                                   # the last few months and their status
 python3 tools/lock_period.py 2026-10 --by "Nathan Booth"       # lock October (all three organisations; --org for one)
-python3 tools/lock_period.py 2026-09 --reopen --by "Nathan Booth" --note "late supplier credit"
+python3 tools/lock_period.py 2026-09 --reopen --note "late supplier credit"      # blanks the lock, says why
 ```
 
 A month can only be locked once it's over. Then rebuild (`python3 tools/run_pipeline.py`): reports and the home

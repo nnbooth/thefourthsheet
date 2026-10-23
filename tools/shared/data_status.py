@@ -61,26 +61,28 @@ def history_lock_day(month):
     return d
 
 
-_REGISTER = []
+_REGISTER = {}
 
 
 def _register():
     if not _REGISTER:
         import period_lock
-        _REGISTER.extend(period_lock.read())
+        _REGISTER.update(period_lock.read())
     return _REGISTER
 
 
 def lock_state(month, as_at=AS_AT, org=None):
-    """('Locked' | 'Reopened' | None, the action in force) for a month as at a moment, from the period-lock register.
-    For one organisation, or (org None) all three together: locked only when every one of them has locked it."""
+    """('Locked' | 'Reopened' | None, the register row) for a month as at a moment, from the period-lock register.
+    For one organisation, or (org None) all three together: locked only when every one of them has locked it.
+    Reopened = a row with its lock blanked (tools/lock_period.py --reopen)."""
     import period_lock
-    rows = _register()
-    acts = [period_lock.state(rows, o, month, as_at) for o in ([org] if org else period_lock.ORGS)]
-    if acts and all(a and a["action"] == "Locked" for a in acts):
-        return "Locked", max(acts, key=lambda a: a["when"])
-    reopened = [a for a in acts if a and a["action"] == "Reopened"]
-    return ("Reopened", max(reopened, key=lambda a: a["when"])) if reopened else (None, None)
+    reg = _register()
+    orgs = [org] if org else period_lock.ORGS
+    locks = [period_lock.locked(reg, o, month, as_at) for o in orgs]
+    if all(locks):
+        return "Locked", max(locks, key=lambda r: r["when"])
+    reopened = [reg[(o, month)] for o in orgs if (o, month) in reg and not reg[(o, month)]["locked_at"]]
+    return ("Reopened", reopened[0]) if reopened else (None, None)
 
 
 def lock_date(month, as_at=AS_AT, org=None):
@@ -97,7 +99,7 @@ def month_status(month, as_at=AS_AT, org=None):
         return "Locked", f"{label} is locked (closed {strf(act['when'].date(), '%-d %b %Y')}). These numbers won't change."
     if as_at.date() > month_end(month):
         if st == "Reopened":
-            return "Provisional", (f"{label} was reopened on {strf(act['when'].date(), '%-d %b %Y')}"
+            return "Provisional", (f"{label} was reopened"
                                    f"{' (' + act['note'] + ')' if act.get('note') else ''}: it can change until it's locked again.")
         return "Provisional", f"{label} is over but not locked yet. Late invoices and adjustments can still change it."
     return "Incomplete", f"{label} is still in progress: figures to {strf(as_at, '%-d %b')} only."

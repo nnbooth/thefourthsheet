@@ -258,11 +258,11 @@ def main():
                                      ds.history_lock_day)
     if added:
         print(f"Period-lock register: added the sample history's closes ({added} rows) to {period_lock.path()}")
-    table("period_lock", "The period-lock register: every time a month was locked (closed) or reopened, by whom and when. A month's "
-          "status is its last action as at the run (Locked; Reopened or never locked = Provisional once it's over). Entered by people "
-          "(tools/lock_period.py), never generated: the build only adds the sample history's closes (Oct 2024 to Sep 2026) where a "
-          "month has no entry, and keeps every row anyone entered.",
-          period_lock.COLUMNS, [[r[c] or None for c in period_lock.COLUMNS] for r in period_lock.read()])
+    table("period_lock", "The period-lock register: one row per organisation and month, saying when the month was locked (closed) "
+          "and by whom. Locked once locked_at is on or before the run; a reopened month has locked_at blank and a note saying why "
+          "(Provisional once it's over, like a month never locked). Entered by people (tools/lock_period.py), never generated: the "
+          "build only adds the sample history's closes (Oct 2024 to Sep 2026) where a month has no row, and keeps every row anyone entered.",
+          period_lock.COLUMNS, [[r[c] or None for c in period_lock.COLUMNS] for r in period_lock.read().values()])
     import financial_model      # the driver-based model
     import model_tables         # ...as CSV rows for the dashboard tables
     import warehouse            # the same model as a daily star schema for a cloud database
