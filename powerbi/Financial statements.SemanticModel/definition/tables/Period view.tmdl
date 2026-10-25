@@ -1,0 +1,95 @@
+/// Turns any measure into this month, last month, year to date and the changes. Put 'view' on a matrix's columns
+/// and filter it to the views the page needs. Every view works on the period in context (the Month slicer).
+table 'Period view'
+	lineageTag: 51b14731-c4b7-5245-bf12-08ae7a820033
+
+	calculationGroup
+		precedence: 1
+
+		calculationItem 'This month' =
+				SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem 'Last month' =
+				CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, MONTH ) )
+			ordinal: 1
+
+		calculationItem 'Change on last month' =
+				SELECTEDMEASURE () - CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, MONTH ) )
+			ordinal: 2
+
+		calculationItem '% change on last month' =
+				VAR _before = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, MONTH ) )
+				RETURN
+				    DIVIDE ( SELECTEDMEASURE () - _before, ABS ( _before ) )
+			ordinal: 3
+			formatStringDefinition = "0.0%;(0.0%);-"
+
+		calculationItem 'Same month last year' =
+				CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, YEAR ) )
+			ordinal: 4
+
+		calculationItem 'Change on last year' =
+				SELECTEDMEASURE () - CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, YEAR ) )
+			ordinal: 5
+
+		calculationItem '% change on last year' =
+				VAR _before = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[calendar_date], -1, YEAR ) )
+				RETURN
+				    DIVIDE ( SELECTEDMEASURE () - _before, ABS ( _before ) )
+			ordinal: 6
+			formatStringDefinition = "0.0%;(0.0%);-"
+
+		calculationItem 'Year to date' =
+				VAR _last = MAX ( 'Date'[calendar_date] )
+				VAR _start = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 7, 1 )
+				RETURN
+				    CALCULATE ( SELECTEDMEASURE (), DATESBETWEEN ( 'Date'[calendar_date], _start, _last ) )
+			ordinal: 7
+
+		calculationItem 'Last year to date' =
+				VAR _last = MAX ( 'Date'[calendar_date] )
+				VAR _start = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 7, 1 )
+				RETURN
+				    CALCULATE ( SELECTEDMEASURE (), DATESBETWEEN ( 'Date'[calendar_date], EDATE ( _start, -12 ), EDATE ( _last, -12 ) ) )
+			ordinal: 8
+
+		calculationItem 'Change on last year to date' =
+				VAR _last = MAX ( 'Date'[calendar_date] )
+				VAR _start = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 7, 1 )
+				RETURN
+				    CALCULATE ( SELECTEDMEASURE (), DATESBETWEEN ( 'Date'[calendar_date], _start, _last ) ) - CALCULATE ( SELECTEDMEASURE (), DATESBETWEEN ( 'Date'[calendar_date], EDATE ( _start, -12 ), EDATE ( _last, -12 ) ) )
+			ordinal: 9
+
+		calculationItem 'At 30 June' =
+				VAR _last = MAX ( 'Date'[calendar_date] )
+				VAR _june = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 6, 30 )
+				RETURN
+				    CALCULATE ( SELECTEDMEASURE (), 'Date'[calendar_date] = _june )
+			ordinal: 10
+
+		calculationItem 'Change since 30 June' =
+				VAR _last = MAX ( 'Date'[calendar_date] )
+				VAR _june = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 6, 30 )
+				RETURN
+				    SELECTEDMEASURE () - CALCULATE ( SELECTEDMEASURE (), 'Date'[calendar_date] = _june )
+			ordinal: 11
+
+	column view
+		dataType: string
+		lineageTag: 61d26344-aff6-5550-b127-6f1d40cb59e7
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: efcb8ff6-6b0f-5d67-91db-22d06122db61
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic

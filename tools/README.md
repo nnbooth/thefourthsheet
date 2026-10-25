@@ -18,9 +18,18 @@ Run the lot: `python3 tools/run_pipeline.py` (add `--azure` to include stage 2).
 |---|---|---|---|
 | 1 | `python3 tools/1_build_data/sample_data.py` | nothing (the model is in code) | OneDrive `Data/**.csv`, `Data documentation/schema.sql` and `README.md` |
 | 2 | `python3 tools/2_load_azure/database/load.py` | OneDrive `Data/` | Azure SQL |
-| 3 | `python3 tools/3_publish_site/build_site.py` | OneDrive `Data/` (or Azure) | `data/*.json`, `report-*.html`, `media/exports/*`, OneDrive Power BI prompts |
+| 3 | `python3 tools/3_publish_site/build_site.py` | OneDrive `Data/` (or Azure) | `data/*.json`, `report-*.html`, `media/exports/*`, `powerbi/`, OneDrive Power BI prompts |
 
 Then, in the cloud: `.github/workflows/pages.yml` runs `3_publish_site/tests/exports_match.py`, builds with Jekyll, and runs `3_publish_site/publish_site.py`.
+
+## The financial statements in Power BI
+
+`1_build_data/statement_lines.py` writes the statements' layout (`statement_line`, `statement_line_account`): every line of
+each P&L, balance sheet and cash flow in print order, and the accounts each line adds up, checked against the locked
+statements and every month's balance. `3_publish_site/powerbi_statements.py` turns it into a Power BI project in `powerbi/`
+(one `[Amount]` measure for every line, a Period view calculation group for the columns), and
+`3_publish_site/tests/powerbi_check.py` checks the project without Power BI. How it works and how to use it for a client:
+[powerbi/README.md](../powerbi/README.md).
 
 ## Locking a month (the month-end close)
 

@@ -1,0 +1,77 @@
+/// Daily profit and loss postings (fact_gl_daily): income +, costs -.
+table GL
+	lineageTag: af1de703-b2ad-5bc3-8400-f47501dee2bb
+	isHidden
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2c7f7f42-df6d-5752-9f57-c464062481ec
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	column org_id
+		dataType: string
+		isHidden
+		lineageTag: e7ee08e8-91c3-51e3-b899-ac5196e3f893
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column account_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cb0e93e3-8d5d-5a9d-b760-70d9849b6957
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = User
+
+	column amount
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7dc95b88-171d-5025-85af-85f35890bba2
+		summarizeBy: none
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = User
+
+	column job_id
+		dataType: string
+		isHidden
+		lineageTag: 5c2a82af-db82-5a63-8307-a8eeedbd41ef
+		summarizeBy: none
+		sourceColumn: job_id
+
+		annotation SummarizationSetBy = User
+
+	column engagement_id
+		dataType: string
+		isHidden
+		lineageTag: be7bead1-51d4-5764-9381-0bb8605cd45b
+		summarizeBy: none
+		sourceColumn: engagement_id
+
+		annotation SummarizationSetBy = User
+
+	column grant_id
+		dataType: string
+		isHidden
+		lineageTag: 3b997a52-905c-56c3-bc04-1f33544c638b
+		summarizeBy: none
+		sourceColumn: grant_id
+
+		annotation SummarizationSetBy = User
+
+	partition GL = m
+		mode: import
+		source =
+				LoadTable("fact_gl_daily", {{"date_key", Int64.Type}, {"org_id", type text}, {"account_id", Int64.Type}, {"amount", Int64.Type}, {"job_id", type text}, {"engagement_id", type text}, {"grant_id", type text}})
+
+	annotation PBI_ResultType = Table

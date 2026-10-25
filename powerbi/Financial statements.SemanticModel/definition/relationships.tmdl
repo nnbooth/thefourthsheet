@@ -1,0 +1,43 @@
+relationship 9ca9421c-cb3e-5d78-9c80-4332d99174da
+	fromColumn: GL.date_key
+	toColumn: 'Date'.date_key
+
+relationship a748b438-42bd-5196-a4ab-b82932c38147
+	fromColumn: GL.org_id
+	toColumn: Organisation.org_id
+
+relationship 30f950ce-caf0-53a7-b16d-ee208cd1ea29
+	fromColumn: GL.account_id
+	toColumn: Account.account_id
+
+relationship a09f6a47-46c0-5b51-97ba-24d65853cec5
+	fromColumn: Balance.date_key
+	toColumn: 'Date'.date_key
+
+relationship 097d4260-ce18-56ed-965d-414a3ab097a1
+	fromColumn: Balance.org_id
+	toColumn: Organisation.org_id
+
+relationship b796656f-e4a2-5ae3-bf50-3e5f34f34ee4
+	fromColumn: Balance.account_id
+	toColumn: Account.account_id
+
+relationship 222994a4-463e-531c-9b21-9296495c02dd
+	fromColumn: 'Cash flow'.date_key
+	toColumn: 'Date'.date_key
+
+relationship b6373beb-a87e-5deb-9454-4472cb6cfe94
+	fromColumn: 'Cash flow'.org_id
+	toColumn: Organisation.org_id
+
+relationship addafb64-f1ed-5993-80cf-7f9db6e939e2
+	fromColumn: 'Cash flow'.account_id
+	toColumn: Account.account_id
+
+relationship a944b72a-2db0-5f6d-a2d4-efc8b2301782
+	fromColumn: 'Statement line'.org_id
+	toColumn: Organisation.org_id
+
+relationship dfc55ee1-831c-5257-b6ba-6eb3eb075cdb
+	fromColumn: 'Statement line account'.line_key
+	toColumn: 'Statement line'.line_key

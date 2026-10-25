@@ -1,0 +1,195 @@
+/// The calendar (dim_date). Marked as the date table on calendar_date; the financial year runs July to June.
+table 'Date'
+	lineageTag: 83492b9f-f183-5648-b5e3-978de3d0e786
+	dataCategory: Time
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3d5d61ed-63d7-5822-b148-498ef78305a3
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	column calendar_date
+		dataType: dateTime
+		isKey
+		formatString: d mmm yyyy
+		lineageTag: b295fd78-95f7-5c55-8a6d-0686ea91b271
+		summarizeBy: none
+		sourceColumn: calendar_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = User
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 80c5fe2f-0e49-5e1e-bc98-30299bdbfded
+		summarizeBy: none
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = User
+
+	column day_name
+		dataType: string
+		lineageTag: 721d5b1c-73e7-583f-9928-95e0835a09b1
+		summarizeBy: none
+		sourceColumn: day_name
+		sortByColumn: day_of_week
+
+		annotation SummarizationSetBy = User
+
+	column day_of_week
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 89837441-803a-5a6b-a344-ab49f58209a0
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = User
+
+	column is_weekend
+		dataType: int64
+		formatString: 0
+		lineageTag: b0345b83-f0b2-5c5a-8390-2b9622a09c10
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = User
+
+	column is_working_day
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e81a828-8851-53ea-873c-3e5821e63e10
+		summarizeBy: none
+		sourceColumn: is_working_day
+
+		annotation SummarizationSetBy = User
+
+	column public_holiday
+		dataType: string
+		lineageTag: 9befc51e-a204-5ee2-8ff5-022a98f52d3a
+		summarizeBy: none
+		sourceColumn: public_holiday
+
+		annotation SummarizationSetBy = User
+
+	column week_start
+		dataType: dateTime
+		formatString: d mmm yyyy
+		lineageTag: 40ef0809-97e9-556c-9d76-9f604bb28b01
+		summarizeBy: none
+		sourceColumn: week_start
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = User
+
+	column iso_week
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 80b918be-db18-5349-96a4-e26947327b53
+		summarizeBy: none
+		sourceColumn: iso_week
+
+		annotation SummarizationSetBy = User
+
+	column month_key
+		dataType: string
+		lineageTag: c700dd3b-b8a3-5503-8f36-bd5cf2b47e2a
+		summarizeBy: none
+		sourceColumn: month_key
+
+		annotation SummarizationSetBy = User
+
+	column month_name
+		dataType: string
+		lineageTag: 346ba181-5b96-50c6-9ae0-b1d595a0818a
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_key
+
+		annotation SummarizationSetBy = User
+
+	column calendar_quarter
+		dataType: string
+		lineageTag: ce144757-bb0a-5483-be00-5c648cfa1124
+		summarizeBy: none
+		sourceColumn: calendar_quarter
+
+		annotation SummarizationSetBy = User
+
+	column financial_year
+		dataType: string
+		lineageTag: 5697589b-1d5a-5a2f-b90a-1c0bdcca2797
+		summarizeBy: none
+		sourceColumn: financial_year
+
+		annotation SummarizationSetBy = User
+
+	column fy_month_no
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e7db6d15-cf17-55e8-846f-187c558e0142
+		summarizeBy: none
+		sourceColumn: fy_month_no
+
+		annotation SummarizationSetBy = User
+
+	column fy_quarter
+		dataType: string
+		lineageTag: ed25ad14-4a9c-557f-99ed-2639e7a0d3a4
+		summarizeBy: none
+		sourceColumn: fy_quarter
+
+		annotation SummarizationSetBy = User
+
+	column day_status
+		dataType: string
+		lineageTag: 956cba35-6a6f-5b6a-96d9-41d2c741f047
+		summarizeBy: none
+		sourceColumn: day_status
+
+		annotation SummarizationSetBy = User
+
+	column month_status
+		dataType: string
+		lineageTag: 2f390fce-c235-5c58-9cf2-3ee990d96eb0
+		summarizeBy: none
+		sourceColumn: month_status
+
+		annotation SummarizationSetBy = User
+
+	column month_locked_on
+		dataType: dateTime
+		formatString: d mmm yyyy
+		lineageTag: b7cd4f1b-a7bf-5856-b6a9-632a3ed8b386
+		summarizeBy: none
+		sourceColumn: month_locked_on
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = User
+
+	column status_as_at
+		dataType: string
+		isHidden
+		lineageTag: 45f275cf-161b-537d-af3f-7d32539c7148
+		summarizeBy: none
+		sourceColumn: status_as_at
+
+		annotation SummarizationSetBy = User
+
+	partition 'Date' = m
+		mode: import
+		source =
+				LoadTable("dim_date", {{"date_key", Int64.Type}, {"calendar_date", type date}, {"day_of_month", Int64.Type}, {"day_name", type text}, {"day_of_week", Int64.Type}, {"is_weekend", Int64.Type}, {"is_working_day", Int64.Type}, {"public_holiday", type text}, {"week_start", type date}, {"iso_week", Int64.Type}, {"month_key", type text}, {"month_name", type text}, {"calendar_quarter", type text}, {"financial_year", type text}, {"fy_month_no", Int64.Type}, {"fy_quarter", type text}, {"day_status", type text}, {"month_status", type text}, {"month_locked_on", type date}, {"status_as_at", type text}})
+
+	annotation PBI_ResultType = Table

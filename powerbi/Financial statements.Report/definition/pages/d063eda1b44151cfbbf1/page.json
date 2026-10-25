@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "d063eda1b44151cfbbf1",
+  "displayName": "Balance sheet",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

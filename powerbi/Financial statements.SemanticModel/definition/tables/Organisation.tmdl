@@ -1,0 +1,57 @@
+/// The organisations that have statements (dim_org). Pick exactly one: every amount is blank otherwise.
+table Organisation
+	lineageTag: 5739233f-8f1e-5ecf-a33c-588bbd46fa74
+
+	column org_id
+		dataType: string
+		lineageTag: 8d096932-0244-5f2b-a190-c3881b175c99
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column toggle_name
+		dataType: string
+		isHidden
+		lineageTag: 0fbab655-9123-5e10-9009-2c11850e9dbd
+		summarizeBy: none
+		sourceColumn: toggle_name
+
+		annotation SummarizationSetBy = User
+
+	column legal_name
+		dataType: string
+		lineageTag: 4c98c48c-ce2f-5858-9955-aeb62a174fb1
+		summarizeBy: none
+		sourceColumn: legal_name
+
+		annotation SummarizationSetBy = User
+
+	column sector
+		dataType: string
+		lineageTag: 5ab9dd31-afa0-56a4-ab9d-3001f22c34a4
+		summarizeBy: none
+		sourceColumn: sector
+
+		annotation SummarizationSetBy = User
+
+	column about
+		dataType: string
+		isHidden
+		lineageTag: 59761c65-fc78-58d8-90c0-82137b4bf65e
+		summarizeBy: none
+		sourceColumn: about
+
+		annotation SummarizationSetBy = User
+
+	partition Organisation = m
+		mode: import
+		source =
+				let
+				    Source = LoadTable("dim_org", {{"org_id", type text}, {"toggle_name", type text}, {"legal_name", type text}, {"sector", type text}, {"about", type text}}),
+				    WithStatements = List.Distinct(LoadTable("statement_line", {{"org_id", type text}})[org_id]),
+				    Kept = Table.SelectRows(Source, each List.Contains(WithStatements, [org_id]))
+				in
+				    Kept
+
+	annotation PBI_ResultType = Table

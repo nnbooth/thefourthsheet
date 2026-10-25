@@ -8,7 +8,8 @@ In order:
   2. deliveries_site    the deliveries map: data/deliveries.json + Excel/PDF/PowerPoint
   3. build_all          the 14 report pages for every period: web data, Excel, PDF, PowerPoint
   4. powerbi_notes      the Power BI build notes (written to OneDrive, Data documentation/Power BI)
-  5. sync_media         media/ (Excel, PDF, images) kept identical with OneDrive
+  5. powerbi_statements the Power BI project for the P&L, balance sheet and cash flow (powerbi/, in git: no data)
+  6. sync_media         media/ (Excel, PDF, images) kept identical with OneDrive
 The CI workflow then checks the downloads (tests/exports_match.py) and publishes (publish_site.py).
 """
 import sys, pathlib  # noqa: E401  (next 2 lines: make every stage folder importable; see tools/README.md)
@@ -21,6 +22,7 @@ import winutf8; winutf8.ensure()   # Windows: run in UTF-8 mode
 def main():
     import deliveries_site
     import powerbi_notes
+    import powerbi_statements
     import publish_dashboard
     import sync_media
     from fourthsheet.build import build_all
@@ -28,6 +30,7 @@ def main():
     deliveries_site.publish()
     built = build_all()
     powerbi_notes.write(built)
+    powerbi_statements.write()
     sync_media.sync()
 
 

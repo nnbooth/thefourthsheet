@@ -1,0 +1,22 @@
+model Model
+	culture: en-AU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-AU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DataSource", "DataFolder", "SqlServer", "SqlDatabase", "LoadTable", "Date", "Organisation", "Account", "Statement line", "Statement line account", "GL", "Balance", "Cash flow"]
+
+ref table 'Date'
+ref table Organisation
+ref table Account
+ref table 'Statement line'
+ref table 'Statement line account'
+ref table GL
+ref table Balance
+ref table 'Cash flow'
+ref table 'Period view'

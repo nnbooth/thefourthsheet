@@ -1,0 +1,81 @@
+/// The chart of accounts (dim_account): every statement line with its code.
+table Account
+	lineageTag: efacb2f9-1785-5e66-8f84-209f1d7cd0c3
+
+	column account_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4dc6ecb0-de50-5c95-80a2-41bfc2d8aa87
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = User
+
+	column org_id
+		dataType: string
+		isHidden
+		lineageTag: efade959-1b7c-523d-bec8-fb50988dfa22
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column statement
+		dataType: string
+		lineageTag: 2ed4e8f6-efe3-55da-962d-f47b44b322e3
+		summarizeBy: none
+		sourceColumn: statement
+
+		annotation SummarizationSetBy = User
+
+	column section
+		dataType: string
+		lineageTag: b528df04-4cb9-52a8-8af3-d6fc24c94613
+		summarizeBy: none
+		sourceColumn: section
+
+		annotation SummarizationSetBy = User
+
+	column line
+		dataType: string
+		lineageTag: 80202239-b716-5aa3-b170-f09739289cf2
+		summarizeBy: none
+		sourceColumn: line
+
+		annotation SummarizationSetBy = User
+
+	column line_level
+		dataType: string
+		lineageTag: 8cb16194-46ee-5e07-9ba4-8c8fc250a52d
+		summarizeBy: none
+		sourceColumn: line_level
+
+		annotation SummarizationSetBy = User
+
+	column line_order
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 483ead32-743a-5ddc-a141-b80752078696
+		summarizeBy: none
+		sourceColumn: line_order
+
+		annotation SummarizationSetBy = User
+
+	column is_postable
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 157bf556-7084-53da-b8e0-c6bccac231f5
+		summarizeBy: none
+		sourceColumn: is_postable
+
+		annotation SummarizationSetBy = User
+
+	partition Account = m
+		mode: import
+		source =
+				LoadTable("dim_account", {{"account_id", Int64.Type}, {"org_id", type text}, {"statement", type text}, {"section", type text}, {"line", type text}, {"line_level", type text}, {"line_order", Int64.Type}, {"is_postable", Int64.Type}})
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,47 @@
+/// Where the data comes from: the CSVs in DataFolder, or the Azure SQL database.
+expression DataSource = "CSV" meta [IsParameterQuery = true, List = {"CSV", "Azure SQL"}, DefaultValue = "CSV", Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 2b4de292-c416-59ef-856e-d00b3ad1a9bc
+
+	annotation PBI_ResultType = Text
+
+/// The OneDrive Data folder (with DataSource = CSV). Set it to this machine's path.
+expression DataFolder = "C:\Users\you\OneDrive\Projects\The Fourth Sheet\Data" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: b101a352-058b-546f-93a1-860386784112
+
+	annotation PBI_ResultType = Text
+
+/// The Azure SQL server (with DataSource = Azure SQL). Sign in with your Microsoft account; no password is stored.
+expression SqlServer = "thefourthsheet-sql.database.windows.net" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 879d0de4-9d51-584e-9ccc-7161f1670b16
+
+	annotation PBI_ResultType = Text
+
+/// The Azure SQL database.
+expression SqlDatabase = "thefourthsheet" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: e98d206c-ed2d-5424-acb2-97813a2c2eae
+
+	annotation PBI_ResultType = Text
+
+/// Loads one table by name, typed: from the CSVs or from Azure SQL (DataSource).
+expression LoadTable =
+		(name as text, types as list) as table =>
+		let
+		    FromSql = () => Sql.Database(SqlServer, SqlDatabase){[Schema = "dbo", Item = name]}[Data],
+		    // every <name>.csv anywhere under the Data folder: one per organisation for the month-end tables, combined
+		    FromCsv = () =>
+		        let
+		            Files = Table.SelectRows(Folder.Files(DataFolder), each Text.Lower([Name]) = Text.Lower(name) & ".csv"),
+		            Tables = List.Transform(Files[Content], each Table.PromoteHeaders(
+		                Csv.Document(_, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = false])),
+		            Combined = if List.IsEmpty(Tables) then error "No " & name & ".csv under " & DataFolder else Table.Combine(Tables),
+		            Kept = Table.SelectColumns(Combined, List.Transform(types, each _{0})),
+		            Nulls = Table.ReplaceValue(Kept, "", null, Replacer.ReplaceValue, Table.ColumnNames(Kept))
+		        in
+		            Nulls,
+		    Raw = if DataSource = "Azure SQL" then Table.SelectColumns(FromSql(), List.Transform(types, each _{0})) else FromCsv(),
+		    Typed = Table.TransformColumnTypes(Raw, types, "en-AU")
+		in
+		    Typed
+	lineageTag: c9d22cc0-818c-5803-a04f-5c790f152397
+
+	annotation PBI_ResultType = Function

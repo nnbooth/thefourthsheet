@@ -1,0 +1,214 @@
+/// What the statements print, in order (statement_line): put row_label on a matrix's rows and [Amount] in its values.
+table 'Statement line'
+	lineageTag: d0854853-5f63-5844-ab46-183717e3de68
+
+	/// Every line of every statement for the period in context: an account's own amount, or a subtotal as the sum of its accounts (statement_line_account). P&L and cash flow add up the period; the balance sheet is at the period's last day. Headings return 0 shown as blank, so their row prints.
+	measure Amount =
+			VAR _kind = SELECTEDVALUE ( 'Statement line'[line_kind] )
+			VAR _statement = SELECTEDVALUE ( 'Statement line'[statement] )
+			VAR _plus = CALCULATETABLE ( VALUES ( 'Statement line account'[account_id] ), 'Statement line account'[factor] = 1 )
+			VAR _minus = CALCULATETABLE ( VALUES ( 'Statement line account'[account_id] ), 'Statement line account'[factor] = -1 )
+			VAR _first = MIN ( 'Date'[calendar_date] )
+			VAR _last = MAX ( 'Date'[calendar_date] )
+			VAR _pnl =
+			    CALCULATE ( SUM ( GL[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _plus, Account[account_id] ) )
+			        - CALCULATE ( SUM ( GL[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _minus, Account[account_id] ) )
+			VAR _flows =
+			    CALCULATE ( SUM ( 'Cash flow'[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _plus, Account[account_id] ) )
+			        - CALCULATE ( SUM ( 'Cash flow'[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _minus, Account[account_id] ) )
+			VAR _closing =
+			    CALCULATE ( SUM ( Balance[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _plus, Account[account_id] ), 'Date'[calendar_date] = _last )
+			        - CALCULATE ( SUM ( Balance[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _minus, Account[account_id] ), 'Date'[calendar_date] = _last )
+			VAR _opening =
+			    CALCULATE ( SUM ( Balance[amount] ), REMOVEFILTERS ( Account ), TREATAS ( _plus, Account[account_id] ), 'Date'[calendar_date] = _first - 1 )
+			VAR _hasData =
+			    SWITCH (
+			        _statement,
+			        "P&L", NOT ISEMPTY ( GL ),
+			        "Balance sheet", CALCULATE ( NOT ISEMPTY ( Balance ), 'Date'[calendar_date] = _last ),
+			        "Cash flow", NOT ISEMPTY ( 'Cash flow' )
+			    )
+			VAR _value =
+			    SWITCH (
+			        TRUE (),
+			        _kind = "opening_cash", _opening,
+			        _kind = "closing_cash" || _statement = "Balance sheet", _closing,
+			        _statement = "Cash flow", _flows,
+			        _pnl
+			    )
+			RETURN
+			    IF (
+			        HASONEVALUE ( Organisation[org_id] ) && NOT ISBLANK ( _kind ) && _hasData,
+			        IF (
+			            _kind = "heading",
+			            0,
+			            IF ( ISBLANK ( _value ) && SELECTEDVALUE ( 'Statement line'[show_when_zero] ) = 1, 0, _value )
+			        )
+			    )
+		formatStringDefinition = IF ( SELECTEDVALUE ( 'Statement line'[line_kind] ) = "heading", " ", "#,0;(#,0);-" )
+		lineageTag: 50ec698b-2b73-5846-a674-b8810ae0527d
+
+	/// The page heading: the organisation and the month.
+	measure 'Statement title' =
+			VAR _org = SELECTEDVALUE ( Organisation[legal_name] )
+			VAR _month = SELECTEDVALUE ( 'Date'[month_name] )
+			RETURN
+			    IF ( ISBLANK ( _org ), "Pick one organisation", _org & IF ( NOT ISBLANK ( _month ), ", " & _month ) )
+		lineageTag: 388da20e-bfc1-5e05-9e21-8dda4b5250ab
+
+	/// Whether the numbers can still change (dim_date.month_status).
+	measure 'Month status' =
+			VAR _status = SELECTEDVALUE ( 'Date'[month_status] )
+			RETURN
+			    SWITCH (
+			        _status,
+			        "Locked", "Locked: the month is closed",
+			        "Provisional", "Provisional: the month is over but not yet locked",
+			        "Incomplete", "Incomplete: the month to date",
+			        _status
+			    )
+		lineageTag: adbf7a5b-fc34-5baf-9280-a289aaf06df9
+
+	/// Net assets less equity: 0 when the balance sheet balances.
+	measure 'Balance sheet check' =
+			VAR _netAssets = CALCULATE ( [Amount], 'Statement line'[role] = "net_assets" )
+			VAR _equity = CALCULATE ( [Amount], 'Statement line'[role] = "equity" )
+			RETURN
+			    IF ( NOT ISBLANK ( _netAssets ), _netAssets - _equity )
+		formatString: #,0;(#,0);-
+		lineageTag: 003e84fe-60b0-5244-913f-42dbc56546ae
+
+	/// Cash at the start + the net cash flow - cash at the end: 0 when the cash flow ends on the balance sheet's cash.
+	measure 'Cash flow check' =
+			VAR _opening = CALCULATE ( [Amount], 'Statement line'[role] = "opening_cash" )
+			VAR _change = CALCULATE ( [Amount], 'Statement line'[role] = "net_change" )
+			VAR _closing = CALCULATE ( [Amount], 'Statement line'[role] = "closing_cash" )
+			RETURN
+			    IF ( NOT ISBLANK ( _change ), _opening + _change - _closing )
+		formatString: #,0;(#,0);-
+		lineageTag: 63518b9a-9304-5017-8f51-3cf0ad9f55d8
+
+	/// The P&L's bottom line less everything posted to the ledger: 0 when no account is missing from the layout.
+	measure 'Profit check' =
+			VAR _profit = CALCULATE ( [Amount], 'Statement line'[role] = "profit" )
+			VAR _ledger = IF ( HASONEVALUE ( Organisation[org_id] ), SUM ( GL[amount] ) )
+			RETURN
+			    IF ( NOT ISBLANK ( _ledger ), _profit - _ledger )
+		formatString: #,0;(#,0);-
+		lineageTag: d9f1d642-f0d9-5a8f-9b70-c42135633c3f
+
+	column line_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 42888a43-b286-5124-b7ac-7d6535a21985
+		summarizeBy: none
+		sourceColumn: line_key
+
+		annotation SummarizationSetBy = User
+
+	column org_id
+		dataType: string
+		isHidden
+		lineageTag: 07d4418c-9fe7-5dcb-8ae8-2ed84c6c2007
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column statement
+		dataType: string
+		lineageTag: d1e53c39-271b-5b64-850b-967f0e622d34
+		summarizeBy: none
+		sourceColumn: statement
+
+		annotation SummarizationSetBy = User
+
+	column section
+		dataType: string
+		lineageTag: a1608cc3-7b86-5f40-8113-85001791a5ea
+		summarizeBy: none
+		sourceColumn: section
+
+		annotation SummarizationSetBy = User
+
+	column line
+		dataType: string
+		isHidden
+		lineageTag: b9984e1f-465e-5802-8b89-a8b51852f395
+		summarizeBy: none
+		sourceColumn: line
+
+		annotation SummarizationSetBy = User
+
+	column line_level
+		dataType: string
+		lineageTag: d97314e4-09c5-5c35-946f-b10183e72acb
+		summarizeBy: none
+		sourceColumn: line_level
+
+		annotation SummarizationSetBy = User
+
+	column line_kind
+		dataType: string
+		isHidden
+		lineageTag: c365c4d1-d1d4-55be-a805-2b7c26fe4a71
+		summarizeBy: none
+		sourceColumn: line_kind
+
+		annotation SummarizationSetBy = User
+
+	column line_order
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 90aed572-0033-510d-91e7-cd0abf8a552b
+		summarizeBy: none
+		sourceColumn: line_order
+
+		annotation SummarizationSetBy = User
+
+	column role
+		dataType: string
+		isHidden
+		lineageTag: c901ceda-ac14-51da-afa7-d2e3928b0342
+		summarizeBy: none
+		sourceColumn: role
+
+		annotation SummarizationSetBy = User
+
+	column show_when_zero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 518980b1-0849-5a6c-941a-a474f7890d50
+		summarizeBy: none
+		sourceColumn: show_when_zero
+
+		annotation SummarizationSetBy = User
+
+	column row_label
+		dataType: string
+		lineageTag: 8e27c371-7cd0-5dd2-9eda-fccdd66deae2
+		summarizeBy: none
+		sourceColumn: row_label
+		sortByColumn: line_order
+
+		annotation SummarizationSetBy = User
+
+	partition 'Statement line' = m
+		mode: import
+		source =
+				let
+				    Source = LoadTable("statement_line", {{"line_key", Int64.Type}, {"org_id", type text}, {"statement", type text}, {"section", type text}, {"line", type text}, {"line_level", type text}, {"line_kind", type text}, {"line_order", Int64.Type}, {"role", type text}, {"show_when_zero", Int64.Type}}),
+				    // detail lines indented with an em space (Power BI trims ordinary leading spaces). A label shared by two
+				    // organisations (or two statements) must still sort by its own line_order: invisible zero-width spaces make every
+				    // row_label unique, so 'Sort by column' works and the matrix shows the plain label
+				    Orgs = List.Sort(List.Distinct(Source[org_id])),
+				    Statements = {"P&L", "Balance sheet", "Cash flow"},
+				    Labelled = Table.AddColumn(Source, "row_label", each (if [line_level] = "detail" then Character.FromNumber(8195) else "")
+				        & [line] & Text.Repeat(Character.FromNumber(8203), List.PositionOf(Orgs, [org_id]) * 3 + List.PositionOf(Statements, [statement])), type text)
+				in
+				    Labelled
+
+	annotation PBI_ResultType = Table

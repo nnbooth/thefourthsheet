@@ -1,0 +1,63 @@
+/// Every cash-flow line for every month (fact_cash_flow_month), dated on the month's last day.
+table 'Cash flow'
+	lineageTag: 042269ec-adb3-500f-a124-34978c865e0b
+	isHidden
+
+	column org_id
+		dataType: string
+		isHidden
+		lineageTag: 8cfd593a-66d0-5c0b-a509-8ba747571968
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column month_key
+		dataType: string
+		isHidden
+		lineageTag: 676ead17-7bd1-596f-88c9-f02ddfafb5ef
+		summarizeBy: none
+		sourceColumn: month_key
+
+		annotation SummarizationSetBy = User
+
+	column account_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db146af8-1565-5fb5-b3e3-56d510b8e02e
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = User
+
+	column amount
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7bd41c78-a3b8-5302-884b-c650f4ceeddd
+		summarizeBy: none
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5576b968-bc21-5b70-8208-24cc54298bd9
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	partition 'Cash flow' = m
+		mode: import
+		source =
+				let
+				    Source = LoadTable("fact_cash_flow_month", {{"org_id", type text}, {"month_key", type text}, {"account_id", Int64.Type}, {"amount", Int64.Type}}),
+				    Dated = Table.AddColumn(Source, "date_key", each Number.From(Date.ToText(Date.EndOfMonth(Date.FromText([month_key] & "-01")), "yyyyMMdd")), Int64.Type)
+				in
+				    Dated
+
+	annotation PBI_ResultType = Table

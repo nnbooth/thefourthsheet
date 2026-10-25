@@ -20,6 +20,10 @@
 !assets/exports/templates/*.xlsx
 !assets/exports/templates/*.pptx
 
+# Power BI Desktop's own per-machine files inside the project (powerbi/): settings and the data cache
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
 # Secrets: copy .env.example to .env and fill it in; never commit .env
 **/.env
 **/.env.*.local

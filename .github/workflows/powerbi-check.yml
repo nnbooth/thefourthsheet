@@ -1,0 +1,27 @@
+# Checks the Power BI project (powerbi/) whenever it or its generator changes: every report file valid against
+# Microsoft's JSON schemas, every field and DAX reference in the model (tools/3_publish_site/tests/powerbi_check.py).
+# Separate from "Publish site" so a Power BI problem never holds up the website.
+name: Check Power BI project
+
+on:
+  push:
+    paths: ["powerbi/**", "tools/3_publish_site/powerbi_statements.py", "tools/3_publish_site/tests/powerbi_check.py"]
+  pull_request:
+    paths: ["powerbi/**", "tools/3_publish_site/powerbi_statements.py", "tools/3_publish_site/tests/powerbi_check.py"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the Power BI project
+        run: |
+          pip install --quiet jsonschema certifi
+          python -I tools/3_publish_site/tests/powerbi_check.py

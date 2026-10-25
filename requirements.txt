@@ -10,6 +10,7 @@ pandas            # the dataset tools (tools/1_build_data/datasets.py)
 certifi           # trusted certificates for downloads (Python from python.org on a Mac has none)
 qrcode            # QR codes (tools/archive/generate_qr.py)
 pillow            # image handling, also needed by generate_qr.py (imported as PIL)
+jsonschema        # checks the Power BI project's report files against Microsoft's schemas (tools/3_publish_site/tests/powerbi_check.py)
 pymupdf           # reads PDFs back for the exports-match check (tools/3_publish_site/tests/exports_match.py)
 holidays          # Queensland public holidays (working days and banking days)
 tzdata            # time zones on Windows: download stamps are in Brisbane time whatever the machine's clock

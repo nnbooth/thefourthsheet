@@ -1,0 +1,50 @@
+/// Which accounts make up each statement line, with a sign (statement_line_account). Read by [Amount] only.
+table 'Statement line account'
+	lineageTag: a455e4dd-bdca-5b8f-8126-cfad39cd1a40
+	isHidden
+
+	column org_id
+		dataType: string
+		isHidden
+		lineageTag: 58b842b9-1b72-5d29-a5fc-621a533e51d1
+		summarizeBy: none
+		sourceColumn: org_id
+
+		annotation SummarizationSetBy = User
+
+	column line_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d6103baf-4fce-5cdd-9c18-455f1b432234
+		summarizeBy: none
+		sourceColumn: line_key
+
+		annotation SummarizationSetBy = User
+
+	column account_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ea28e0ee-cce3-5d3d-ae3b-5b237aa94fa5
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = User
+
+	column factor
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 50bfa203-218f-55a0-a1f3-9222a2b127d0
+		summarizeBy: none
+		sourceColumn: factor
+
+		annotation SummarizationSetBy = User
+
+	partition 'Statement line account' = m
+		mode: import
+		source =
+				LoadTable("statement_line_account", {{"org_id", type text}, {"line_key", Int64.Type}, {"account_id", Int64.Type}, {"factor", Int64.Type}})
+
+	annotation PBI_ResultType = Table

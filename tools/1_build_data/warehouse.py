@@ -478,15 +478,32 @@ def build(res):
             got = p_["surplus"] if org == "nfp" else p_["npat"]
             if got != led.get((org, mo), 0):
                 raise SystemExit(f"month_end {org} {mo}: profit {got} isn't the ledger's {led.get((org, mo), 0)}")
+    bal_rows = [[o, m, acct[(o, "bsr", line)], a] for o, m, line, a in bal_m]
+    cf_rows = [[o, m, acct[(o, "cfr", line)], a] for o, m, line, a in cf_m]
     tbl("fact_balance_month", "Every balance-sheet line at every month end, 31 Oct 2024 to 30 Sep 2026 (whole dollars; assets, liabilities and equity all positive). "
         "August and September 2026 are the locked statements; earlier months are closed the same way (month_end.py) and join them at 31 July 2026 to the dollar. "
-        "Totals and subtotals aren't stored: add the lines up (dim_account.section).",
+        "Totals and subtotals aren't stored: add the lines up (statement_line_account says which).",
         [("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("month_key", V(7)), ("account_id", "INT REFERENCES dim_account(account_id)"), ("amount", "INT")],
-        [[o, m, acct[(o, "bsr", line)], a] for o, m, line, a in bal_m])
+        bal_rows)
     tbl("fact_cash_flow_month", "Every cash-flow line for every month, Nov 2024 to Sep 2026 (direct method: in +, out -). Cash at the start of the month + these = "
         "cash at the end (fact_balance_month). Each line is what was earned or incurred less the change in what's owed.",
         [("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("month_key", V(7)), ("account_id", "INT REFERENCES dim_account(account_id)"), ("amount", "INT")],
-        [[o, m, acct[(o, "cfr", line)], a] for o, m, line, a in cf_m])
+        cf_rows)
+    # ---- the statements' layout: every line in print order, and the accounts each line adds up (statement_lines.py)
+    import statement_lines
+    sl, sla = statement_lines.build(res, acct_rows, gl, bal_rows, cf_rows)
+    tbl("statement_line", "Every line of each organisation's profit and loss, balance sheet and cash flow, in print order (line_order): headings, "
+        "accounts and subtotals. line_kind: heading (no amount), value (an account), sum (its accounts in statement_line_account), "
+        "opening_cash / closing_cash (cash at bank at the end of the month before / of the period). "
+        "role marks the lines the checks use (profit, net_assets, equity, net_change, opening_cash, closing_cash). "
+        "show_when_zero = 0 for lines the current statements don't print (finished grants): show them only when they have amounts.",
+        [("line_key", "INT PRIMARY KEY"), ("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("statement", V(20)), ("section", V(40)),
+         ("line", V(60)), ("line_level", V(10)), ("line_kind", V(12)), ("line_order", "INT"), ("role", V(12)),
+         ("show_when_zero", "INT")], sl)
+    tbl("statement_line_account", "Which accounts make up each statement line, and with what sign (factor +1 or -1): an account line is "
+        "itself; a subtotal is its accounts (Net assets = assets +1, liabilities -1). Amount of a line = sum of factor x the account's amount.",
+        [("org_id", V(10) + " REFERENCES dim_org(org_id)"), ("line_key", "INT REFERENCES statement_line(line_key)"),
+         ("account_id", "INT REFERENCES dim_account(account_id)"), ("factor", "INT")], sla)
     build.closes = closes
     build.balance_daily = bal
     tbl("fact_grant_position", "Each grant at 30 Sep 2026: received, spent, budget to date, still to spend. balance = received - spent (+ in advance, - receivable).",

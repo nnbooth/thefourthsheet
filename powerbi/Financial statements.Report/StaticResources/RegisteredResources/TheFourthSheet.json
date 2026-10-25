@@ -1,0 +1,30 @@
+{
+  "name": "The Fourth Sheet",
+  "dataColors": [
+    "#0E9F6E",
+    "#A7B0B8",
+    "#2F2F2F",
+    "#5F6F63",
+    "#7FCFB3",
+    "#D9DEE2"
+  ],
+  "foreground": "#25342A",
+  "foregroundNeutralSecondary": "#5F6F63",
+  "background": "#FFFFFF",
+  "tableAccent": "#0E9F6E",
+  "good": "#0E9F6E",
+  "neutral": "#A7B0B8",
+  "bad": "#2F2F2F",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 14,
+      "color": "#25342A"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#25342A"
+    }
+  }
+}

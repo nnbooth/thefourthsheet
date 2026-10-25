@@ -7,4 +7,5 @@ exclude:
   - requirements.txt
   - tools
   - docs
+  - powerbi
   - media/exports/generated.json
