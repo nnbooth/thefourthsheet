@@ -48,4 +48,4 @@ Thumbs.db
 media/game/month-end-run-15s.*
 
 # Local experiments, not part of the site
-visuals/
+/visuals/
