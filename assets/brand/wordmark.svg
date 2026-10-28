@@ -1,6 +1,9 @@
-<!-- The Fourth Sheet wordmark: green "4th" mark + "The Fourth Sheet". For print, email signatures and documents. Uses Roboto. -->
+<!-- The Fourth Sheet wordmark: the "4th" sheet mark + "The Fourth Sheet". For print, email signatures and documents. Uses Roboto. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 72" role="img" aria-label="The Fourth Sheet">
-  <rect x="0" y="4" width="64" height="64" rx="14" fill="#2f7a5d"/>
-  <text x="29" y="50" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="36" font-weight="800" fill="#fbfdf9" text-anchor="middle">4<tspan font-size="16" dy="-15" font-weight="700">th</tspan></text>
-  <text x="84" y="49" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#25342a">The Fourth Sheet</text>
+  <g transform="translate(0 4)">
+    <path d="M12 5h27l13 13v39a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#ffffff" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M39 5v11a2 2 0 0 0 2 2h11" fill="none" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>
+    <text x="28" y="49" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#2f7a5d" text-anchor="middle">4<tspan font-size="12" dy="-12">th</tspan></text>
+  </g>
+  <text x="70" y="49" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#25342a">The Fourth Sheet</text>
 </svg>

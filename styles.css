@@ -375,16 +375,9 @@ h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); letter-spacing: -0.02em; 
 
 .display-link { display: block; position: relative; }
 
-/* BRAND MARK — the green "4" square before the name in the header */
+/* BRAND MARK — the "4th" sheet (assets/brand/mark-4th.svg) before the name in the header */
 .brand { display: inline-flex; align-items: center; gap: var(--sp-2); }
-.brand-mark {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 1.9rem; height: 1.9rem; padding: 0 var(--sp-1); border-radius: var(--r-sm);
-  background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: var(--fs-md); line-height: 1;
-}
-
-.brand-mark sup { font-size: 0.55em; font-weight: 700; margin-left: 1px; }
-.brand sup { font-size: 0.6em; line-height: 0; }
+.brand-mark { display: block; width: 32px; height: 32px; flex: none; }
 
 /* HERO extras — the "three sheets" lead line and the two audience links */
 .hero-lead { margin: 0 0 var(--sp-2); font-size: var(--fs-lg); font-weight: 600; color: var(--accent); line-height: 1.35; }

@@ -221,7 +221,7 @@ def image_src(ref):
 
 NAV = """<header class="site-header">
       <div class="container nav-bar">
-        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">4<sup>th</sup></span><span>The Fourth Sheet</span></a>
+        <a class="brand" href="/"><img class="brand-mark" src="/assets/brand/mark-4th.svg?v=sheet" alt="" width="32" height="32" /><span>The Fourth Sheet</span></a>
         <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">☰</button>
         <nav class="nav-links" id="primary-nav" aria-label="Primary navigation">
           <a href="/sme.html">Businesses</a>
@@ -275,7 +275,7 @@ def page(title, description, body, draft=False, canonical=None):
     <meta name="description" content="{esc(description)}" />
     {robots}
     {canon}
-    <link rel="icon" href="/assets/brand/mark-4th.svg?v=roboto" type="image/svg+xml" />
+    <link rel="icon" href="/assets/brand/mark-4th.svg?v=sheet" type="image/svg+xml" />
     <meta name="theme-color" content="#2f7a5d" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

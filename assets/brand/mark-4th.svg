@@ -1,6 +1,8 @@
-<!-- The Fourth Sheet mark: "4th" with a superscript "th", in the brand green
-     (#2f7a5d). mark-4th-32.png and mark-4th-180.png are PNG copies (browser tab and phone home-screen icons). -->
+<!-- The Fourth Sheet mark: one page with a folded corner and "4th" printed on it, in the brand green (#2f7a5d).
+     Chosen in the design review (Oct 2026), replacing the green rounded square. mark-4th-32.png and mark-4th-180.png
+     are PNG copies (browser tab and phone home-screen icons). -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#2f7a5d"/>
-  <text x="29" y="46" font-family="Roboto, Segoe UI, Helvetica, Arial, sans-serif" font-size="36" font-weight="800" fill="#fbfdf9" text-anchor="middle">4<tspan font-size="16" dy="-15" font-weight="700">th</tspan></text>
+  <path d="M12 5h27l13 13v39a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#ffffff" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M39 5v11a2 2 0 0 0 2 2h11" fill="none" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>
+  <text x="28" y="49" font-family="Roboto, Segoe UI, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#2f7a5d" text-anchor="middle">4<tspan font-size="12" dy="-12">th</tspan></text>
 </svg>
