@@ -573,7 +573,7 @@ def html_report(org, v):
 @page {{ size: A4; margin: 16mm 14mm; }}
 body {{ font-family: Roboto, Arial, sans-serif; color: #25342a; font-size: 10.5pt; }}
 header {{ display: flex; align-items: center; gap: 10px; border-bottom: 3px solid #2f7a5d; padding-bottom: 8px; margin-bottom: 12px; }}
-.mark {{ min-width: 30px; height: 30px; padding: 0 4px; border-radius: 7px; background: #2f7a5d; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 15px; }} .mark sup, header b sup {{ font-size: 0.55em; }}
+.mark {{ width: 32px; height: 32px; flex: none; }} header b sup {{ font-size: 0.55em; }}
 header b {{ font-size: 13pt; }} header small {{ margin-left: auto; color: #5f6f63; }}
 h1 {{ font-size: 17pt; margin: 6px 0 2px; }} .about {{ color: #5f6f63; margin: 0 0 10px; }}
 .sample {{ display: inline-block; background: #f6f1e7; border: 1px solid #b28a92; color: #6b5532; border-radius: 4px; padding: 2px 8px; font-size: 8.5pt; font-weight: 700; }}
@@ -595,7 +595,7 @@ tr.key td {{ font-weight: 800; background: #eaf6ee; border-top: 1px solid #25342
 .assum td:first-child {{ width: 40%; color: #5f6f63; }} .checks li {{ margin: 2px 0; }}
 footer {{ margin-top: 14px; font-size: 8pt; color: #5f6f63; }}
 </style></head><body>
-<header><div class=mark>4<sup>th</sup></div><b>The Fourth Sheet</b><small>Your accountant gives you three sheets. I give you the fourth.</small></header>
+<header>{ek.MARK_SVG}<b>The Fourth Sheet</b><small>Your accountant gives you three sheets. I give you the fourth.</small></header>
 <span class=sample>SAMPLE DATA · invented figures for demonstration</span>
 <h1>{esc(v['model']['long_name'])}</h1><p class=about>{esc(v['model']['about'])}</p>
 {ek.status_box_html([(date.fromisoformat(m + "-01").strftime("%B %Y"), *ds.month_status(m)) for m in STATUS_MONTHS])}

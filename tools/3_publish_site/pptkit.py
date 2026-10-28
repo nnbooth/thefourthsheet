@@ -29,6 +29,9 @@ from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.opc.constants import RELATIONSHIP_TYPE as RT
 from pptx.oxml.ns import qn
 from pptx.util import Emu, Inches, Pt
+from pathlib import Path
+
+MARK_PNG = Path(__file__).resolve().parents[2] / "assets" / "brand" / "mark-4th-180.png"
 
 GREEN, GREY, INK, MUTED, BRAND, NEG, LINE, WARN = "0E9F6E", "7D8790", "25342A", "5F6F63", "2F7A5D", "B42318", "DCE8DC", "8A6D3B"
 FMT = {"pct_var": '0.0"% over";0.0"% under";"on budget"', "money_var": '$#,##0" over";$#,##0" under";"on budget"', "money0": '$#,##0;[Red]($#,##0);"-"',
@@ -176,10 +179,8 @@ class Deck:
         for ph in list(s.placeholders):
             if ph.placeholder_format.idx != 0:
                 ph._element.getparent().remove(ph._element)          # the subtitle placeholder: ours is laid out below
-        box = s.shapes.add_shape(1, L, Inches(0.6), Inches(0.7), Inches(0.7))
-        box.fill.solid(); box.fill.fore_color.rgb = rgb(BRAND); box.line.fill.background()
-        box.text_frame.text = "4th"
-        r_ = box.text_frame.paragraphs[0].runs[0]; r_.font.size = Pt(16); r_.font.bold = True; r_.font.color.rgb = rgb("FFFFFF")
+        # the brand mark (the "4th" sheet): assets/brand/mark-4th-180.png, which has a white margin of 12% a side
+        s.shapes.add_picture(str(MARK_PNG), L - Inches(0.1), Inches(0.5), Inches(0.9), Inches(0.9))
         self.text(s, Inches(1.35), Inches(0.72), Inches(6), Inches(0.5), "The Fourth Sheet", 18, bold=True)
         self.text(s, L, Inches(1.7), Inches(12), Inches(0.4), "SAMPLE DATA · invented figures for demonstration", 11, bold=True, colour="8A7A52")
         t = s.shapes.title

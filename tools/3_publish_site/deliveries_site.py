@@ -236,7 +236,7 @@ def html_report(d):
 <link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 <style>@page {{ size: A4 landscape; margin: 12mm; }} body {{ font-family: Roboto, Arial, sans-serif; color: #25342a; font-size: 10pt; margin: 0; }}
 header {{ display: flex; align-items: center; gap: 10px; border-bottom: 3px solid #2f7a5d; padding-bottom: 6px; margin-bottom: 8px; }}
-.mark {{ min-width: 28px; height: 28px; padding: 0 4px; border-radius: 7px; background: #2f7a5d; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; }}
+.mark {{ width: 30px; height: 30px; flex: none; }}
 sup {{ font-size: .55em; }} header small {{ margin-left: auto; color: #5f6f63; }}
 .sample {{ display: inline-block; background: #f6f1e7; border: 1px solid #b28a92; color: #6b5532; border-radius: 4px; padding: 1px 7px; font-size: 8pt; font-weight: 700; }}
 h1 {{ font-size: 15pt; margin: 4px 0; }} h2 {{ font-size: 12pt; color: #2f7a5d; margin: 6px 0; }} h3 {{ font-size: 10.5pt; margin: 0 0 4px; }}
@@ -246,7 +246,7 @@ h1 {{ font-size: 15pt; margin: 4px 0; }} h2 {{ font-size: 12pt; color: #2f7a5d; 
 .side ul {{ padding-left: 16px; }} .side li {{ margin: 4px 0; }} .legend i {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin: 0 3px 0 8px; }}
 .note {{ color: #5f6f63; font-size: 8.5pt; }} .leaflet-control-attribution {{ font-size: 7px; }} .leaflet-container {{ font-family: Roboto, Arial, sans-serif; }}
 """ + ek.STATUS_CSS + f"""</style></head><body>
-<header><div class=mark>4<sup>th</sup></div><b>The Fourth Sheet</b><small>Deliveries in and out · as at {ds.strf(TODAY, '%-d %b %Y')}, 2pm</small></header>
+<header>{ek.MARK_SVG}<b>The Fourth Sheet</b><small>Deliveries in and out · as at {ds.strf(TODAY, '%-d %b %Y')}, 2pm</small></header>
 <span class=sample>SAMPLE DATA · invented figures for demonstration</span>
 <h1>Sample Distribution: Wacol DC</h1>
 {ek.status_box_html([("Today (6 Oct)", "Incomplete", f"As at {ds.as_at_text()}: deliveries still on the road are shown as on their way."),

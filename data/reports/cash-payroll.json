@@ -2549,7 +2549,7 @@
       "exports_meta": {
         "pdf_pages": 3,
         "pptx_slides": 7,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-28 1245.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - October - generated 2026-10-28 1245.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-10/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-10/cash-payroll.pdf", "pptx": "media/exports/reports/2026-10/cash-payroll.pptx"},
       "status": [
@@ -5021,7 +5021,7 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 6,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-28 1245.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - September 2026 - generated 2026-10-28 1245.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-09/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-09/cash-payroll.pdf", "pptx": "media/exports/reports/2026-09/cash-payroll.pptx"},
       "status": [
@@ -7190,7 +7190,7 @@
       "exports_meta": {
         "pdf_pages": 2,
         "pptx_slides": 6,
-        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.pptx"}
+        "names": {"xlsx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-22 1657.xlsx", "pdf": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-28 1245.pdf", "pptx": "Sample Electrical & Air Pty Ltd - Cash cover for payroll - August 2026 - generated 2026-10-28 1245.pptx"}
       },
       "exports": {"xlsx": "media/exports/reports/2026-08/cash-payroll.xlsx", "pdf": "media/exports/reports/2026-08/cash-payroll.pdf", "pptx": "media/exports/reports/2026-08/cash-payroll.pptx"},
       "status": [

@@ -512,7 +512,7 @@ def html_report(r):
 <style>
 @page {{ size: A4; }} body {{ font-family: Roboto, Arial, sans-serif; color: #25342a; font-size: 10pt; margin: 0; }}
 header {{ display: flex; align-items: center; gap: 10px; border-bottom: 3px solid #2f7a5d; padding-bottom: 6px; margin-bottom: 8px; }}
-.mark {{ min-width: 28px; height: 28px; padding: 0 4px; border-radius: 7px; background: #2f7a5d; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; }}
+.mark {{ width: 30px; height: 30px; flex: none; }}
 sup {{ font-size: .55em; }} header small {{ margin-left: auto; color: #5f6f63; }}
 .sample {{ display: inline-block; background: #f6f1e7; border: 1px solid #c8a77e; color: #6b5532; border-radius: 4px; padding: 1px 7px; font-size: 8pt; font-weight: 700; }}
 h1 {{ font-size: 16pt; margin: 6px 0 2px; }} .intro {{ color: #5f6f63; margin: 0 0 6px; }} h2.block {{ font-size: 13pt; color: #2f7a5d; margin: 18px 0 4px; padding-top: 8px; border-top: 3px solid #2f7a5d; page-break-after: avoid; }}
@@ -526,7 +526,7 @@ h3 {{ font-size: 10.5pt; margin: 12px 0 4px; }} h2.sub {{ font-size: 11.5pt; col
 table {{ width: 100%; border-collapse: collapse; font-size: 9pt; }} table.small, table.bridge {{ page-break-inside: avoid; }} tr {{ page-break-inside: avoid; }} thead {{ display: table-header-group; }} h3 {{ page-break-after: avoid; }} th {{ text-align: left; background: #2f7a5d; color: #fff; padding: 3px 6px; }}
 td {{ padding: 3px 6px; border-bottom: 1px solid #eef2ee; }} .n {{ text-align: right; font-variant-numeric: tabular-nums; }} ul {{ margin: 4px 0 8px; padding-left: 18px; }} li {{ margin: 3px 0; }}
 """ + ek.STATUS_CSS + ek.MADE_WITH_CSS + f"""</style></head><body>
-<header><div class=mark>4<sup>th</sup></div><b>The Fourth Sheet</b><small>Example report · {esc(AUDIENCE[r['audience']][1])}</small></header>
+<header>{ek.MARK_SVG}<b>The Fourth Sheet</b><small>Example report · {esc(AUDIENCE[r['audience']][1])}</small></header>
 <span class=sample>SAMPLE DATA · invented figures for demonstration</span>
 <h1>{esc(r['question'])}</h1><p class=intro><b>Period: {esc(r['period_label'])}.</b> {esc(r['intro'])}</p>
 {status}

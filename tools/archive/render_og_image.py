@@ -21,12 +21,12 @@ HTML = """<!doctype html><html><head><meta charset="utf-8">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
 <style>
   html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
-  body { background: #f4f7f2; color: #25342a; font-family: "Roboto", "Segoe UI", Arial, sans-serif; position: relative; }
+  body { background: #fafbfa; color: #25342a; font-family: "Roboto", "Segoe UI", Arial, sans-serif; position: relative; }
   .brand { position: absolute; left: 80px; top: 72px; display: flex; align-items: center; gap: 22px; }
   .brand img { width: 76px; height: 76px; display: block; }
   .brand b { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; }
   sup { font-size: 0.55em; vertical-align: 0.75em; line-height: 0; }
-  .eyebrow { position: absolute; left: 80px; top: 240px; color: #2f7a5d; font-size: 21px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+  .eyebrow { position: absolute; left: 80px; top: 236px; color: #2f7a5d; font-size: 26px; font-weight: 600; }
   h1 { position: absolute; left: 80px; top: 278px; margin: 0; font-size: 56px; line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; }
   h1 span { color: #2f7a5d; }
   .sub { position: absolute; left: 80px; top: 500px; color: #5f6f63; font-size: 27px; }

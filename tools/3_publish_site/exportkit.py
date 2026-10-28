@@ -21,6 +21,11 @@ from datetime import date
 
 GOOD, SOME, BAD, OPEN, INK, MUTED, LINE = "#0E9F6E", "#7D8790", "#b42318", "#8e9cab", "#2f2f2f", "#5f6f63", "#dce8dc"
 NEG = "#B42318"     # negative numbers: always red, in brackets
+# The brand mark for PDF headers: the "4th" sheet, same drawing as assets/brand/mark-4th.svg (size it with CSS on .mark)
+MARK_SVG = ('<svg class="mark" viewBox="0 0 64 64" aria-hidden="true">'
+            '<path d="M12 5h27l13 13v39a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#fff" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>'
+            '<path d="M39 5v11a2 2 0 0 0 2 2h11" fill="none" stroke="#2f7a5d" stroke-width="3.5" stroke-linejoin="round"/>'
+            '<text x="28" y="49" font-family="Roboto, Arial, sans-serif" font-size="27" font-weight="700" fill="#2f7a5d" text-anchor="middle">4<tspan font-size="12" dy="-12">th</tspan></text></svg>')
 NEG_CSS = ".neg {{ color: #B42318; }}"
 
 
@@ -495,7 +500,7 @@ def _rel(dest):
     from pathlib import Path
     repo = Path(__file__).resolve().parent.parent.parent
     try:
-        return str(Path(dest).resolve().relative_to(repo))
+        return Path(dest).resolve().relative_to(repo).as_posix()   # forward slashes on every OS: the same key on a Mac and a PC
     except ValueError:
         return None              # outside the repo (e.g. a test render): not recorded
 
