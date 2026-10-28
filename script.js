@@ -679,10 +679,10 @@ const SHOW_EXPLANATIONS = true;
 if (!SHOW_EXPLANATIONS || new URLSearchParams(location.search).get('explain') === 'off') document.documentElement.classList.add('no-explain');
 
 // Charts are drawn at their real pixel width (1 SVG unit = 1px), so chart text stays at a fixed, readable size
-// (11px labels, 12px values) on every screen. chartWidth() measures the box a chart will sit in.
+// (14px labels and values: nothing on the site is smaller) on every screen. chartWidth() measures the box a chart will sit in.
 const chartWidth = (node, pad = 0) => Math.max(160, Math.round((node && node.clientWidth ? node.clientWidth : 320) - pad));
-const textW = (t, px = 11) => String(t).length * px * 0.56;              // close enough for Roboto at chart sizes
-const clip = (t, maxW, px = 11) => { const s = String(t); const n = Math.floor(maxW / (px * 0.56)); return s.length <= n ? s : `${s.slice(0, Math.max(1, n - 1))}…`; };
+const textW = (t, px = 14) => String(t).length * px * 0.56;              // close enough for Roboto at chart sizes
+const clip = (t, maxW, px = 14) => { const s = String(t); const n = Math.floor(maxW / (px * 0.56)); return s.length <= n ? s : `${s.slice(0, Math.max(1, n - 1))}…`; };
 
 // Colour by meaning, not by sign: is this value good, close (warn) or bad? goodWhen 'higher' or 'lower';
 // target is the line it's judged against; warnWithin (same units) counts as close. Returns a CSS class.
@@ -739,18 +739,25 @@ function renderChart(ch, width = 320) {
   // Every bar carries a value label and opens its workings when clicked. Grey = below target (unless the chart is
   // "plain"); red = losing money (below zero). "marks" = a small tick per bar (e.g. budget to date).
   const fmt = CHART_FORMATS[ch.format] || String;
-  const W = Math.round(width), top = 8, bh = 15;
-  const valW = Math.max(...ch.values.map((v) => textW(fmt(v), 12))) + 10;
+  const W = Math.round(width), top = 8, bh = 16;
+  const valW = Math.max(...ch.values.map((v) => textW(fmt(v), 14))) + 10;
   const right = W - valW;
   // a label that won't fit down the left (narrow charts, phones) puts every label on its own line above its bar
   const stacked = ch.labels.some((l) => 12 + textW(l) > W * 0.42);
-  const lab = stacked ? 16 : 0, row = 26 + lab;
+  const lab = stacked ? 19 : 0, row = 30 + lab;
   const left = stacked ? 0 : 12 + Math.max(...ch.labels.map((l) => textW(l)));
   const n = ch.values.length, plotH = n * row;
   const below = (v, i) => !ch.plain && ((ch.target != null && v < ch.target) || (ch.below_marks && ch.marks && v < ch.marks[i]));
   const anyBelow = ch.values.some((v, i) => below(v, i));
-  const be = ch.breakeven != null ? 14 : 0;               // a second label row for the break-even line
-  const H = top + plotH + be + (anyBelow || ch.marks || ch.variance ? 40 : ch.target != null ? 24 : 6);
+  const be = ch.breakeven != null ? 18 : 0;               // a second label row for the break-even line
+  // variance key: three swatches laid out by their text width; on a narrow chart they wrap onto a second row
+  const vKeys = [['bad', 'Over budget'], ['good', 'Under budget'], ['warn', 'Within 1%']];
+  const vW = vKeys.map(([, t]) => 16 + textW(t) + 18);
+  const vFits = vW.reduce((a, w) => a + w, 0) - 18 <= W - left;   // one row, lined up with the bars
+  const vPos = []; let vx = 0, vRow = 0;
+  vW.forEach((w) => { if (!vFits && vx && vx + w - 18 > W) { vx = 0; vRow += 1; } vPos.push([vx, vRow]); vx += w; });
+  const vExtra = ch.variance ? vRow * 20 : 0;
+  const H = top + plotH + be + vExtra + (anyBelow || ch.marks || ch.variance ? 40 : ch.target != null ? 24 : 6);
   const lo = Math.min(0, ...ch.values);
   const max = Math.max(...ch.values, ch.target || 0, ch.breakeven || 0, ...(ch.marks || [0])) * 1.05;
   const x = (v) => left + ((v - lo) / (max - lo || 1)) * (right - left);
@@ -775,7 +782,7 @@ function renderChart(ch, width = 320) {
       + `<rect class="dash-bar dash-bar--h${cls}" x="${bx.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh}" rx="2"/>`;
     if (ch.marks) g += `<line class="dash-mark" x1="${x(ch.marks[i]).toFixed(1)}" x2="${x(ch.marks[i]).toFixed(1)}" y1="${(y - 3).toFixed(1)}" y2="${(y + bh + 3).toFixed(1)}"/>`;
     // value label at the bar's end; it steps past a marker or the target line rather than sitting on it
-    const txt = fmt(v), tw = textW(txt, 12);
+    const txt = fmt(v), tw = textW(txt, 14);
     let lx = Math.max(x(v), x0) + 5;
     if (ch.marks) { const mx = x(ch.marks[i]); if (mx >= x(v) - 1 && mx < lx + tw + 3) lx = mx + 5; }
     if (ch.breakeven != null && lx - 3 < x(ch.breakeven) && x(ch.breakeven) < lx + tw + 3) lx = x(ch.breakeven) + 5;
@@ -787,16 +794,17 @@ function renderChart(ch, width = 320) {
   if (ch.target != null) {   // drawn after the bars, so the target sits on top
     const tx = x(ch.target).toFixed(1);
     g += `<line class="dash-target" x1="${tx}" x2="${tx}" y1="${top - 4}" y2="${top + plotH + 2}"/>`;
-    g += `<text class="dash-target-label" x="${tx}" y="${top + plotH + 16}" text-anchor="middle">Target ${fmt(ch.target)}</text>`;
+    g += `<text class="dash-target-label" x="${tx}" y="${top + plotH + 17}" text-anchor="middle">Target ${fmt(ch.target)}</text>`;
   }
   if (ch.breakeven != null) {   // what just covers overheads: below the target, labelled on the row under it
     const bx = x(ch.breakeven).toFixed(1);
-    g += `<line class="dash-breakeven" x1="${bx}" x2="${bx}" y1="${top - 4}" y2="${top + plotH + 18}"/>`;
-    g += `<text class="dash-breakeven-label" x="${bx}" y="${top + plotH + 30}" text-anchor="middle">Break-even ${fmt(ch.breakeven)}</text>`;
+    g += `<line class="dash-breakeven" x1="${bx}" x2="${bx}" y1="${top - 4}" y2="${top + plotH + 21}"/>`;
+    g += `<text class="dash-breakeven-label" x="${bx}" y="${top + plotH + 35}" text-anchor="middle">Break-even ${fmt(ch.breakeven)}</text>`;
   }
-  if (ch.variance) g += `<rect class="dash-bar--bad" x="${left}" y="${H - 13}" width="11" height="11" rx="2"/><text class="dash-key" x="${left + 16}" y="${H - 3}">Over budget</text>`
-    + `<rect class="dash-bar--good" x="${left + 106}" y="${H - 13}" width="11" height="11" rx="2"/><text class="dash-key" x="${left + 122}" y="${H - 3}">Under budget</text>`
-    + `<rect class="dash-bar--warn" x="${left + 218}" y="${H - 13}" width="11" height="11" rx="2"/><text class="dash-key" x="${left + 234}" y="${H - 3}">Within 1%</text>`;
+  if (ch.variance) vKeys.forEach(([k, t], i) => {
+    const kx = (vFits ? left : 0) + vPos[i][0], ky = H - 3 - (vRow - vPos[i][1]) * 20;
+    g += `<rect class="dash-bar--${k}" x="${kx}" y="${ky - 11}" width="11" height="11" rx="2"/><text class="dash-key" x="${kx + 16}" y="${ky}">${t}</text>`;
+  });
   else if (anyBelow && !ch.marks) g += `<rect class="dash-bar--below" x="${left}" y="${H - 13}" width="11" height="11" rx="2"/><text class="dash-key" x="${left + 16}" y="${H - 3}">Below target</text>`;
   if (ch.marks) g += `<line class="dash-mark" x1="${left + 4}" x2="${left + 4}" y1="${H - 14}" y2="${H - 1}"/><text class="dash-key" x="${left + 12}" y="${H - 3}">${esc(ch.mark_label || '')}</text>`;
   const label = `${ch.title}: ${ch.labels.map((l, i) => `${l} ${fmt(ch.values[i])}`).join(', ')}${ch.target != null ? `; target ${fmt(ch.target)}` : ''}${ch.breakeven != null ? `; break-even ${fmt(ch.breakeven)}` : ''}.`;
@@ -1025,8 +1033,11 @@ function renderArea(labels, values, status, format, mini, width, target) {
     g += `<path class="dash-area dash-area--light" fill="url(#${gid}l)" d="${path(tail)}L${tail[tail.length - 1][0].toFixed(1)},${zeroY.toFixed(1)}L${tail[0][0].toFixed(1)},${zeroY.toFixed(1)}Z"/>`;
     g += `<path class="dash-line dash-line--light" d="${path(tail)}"/>`;
   }
-  if (tv != null) g += `<line class="dash-target" x1="${left}" x2="${right}" y1="${y(tv).toFixed(1)}" y2="${y(tv).toFixed(1)}"/>`
-    + `<text class="dash-target-label" x="${right}" y="${(y(tv) - 5).toFixed(1)}" text-anchor="end">${esc(target.label || `Target ${fmt(tv)}`)}</text>`;
+  if (tv != null) {   // the full label where it fits, else just "Target $…" (the full one shows on hover)
+    const full = target.label || `Target ${fmt(tv)}`, short = textW(full) <= right - left ? full : clip(`Target ${fmt(tv)}`, right - left);
+    g += `<line class="dash-target" x1="${left}" x2="${right}" y1="${y(tv).toFixed(1)}" y2="${y(tv).toFixed(1)}"/>`
+      + `<text class="dash-target-label" x="${right}" y="${(y(tv) - 5).toFixed(1)}" text-anchor="end"><title>${esc(full)}</title>${esc(short)}</text>`;
+  }
   if (yMin < 0) g += `<line class="dash-grid" x1="${left}" x2="${right}" y1="${zeroY.toFixed(1)}" y2="${zeroY.toFixed(1)}"/>`;
   const idx = values.map((v, i) => (v == null ? null : i)).filter((i) => i != null);
   const hi = idx.reduce((a, i) => (values[i] > values[a] ? i : a), idx[0]);

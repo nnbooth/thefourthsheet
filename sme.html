@@ -73,10 +73,20 @@
            call to action) so it can move to its own page later. -->
       <section id="sme" class="section page-top audience">
         <div class="container">
-          <div class="section-heading">
+          <!-- Top of the page: the intro, a sample chart (one example report, on sample data) and the questions. Desktop: the
+               chart sits to the right of the questions; phones: intro, chart, questions. -->
+          <div class="section-heading audience-top">
+            <div class="audience-intro">
             <p class="eyebrow">For SMEs (small and medium businesses)</p>
             <h1>What's really driving your business?</h1>
             <p class="lead">You already know your business. The fourth sheet answers the questions underneath it, whichever ones matter to you.</p>
+            </div>
+            <figure class="audience-sample">
+              <p class="audience-sample-q">Example: <a href="report-job-margins.html">Which jobs actually make money?</a></p>
+              <div data-report-feature="job-margins" data-only="bars"><noscript><p>Turn on JavaScript to see the chart, or <a href="report-job-margins.html">open the report</a>.</p></noscript></div>
+              <figcaption><span class="dash-sample">Sample data</span> for an invented Brisbane electrical and air-conditioning business. <a href="report-job-margins.html">Open the full report &rarr;</a></figcaption>
+            </figure>
+            <div class="audience-qs">
             <p class="q-intro">Questions like:</p>
             <ul class="q-list" aria-label="Questions">
               <li><a href="report-job-margins.html"><span class="q-text">Which jobs actually make money?</span><span class="q-tag">Money</span><span class="q-go">Example &rarr;</span></a></li>
@@ -88,6 +98,7 @@
               <li><a href="report-growth.html"><span class="q-text">Which products and services are growing?</span><span class="q-tag">Growth</span><span class="q-go">Example &rarr;</span></a></li>
               <li><a class="q-ask" href="contact.html?topic=other"><span class="q-text">Got a different question?</span><span class="q-go">Ask me &rarr;</span></a></li>
             </ul>
+            </div>
           </div>
 
           <p class="no-data-line"><strong>No data to hand over yet?</strong> I'll help you set up the processes and frameworks to start capturing it, then build the reporting on top.</p>
