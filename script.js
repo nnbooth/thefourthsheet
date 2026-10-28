@@ -6,7 +6,7 @@
   - Report card builder ...................... renderReports() / buildReportCard()
   - Loading message + 8-second fallback ...... watchEmbedLoad()
   - Game (load on Play) ...................... setupGameSlot()
-  - Prices ($110 an hour, $800 a day) ........ SHOW_PRICES / PRICES
+  - Prices (rungs; ad-hoc $110/h, $800/day) .. SHOW_PRICES / PRICES
   - Analytics (off until a token is set) ..... ANALYTICS / track()
   - Home-page sample dashboard ............... setupHeroDash() (data: data/dashboard.json)
   - Generated data files (data/*.json) ....... loadData()
@@ -582,7 +582,9 @@ function setupGameSlot() {
 }
 
 /* ---------------------------------------------------------------------------
-   PRICES — base rate $110 an hour; day rate $800 (7 hours × $110 = $770, rounded up).
+   PRICES — the three rungs are priced as products (Build it: fixed quote; Make it stick: fixed term, fixed fee;
+   Run it: from $2,000 a month). The hourly and day rate shows only on services.html, for one-off or ad-hoc work:
+   base rate $110 an hour; day rate $800 (7 hours × $110 = $770, rounded up).
 
    Each price on the page shows "Talk to me about pricing" in the HTML (what visitors see
    without JavaScript); with SHOW_PRICES on, the PRICES text replaces it.
@@ -590,9 +592,10 @@ function setupGameSlot() {
 --------------------------------------------------------------------------- */
 const SHOW_PRICES = true;
 const PRICES = {
-  setup: 'From $110 an hour · $800 a day',
-  bedding: '$110 an hour · $800 a day',
-  monthly: '$110 an hour · $800 a day',
+  setup: 'Fixed quote per engagement',
+  bedding: 'Fixed term, fixed fee',
+  monthly: 'From $2,000 a month',
+  adhoc: '$110 an hour · $800 a day',
 };
 
 /* ---------------------------------------------------------------------------

@@ -27,7 +27,8 @@ Anything not yet known is marked with a `data-placeholder` attribute; search the
 
 ## Switches
 
-- **Prices:** `PRICES` and `SHOW_PRICES` in `script.js` ($110 an hour, $800 a day). Without JavaScript each price reads
+- **Prices:** `PRICES` and `SHOW_PRICES` in `script.js`. The rungs are fixed quote / fixed term, fixed fee / from $2,000 a
+  month; $110 an hour and $800 a day appear only on services.html, for one-off or ad-hoc work. Without JavaScript each price reads
   "Talk to me about pricing".
 - **Analytics:** off. `ANALYTICS` in `script.js`: while `token` is a `[[TOKEN]]` nothing loads or sends. To switch on,
   set `token`, `src` (the provider's script) and `send(name, detail)`. Events come from `data-track` attributes:

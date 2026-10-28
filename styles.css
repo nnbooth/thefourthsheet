@@ -440,9 +440,9 @@ h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); letter-spacing: -0.02em; 
 .hero-sheets img { display: block; width: 104px; height: auto; }
 .h1-accent { color: var(--accent); }
 .nowrap { white-space: nowrap; }   /* keeps a hyphenated word on one line */
-.hero-byline { display: flex; align-items: center; gap: var(--sp-2); margin: var(--sp-1) 0 0; color: var(--muted); font-size: var(--fs-sm); }
+.hero-byline { display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-1) 0 0; color: var(--muted); font-size: var(--fs-sm); }
 .hero-byline strong { color: var(--text); }
-.headshot--sm { width: 36px; height: 36px; }
+.headshot--byline { width: 60px; height: 60px; }   /* home hero, beside the name line */
 .headshot--lg { width: 96px; height: 96px; }
 .about-intro { display: flex; align-items: center; gap: var(--sp-4); margin: var(--sp-4) 0 var(--sp-5); font-size: var(--fs-md); }
 .moment-result { margin: auto 0 0; padding-top: var(--sp-3); color: var(--accent); font-weight: 700; }
@@ -673,6 +673,11 @@ h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); letter-spacing: -0.02em; 
 .rung-price small { display: block; font-weight: 400; color: var(--muted); }
 .rung-tag { display: block; margin: 0 0 var(--sp-2); font-size: var(--fs-xs); font-weight: 700; color: var(--accent); }
 .rung-price span:empty { display: none; }
+.rung-price:has(> span:empty:only-child) { display: none; }   /* no JavaScript, no price: no empty ruled line */
+/* Examples, live displays: what each screen is (real work or a sample design) */
+.display-tag { display: table; margin-bottom: var(--sp-1); padding: 2px var(--sp-2); border-radius: var(--r-pill); background: var(--track); color: var(--muted); font-size: var(--fs-sm); font-weight: 700; }
+.display-tag--real { background: var(--accent); color: var(--on-accent); }
+.adhoc-rate { margin: var(--sp-2) 0 0; font-size: var(--fs-sm); color: var(--muted); }
 .ladder-price { margin: 0 0 var(--sp-2); font-weight: 700; color: var(--text); }
 .offer-cta { margin-top: var(--sp-6); }
 
@@ -1128,6 +1133,7 @@ button.dash-kpi:focus-visible { outline: 3px solid var(--accent); outline-offset
 }
 
 /* HERO — the line that says what the three sheets and the fourth are */
+.hero-sub { margin: var(--sp-3) 0 0; font-size: var(--fs-md); font-weight: 500; color: var(--text); }   /* under the headline: the accountant stays */
 .hero-define { margin: var(--sp-3) 0 var(--sp-2); font-size: var(--fs-md); line-height: 1.55; color: var(--text); max-width: 36rem; }
 .hero-define strong { color: var(--accent); }
 .hero .hero-copy { margin: 0 0 var(--sp-2); font-size: var(--fs-md); line-height: 1.55; color: var(--text); max-width: 36rem; }   /* body text, same as the explainer */
