@@ -437,10 +437,6 @@ h2 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); letter-spacing: -0.02em; 
 .hero-headline { display: flex; align-items: center; gap: var(--sp-5); }
 .hero-headline h1 { flex: 1; min-width: 0; }
 .hero-sheets { flex: none; background: var(--accent); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-4); line-height: 0; }
-button.hero-sheets { border: 0; font: inherit; color: inherit; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-button.hero-sheets:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-button.hero-sheets:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { button.hero-sheets { transition: none; } button.hero-sheets:hover { transform: none; } }
 .hero-sheets img { display: block; width: 104px; height: auto; }
 .h1-accent { color: var(--accent); }
 .nowrap { white-space: nowrap; }   /* keeps a hyphenated word on one line */
@@ -494,18 +490,18 @@ button.hero-sheets:focus-visible { outline: 3px solid var(--accent); outline-off
 .dash-svg .dash-bar--warn { fill: var(--warn); }
 .dash-svg .dash-bar--good { fill: var(--good); }
 .dash-svg .dash-value--good { fill: var(--accent); }
-.dash-svg .dash-value { font-size: 12px; font-weight: 500; fill: var(--muted); paint-order: stroke; stroke: var(--paper); stroke-width: 2px; stroke-linejoin: round; font-variant-numeric: tabular-nums; animation: dash-fade 300ms 450ms ease-out both; }
-@keyframes dash-fade { from { opacity: 0; } }
+.dash-svg .dash-value { font-size: 12px; font-weight: 500; fill: var(--muted); paint-order: stroke; stroke: var(--paper); stroke-width: 2px; stroke-linejoin: round; font-variant-numeric: tabular-nums; }
 .dash-svg .dash-bar--h { transform-origin: left; animation-name: dash-grow; }
-@keyframes dash-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes dash-grow { from { transform: scaleX(0.6); } to { transform: scaleX(1); } }   /* starts at 60%: the bar is never hidden, even if the animation is frozen */
 .dash-svg .dash-key { font-size: 11px; fill: var(--muted); }
 .dash-svg .dash-axis { font-size: 11px; fill: var(--muted); }
+.dash-svg .dash-axis--above { paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }   /* labels over their bars (phones): a halo where the target line crosses */
 .dash-svg .dash-target { stroke: var(--ink-line); stroke-width: 1; stroke-dasharray: 3 2; }
 .dash-svg .dash-target-label { font-size: 11px; font-weight: 600; fill: var(--ink-line); }
 .dash-svg .dash-breakeven { stroke: var(--bad); stroke-width: 1; stroke-dasharray: 1 2; }
 .dash-svg .dash-breakeven-label { font-size: 11px; font-weight: 600; fill: var(--bad); }
-@keyframes dash-rise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-@media (prefers-reduced-motion: reduce) { .dash-svg .dash-bar, .dash-svg .dash-value { animation: none; } }
+@keyframes dash-rise { from { transform: scaleY(0.6); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .dash-svg .dash-bar { animation: none; } }
 .dash-table, .st-table { width: 100%; border-collapse: collapse; font-size: var(--fs-xs); }
 .dash-table th, .st-table thead th { text-align: left; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding: var(--sp-1) var(--sp-1); border-bottom: 1px solid var(--border); }
 .dash-table td, .st-table td { padding: var(--sp-1) var(--sp-1); border-bottom: 1px solid var(--track); }
@@ -1141,82 +1137,6 @@ button.dash-kpi:focus-visible { outline: 3px solid var(--accent); outline-offset
 .hero-define { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--sp-2); row-gap: var(--sp-2); }
 .hero-define br { display: none; }
 
-/* INTRO — plays once per visit on the home page (markup: index.html, logic: script.js, search "INTRO").
-   The three sheets arrive one at a time, data flows into the fourth, then script.js shrinks the picture
-   into .hero-sheets. Timings are the animation-delay values below (seconds from the start). */
-/* A panel over the page, which stays visible behind it, dimmed. × (top right), Esc or a click on the page closes it. */
-.intro { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px;
-  background-color: rgba(20, 28, 22, 0.55); transition: background-color 700ms ease; animation: intro-dim 400ms ease both; }
-.intro[hidden] { display: none; }
-.intro-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--sp-4); width: min(560px, 100%);
-  padding: var(--sp-7) var(--sp-6) var(--sp-6); background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: 0 18px 48px rgba(20, 28, 22, 0.28);
-  transition: background-color 500ms ease, border-color 500ms ease, box-shadow 500ms ease; animation: intro-pop 400ms cubic-bezier(.2, .7, .2, 1) both; }
-.intro-art { display: block; width: min(250px, 58vw, calc((100vh - 16rem) * 0.8667)); height: auto; overflow: visible; }
-.intro-close { position: absolute; top: var(--sp-2); right: var(--sp-2); width: 44px; height: 44px; display: grid; place-items: center; padding: 0;
-  border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 1.75rem; line-height: 1; cursor: pointer; }
-.intro-close:hover, .intro-close:focus-visible { background: var(--accent-soft); color: var(--text); outline: none; box-shadow: 0 0 0 2px var(--accent); }
-/* Phones: a tighter panel — less padding, a smaller picture, room for two caption lines (three on the narrowest) */
-@media (max-width: 600px) {
-  .intro { padding: var(--sp-3); }
-  .intro-stage { gap: var(--sp-2); padding: var(--sp-6) var(--sp-4) var(--sp-4); }
-  .intro-art { width: min(190px, 52vw, calc((100vh - 12rem) * 0.8667)); }
-  .intro-captions { height: 2.9em; font-size: 1rem; }
-  .intro-close { top: var(--sp-1); right: var(--sp-1); }
-}
-@media (max-width: 359px) { .intro-captions { height: 4.3em; } }
-@keyframes intro-dim { from { background-color: rgba(20, 28, 22, 0); } }
-@keyframes intro-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
-.intro-label { font-size: 4.2px; font-weight: 700; fill: var(--on-accent); }
-.intro-label--fourth { font-size: 5.4px; fill: var(--accent); }
-.intro-line { opacity: 0; transition: opacity 400ms ease; }
-.intro-captions { position: relative; width: 100%; height: 3.6em; font-size: clamp(1rem, 2vw, var(--fs-md)); line-height: 1.4; text-align: center; }
-.intro-cap { position: absolute; inset: 0; margin: 0; color: var(--muted); opacity: 0; }
-.intro-cap strong { color: var(--text); }
-.intro-cap strong.intro-accent { color: var(--accent); }
-.intro-captions, .intro-skip, .intro-label { transition: opacity 400ms ease; }
-
-.intro-sheet, .intro-pill { opacity: 0; }
-.intro-sheet, .intro-bar, .intro-pill { transform-box: fill-box; }
-.intro-s1 { animation: intro-in 600ms ease-out 300ms both; }
-.intro-s2 { animation: intro-in 600ms ease-out 2000ms both; }
-.intro-s3 { animation: intro-in 600ms ease-out 3700ms both; }
-.intro-s4 { animation: intro-slide 700ms cubic-bezier(.2, .7, .2, 1) 5400ms both; }
-.intro-c1 { animation: intro-cap 1900ms ease 350ms both; }
-.intro-c2 { animation: intro-cap 1900ms ease 2050ms both; }
-.intro-c3 { animation: intro-cap 1900ms ease 3750ms both; }
-.intro-c4 { animation: intro-in 600ms ease-out 5500ms both; }
-.intro-p0 { animation: intro-p0 1000ms ease-in-out 5900ms both; }
-.intro-p1 { animation: intro-p1 1000ms ease-in-out 6050ms both; }
-.intro-p2 { animation: intro-p2 1000ms ease-in-out 6200ms both; }
-.intro-bar { transform-origin: bottom; }
-.intro-b0 { animation: intro-grow 600ms ease-out 6700ms both; }
-.intro-b1 { animation: intro-grow 600ms ease-out 6850ms both; }
-.intro-b2 { animation: intro-grow 600ms ease-out 7000ms both; }
-
-@keyframes intro-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-@keyframes intro-slide { from { opacity: 0; transform: translate(10px, 6px); } to { opacity: 1; transform: none; } }
-@keyframes intro-cap { 0% { opacity: 0; transform: translateY(6px); } 15%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-6px); } }
-@keyframes intro-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-/* each piece starts on its own sheet and lands on the base of its bar */
-@keyframes intro-p0 { 0% { opacity: 0; transform: none; } 20% { opacity: 1; transform: none; } 85% { opacity: 1; transform: translate(8px, 95px); } 100% { opacity: 0; transform: translate(8px, 95px); } }
-@keyframes intro-p1 { 0% { opacity: 0; transform: none; } 20% { opacity: 1; transform: none; } 85% { opacity: 1; transform: translate(9px, 85px); } 100% { opacity: 0; transform: translate(9px, 85px); } }
-@keyframes intro-p2 { 0% { opacity: 0; transform: none; } 20% { opacity: 1; transform: none; } 85% { opacity: 1; transform: translate(16px, 75px); } 100% { opacity: 0; transform: translate(16px, 75px); } }
-
-/* Leaving: the background fades to show the page, the words go, and the picture becomes the brand illustration */
-body.intro-active { overflow: hidden; }
-body.intro-active .hero-sheets img { visibility: hidden; }
-.intro--leaving { background-color: transparent; pointer-events: none; }
-.intro--leaving .intro-stage { background-color: transparent; border-color: transparent; box-shadow: none; }
-.intro--leaving .intro-captions, .intro--leaving .intro-skip, .intro--leaving .intro-label { opacity: 0; }
-.intro--leaving .intro-line { opacity: 1; }
-.intro--leaving .intro-art { transition: transform 900ms cubic-bezier(.65, 0, .35, 1); }
-.intro--fade { opacity: 0; transition: opacity 500ms ease; }
-/* Skipped: jump every part to its finished state */
-.intro--skipped .intro-sheet, .intro--skipped .intro-bar { animation: none; opacity: 1; }
-.intro--skipped .intro-pill, .intro--skipped .intro-cap { animation: none; opacity: 0; }
-.intro--skipped .intro-c4 { opacity: 1; }
-
-
 /* HERO — three short proof points under the byline */
 .hero-points { list-style: none; margin: var(--sp-7) 0 0; padding: var(--sp-6) 0 0; border-top: 1px solid var(--border); display: grid; gap: var(--sp-4); }
 .hero-points li { position: relative; padding-left: 1.9rem; font-size: var(--fs-md); color: var(--text); }
@@ -1253,10 +1173,16 @@ body.intro-active .hero-sheets img { visibility: hidden; }
   .dash-svg .dash-key, .dash-svg .dash-axis, .dash-svg .dash-target-label, .dash-svg .dash-breakeven-label,
   .dash-svg .dash-key--warn, .dash-svg .dash-ytick, .report-area--mini .dash-value--top { font-size: 12px; }
 }
-/* D2: on a phone every toggle option is visible: the segmented controls wrap onto a second row instead of scrolling sideways */
+/* On a phone each toggle group stays one row and scrolls sideways (no scrollbar). An edge fades out on whichever
+   side has more options (script.js adds .seg--more-end / .seg--more-start), so nothing looks cut off by accident. */
+.seg { scroll-snap-type: x proximity; scroll-padding-inline: 3px; overscroll-behavior-x: contain; }
+.seg > button { scroll-snap-align: start; }
+.seg--more-end { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
+.seg--more-start { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 40px), transparent); }
+.seg--more-start.seg--more-end { -webkit-mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
 @media (max-width: 480px) {
-  .seg { display: flex; flex-wrap: wrap; overflow: visible; border-radius: var(--r-md); }
-  .seg > button { flex: 1 1 auto; }
+  .seg { display: flex; }
+  .seg > button { flex: 1 0 auto; }
   /* D8: the period picker takes the full width, so "October 2026 to date (incomplete)" isn't cut off */
   .dash-orgbar { flex-direction: column; align-items: stretch; gap: var(--sp-2); }
   .dash-period { width: 100%; }

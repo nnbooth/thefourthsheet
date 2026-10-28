@@ -10,7 +10,6 @@
   - Analytics (off until a token is set) ..... ANALYTICS / track()
   - Home-page sample dashboard ............... setupHeroDash() (data: data/dashboard.json)
   - Generated data files (data/*.json) ....... loadData()
-  - Home-page opening animation ............. setupIntro() / INTRO_HOLD_MS
   - Mobile menu + footer year ................ bottom of file (DOMContentLoaded)
 
   No frameworks. Publishing (.github/workflows/pages.yml) stamps every ?v= with the commit; locally it's ?v=dev.
@@ -737,10 +736,13 @@ function renderChart(ch, width = 320) {
   // Every bar carries a value label and opens its workings when clicked. Grey = below target (unless the chart is
   // "plain"); red = losing money (below zero). "marks" = a small tick per bar (e.g. budget to date).
   const fmt = CHART_FORMATS[ch.format] || String;
-  const W = Math.round(width), top = 8, row = 26, bh = 15;
+  const W = Math.round(width), top = 8, bh = 15;
   const valW = Math.max(...ch.values.map((v) => textW(fmt(v), 12))) + 10;
   const right = W - valW;
-  const left = Math.min(Math.round(W * 0.42), 12 + Math.max(...ch.labels.map((l) => textW(l))));
+  // a label that won't fit down the left (narrow charts, phones) puts every label on its own line above its bar
+  const stacked = ch.labels.some((l) => 12 + textW(l) > W * 0.42);
+  const lab = stacked ? 16 : 0, row = 26 + lab;
+  const left = stacked ? 0 : 12 + Math.max(...ch.labels.map((l) => textW(l)));
   const n = ch.values.length, plotH = n * row;
   const below = (v, i) => !ch.plain && ((ch.target != null && v < ch.target) || (ch.below_marks && ch.marks && v < ch.marks[i]));
   const anyBelow = ch.values.some((v, i) => below(v, i));
@@ -756,7 +758,7 @@ function renderChart(ch, width = 320) {
   const order = ch.keep_order ? ch.values.map((v, i) => i) : ch.values.map((v, i) => i).sort((p, q) => by[q] - by[p]);   // times of day keep clock order
   order.forEach((i, pos) => {
     const v = ch.values[i];
-    const y = top + pos * row + (row - bh) / 2;
+    const y = top + pos * row + lab + (row - lab - bh) / 2;
     const dim = ch.highlight && ch.labels[i] !== ch.highlight ? ' dash-row--dim' : '';
     // variance charts: off budget either way is red; within 1% amber; on budget neutral (judged on the % of budget)
     // variance charts (judged on % of budget): over budget red, under budget green, within 1% amber, on budget neutral
@@ -765,7 +767,8 @@ function renderChart(ch, width = 320) {
     const bx = Math.min(x(v), x0), bw = Math.abs(x(v) - x0);
     g += `<g class="dash-row${dim}" data-detail="${i}" data-tip="${esc(ch.labels[i])}: ${fmt(v)}${ch.marks ? ` · ${esc(ch.mark_label || 'mark')} ${fmt(ch.marks[i])}` : ''}" tabindex="0" role="button" aria-label="${esc(ch.labels[i])}: ${fmt(v)}. Show the workings.">`
       + `<rect class="dash-hit" x="0" y="${(top + pos * row).toFixed(1)}" width="${W}" height="${row}"/>`
-      + `<text class="dash-axis" x="${left - 8}" y="${(y + bh - 3).toFixed(1)}" text-anchor="end"><title>${esc(ch.labels[i])}</title>${esc(clip(ch.labels[i], left - 12))}</text>`
+      + (stacked ? `<text class="dash-axis dash-axis--above" x="0" y="${(y - 5).toFixed(1)}"><title>${esc(ch.labels[i])}</title>${esc(clip(ch.labels[i], W))}</text>`
+        : `<text class="dash-axis" x="${left - 8}" y="${(y + bh - 3).toFixed(1)}" text-anchor="end"><title>${esc(ch.labels[i])}</title>${esc(clip(ch.labels[i], left - 12))}</text>`)
       + `<rect class="dash-bar dash-bar--h${cls}" x="${bx.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh}" rx="2"/>`;
     if (ch.marks) g += `<line class="dash-mark" x1="${x(ch.marks[i]).toFixed(1)}" x2="${x(ch.marks[i]).toFixed(1)}" y1="${(y - 3).toFixed(1)}" y2="${(y + bh + 3).toFixed(1)}"/>`;
     // value label at the bar's end; it steps past a marker or the target line rather than sitting on it
@@ -1472,71 +1475,31 @@ function startHeroDash(box, data) {
 }
 
 /* ---------------------------------------------------------------------------
-   INTRO — the opening animation on the home page (markup: index.html, styles: styles.css, search "INTRO").
-   Plays once per visit, then the picture shrinks into the small illustration beside the headline.
-   Skipped for reduced motion, automated tests, a link to a section (#…) or ?intro=off; ?intro=on forces it.
-   Clicking the sheets beside the headline (.hero-sheets) plays it again, on request, whatever the settings.
+   TOGGLE ROWS — a .seg group too wide for its space scrolls sideways (phones). Marks which side has more options
+   (.seg--more-start / .seg--more-end, styles.css fades that edge) and keeps the chosen option in view.
+   Groups are redrawn by the charts, so this watches the page for new ones.
 --------------------------------------------------------------------------- */
-const INTRO_HOLD_MS = 9000;   // when the picture starts to shrink away (the CSS timings finish at about 7.6s)
-
-function setupIntro() {
-  const intro = document.getElementById('intro');
-  if (!intro) return;
-  const fresh = intro.cloneNode(true);   // an untouched copy, so the sheets beside the headline can play it again
-  const sheets = document.querySelector('.hero-sheets');
-  if (sheets) sheets.addEventListener('click', (e) => {
-    if (document.getElementById('intro')) return;          // already playing
-    const again = fresh.cloneNode(true);
-    document.body.prepend(again);
-    playIntro(again, sheets, e.detail === 0);            // detail 0: pressed with Enter or Space, not tapped
-  });
-  const param = new URLSearchParams(location.search).get('intro');
-  let seen = false;
-  try { seen = sessionStorage.getItem('introSeen') === '1'; } catch (e) { /* storage blocked: play it */ }
-  const skip = param === 'off' || (param !== 'on' && (seen || location.hash || window.scrollY > 0 || navigator.webdriver
-    || window.matchMedia('(prefers-reduced-motion: reduce)').matches));
-  if (skip) { intro.remove(); return; }
-  try { sessionStorage.setItem('introSeen', '1'); } catch (e) { /* fine */ }
-  playIntro(intro, null, !window.matchMedia('(pointer: coarse)').matches);
-}
-
-function playIntro(intro, returnFocus, focusClose) {   // returnFocus: where focus goes after (the sheets button on a replay);
-                                                        // focusClose: put focus on × (keyboard and mouse; not on a touch screen, where its ring is clutter)
-  const art = intro.querySelector('.intro-art');
-  const target = document.querySelector('.hero-sheets img');
-  intro.hidden = false;
-  document.body.classList.add('intro-active');
-
-  let leaving = false;
-  const finish = () => {
-    intro.remove(); document.body.classList.remove('intro-active'); document.removeEventListener('keydown', onKey);
-    if (returnFocus && focusClose) returnFocus.focus({ preventScroll: true });
+function setupSegOverflow() {
+  const mark = (seg) => {
+    const max = seg.scrollWidth - seg.clientWidth;
+    seg.classList.toggle('seg--more-start', max > 4 && seg.scrollLeft > 4);
+    seg.classList.toggle('seg--more-end', max > 4 && seg.scrollLeft < max - 4);
   };
-  const leave = (skipped) => {
-    if (leaving) return;
-    leaving = true;
-    clearTimeout(timer);
-    if (skipped) intro.classList.add('intro--skipped');
-    const from = art.getBoundingClientRect();
-    const to = target && target.getBoundingClientRect();
-    if (!to || !to.width || to.bottom < 0 || to.top > window.innerHeight) {
-      intro.classList.add('intro--fade');   // nowhere on screen to land: just fade out
-      setTimeout(finish, 520);
-      return;
+  const reveal = (seg) => {
+    const on = seg.querySelector('[aria-pressed="true"], [aria-selected="true"]');
+    if (on && seg.scrollWidth > seg.clientWidth) {   // only when the chosen option is partly out of view
+      const r = on.getBoundingClientRect(), box = seg.getBoundingClientRect();
+      if (r.left < box.left || r.right > box.right) seg.scrollLeft += r.left - box.left - (box.width - r.width) / 2;
     }
-    intro.classList.add('intro--leaving');
-    art.style.transformOrigin = '0 0';
-    art.style.transform = `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width})`;
-    art.addEventListener('transitionend', (e) => { if (e.target === art) finish(); });
-    setTimeout(finish, 1200);   // in case transitionend never fires
+    mark(seg);
   };
-  const onKey = (e) => { if (e.key === 'Escape') leave(true); };
-  const timer = setTimeout(() => leave(false), INTRO_HOLD_MS);
-  const closeBtn = intro.querySelector('.intro-close');
-  if (closeBtn && focusClose) closeBtn.focus({ preventScroll: true });   // keyboard users land on ×
-  intro.querySelector('.intro-skip').addEventListener('click', () => leave(true));
-  intro.addEventListener('click', (e) => { if (!e.target.closest('.intro-stage')) leave(true); });   // a click on the dimmed page closes it; clicks in the panel don't
-  document.addEventListener('keydown', onKey);
+  const all = () => document.querySelectorAll('.seg').forEach(reveal);
+  document.addEventListener('scroll', (e) => { if (e.target.classList && e.target.classList.contains('seg')) mark(e.target); }, true);
+  window.addEventListener('resize', all);
+  let queued = false;
+  new MutationObserver(() => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; all(); }); } })
+    .observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-pressed', 'aria-selected'] });
+  all();
 }
 
 /* ---------------------------------------------------------------------------
@@ -1584,7 +1547,7 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => { const again = sel && document.querySelector(`.seg ${sel}`); (again || next).focus(); });   // the group may have been redrawn
   });
 
-  setupIntro();
+  setupSegOverflow();
   setupAnalytics();
   setupGameSlot();
   applyPrices();

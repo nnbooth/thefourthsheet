@@ -81,49 +81,6 @@
   -->
 
   <body>
-    <!-- INTRO: plays once per visit on opening the home page, then the sheets shrink
-         into the small illustration beside the headline. Shown and run by script.js
-         (search "INTRO"); styles in styles.css (search "INTRO"). Never shown with
-         reduced motion, ?intro=off, or for automated tests; ?intro=on forces it.
-         Clicking the sheets beside the headline plays it again. -->
-    <div class="intro" id="intro" hidden>
-      <div class="intro-stage" role="dialog" aria-modal="true" aria-label="What the fourth sheet is: a short introduction">
-        <button type="button" class="intro-close intro-skip" aria-label="Close the introduction">&times;</button>
-        <svg class="intro-art" viewBox="0 0 104 120" width="104" height="120" aria-hidden="true" focusable="false">
-          <g class="intro-sheet intro-s1">
-            <rect x="2" y="2" width="56" height="74" rx="4" fill="#2f7a5d" stroke="#eaf6ee" stroke-width="1.5" stroke-opacity="0.55"/>
-            <text class="intro-label" x="6" y="8.6">Profit &amp; loss</text>
-          </g>
-          <g class="intro-sheet intro-s2">
-            <rect x="14" y="12" width="56" height="74" rx="4" fill="#2f7a5d" stroke="#eaf6ee" stroke-width="1.5" stroke-opacity="0.7"/>
-            <text class="intro-label" x="18" y="18.6">Balance sheet</text>
-          </g>
-          <g class="intro-sheet intro-s3">
-            <rect x="26" y="22" width="56" height="74" rx="4" fill="#2f7a5d" stroke="#eaf6ee" stroke-width="1.5" stroke-opacity="0.85"/>
-            <text class="intro-label" x="30" y="28.6">Cash flow</text>
-          </g>
-          <g class="intro-sheet intro-s4">
-            <rect x="44" y="40" width="56" height="74" rx="4" fill="#fbfdf9" stroke="#25342a" stroke-width="1"/>
-            <text class="intro-label intro-label--fourth" x="52" y="55">Analysis</text>
-            <rect class="intro-line" x="52" y="50" width="28" height="3" rx="1.5" fill="#2f7a5d"/>
-            <rect class="intro-line" x="52" y="58" width="40" height="3" rx="1.5" fill="#dce8dc"/>
-            <rect class="intro-bar intro-b0" x="54" y="92" width="7" height="12" rx="1" fill="#2f7a5d" opacity="0.55"/>
-            <rect class="intro-bar intro-b1" x="65" y="84" width="7" height="20" rx="1" fill="#2f7a5d" opacity="0.75"/>
-            <rect class="intro-bar intro-b2" x="76" y="72" width="7" height="32" rx="1" fill="#2f7a5d"/>
-          </g>
-          <!-- one piece of data from each of the three sheets, travelling into the fourth -->
-          <rect class="intro-pill intro-p0" x="46" y="5" width="7" height="2" rx="1" fill="#eaf6ee"/>
-          <rect class="intro-pill intro-p1" x="56" y="15" width="7" height="2" rx="1" fill="#eaf6ee"/>
-          <rect class="intro-pill intro-p2" x="60" y="25" width="7" height="2" rx="1" fill="#eaf6ee"/>
-        </svg>
-        <div class="intro-captions">
-          <p class="intro-cap intro-c1"><strong>Profit &amp; loss.</strong> What you earned and what you spent.</p>
-          <p class="intro-cap intro-c2"><strong>Balance sheet.</strong> What you own and what you owe.</p>
-          <p class="intro-cap intro-c3"><strong>Cash flow.</strong> Where the money actually moved.</p>
-          <p class="intro-cap intro-c4"><strong>The Fourth Sheet:</strong> <strong class="intro-accent">Analysis.</strong> What it all means and what to do next.</p>
-        </div>
-      </div>
-    </div>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -153,7 +110,7 @@
             <p class="eyebrow">Management reporting for Brisbane businesses and <span class="nowrap">not-for-profits</span></p>
             <div class="hero-headline">
               <h1>Your accountant gives you three sheets. <span class="h1-accent">I&nbsp;give you the fourth.</span></h1>
-              <button type="button" class="hero-sheets" aria-label="Play the introduction again" title="Play the introduction again"><img src="assets/brand/sheets-illustration.svg?v=dev" alt="" aria-hidden="true" width="104" height="120" /></button>
+              <div class="hero-sheets" aria-hidden="true"><img src="assets/brand/sheets-illustration.svg?v=dev" alt="" width="104" height="120" /></div>
             </div>
             <!-- What the sheets are, in plain words (user testing: people didn't know what "three sheets" meant) -->
             <p class="hero-define"><strong>The three:</strong> <span>profit and loss, balance sheet and cash flow, the reports your accountant prepares.</span><br>

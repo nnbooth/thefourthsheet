@@ -34,8 +34,8 @@ Anything not yet known is marked with a `data-placeholder` attribute; search the
   `numbers-check` (every "Ask for a free 20-minute numbers check" button, which goes to the contact page with the
   numbers check picked), `email` (mailto links), `export` (each download; detail = format) and `contact-submit` (sent once the form
   passes its checks; detail = the topic). New buttons only need the attribute.
-- **Intro animation:** plays once per visit on the home page; skipped for reduced motion, automated tests, a link to a
-  section, or `?intro=off`; `?intro=on` forces it; clicking the sheets beside the headline replays it.
+- **No intro, no fade-ins:** the opening animation was removed (design review, Oct 2026). Content is never hidden waiting
+  for an animation or a script; the only motion is the dashboard bars growing in, and that is off with reduced motion.
 
 ## Copy rules worth remembering
 
